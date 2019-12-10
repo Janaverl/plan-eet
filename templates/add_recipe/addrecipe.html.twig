@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AddRecipeController!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <script src="{{ asset('jcss/style.min.css') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>voeg een recept toe</h1>
+
+    <div class="cardwrapper">
+        <div class="inputwrapper">
+            <div class="w3-card step generalInformation">
+                <!-- <h3>bekijk zeker eerst of het recept niet al in de database aanwezig is</h3>
+                <p>todo</p> -->
+                <h3>algemene info</h3>
+                <input type="text" id="naam" name="naam" class="w3-input" placeholder="naam recept">
+                <input type="text" id="receptTip" name="receptTip" class="w3-input"
+                    placeholder="recept tip (optioneel)">
+
+                <select class="w3-select w3-border" id="categorie" name="categorie">
+                    <option class="selectCategorie" value="default" disabled selected>categorie recept</option>
+                </select>
+
+                <select class="w3-select w3-border" id="type" name="type">
+                    <option class="selectType" value="default" disabled selected>type recept</option>
+                </select>
+            </div>
+
+            <!-- create the boxes to select an ingredient -->
+            <div class="w3-card step ingredients">
+                <input type="number" id="numberOfEaters"><label for="numberOfEaters">eters</label>
+                <h3>kies je ingredienten</h3>
+                <input type="text" id="searchForIngredients" class="w3-input" placeholder="Search for ingredients..">
+                <br>
+                <p>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    toon enkel geselecteerde ingredienten</p></span>
+                <div class="chooseIngredients">
+
+                </div>
+            </div>
+            <!-- end of create the boxes to select an ingredient -->
+
+            <div class="w3-card step recipe">
+                <h3><label for="recept">bereidingswijze</label></h3>
+                <textarea name="recept" cols="30" rows="10"></textarea>
+            </div>
+
+            <!-- confirmation and errord -->
+            <div class="w3-card step recipe">
+                <button class="confirm">nomnomnom, sla dit recept maar op!</button>
+                <ul class="errors"></ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/createRecipe.js') }}"></script>
+{% endblock %}

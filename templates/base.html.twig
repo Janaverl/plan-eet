@@ -2,11 +2,19 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Menuplanner voor op kamp!{% endblock %}</title>
+        {% block stylesheets %}
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        {% endblock %}
     </head>
     <body>
+    <nav>This will be the navbar</nav>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <footer>This will be the footer</footer>
+
+    {% block javascripts %}
+        {# jQuery JS 2.2.4 #}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    {% endblock %}
     </body>
 </html>
