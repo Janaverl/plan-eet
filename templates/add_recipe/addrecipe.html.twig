@@ -4,12 +4,12 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <script src="{{ asset('jcss/style.min.css') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
 {% endblock %}
 
 {% block body %}
     <h1>voeg een recept toe</h1>
-
+    
     <div class="cardwrapper">
         <div class="inputwrapper">
             <div class="w3-card step generalInformation">
