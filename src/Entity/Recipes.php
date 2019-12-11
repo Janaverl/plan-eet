@@ -37,6 +37,12 @@ class Recipes
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RecipeCategory", inversedBy="catID")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +92,18 @@ class Recipes
     public function setType(?RecipeType $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCategory(): ?RecipeCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?RecipeCategory $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
