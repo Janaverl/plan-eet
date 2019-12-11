@@ -43,6 +43,12 @@ class Ingredient
      */
     private $recipe;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Rayon", inversedBy="ingredient")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $rayon;
+
     public function __construct()
     {
         $this->recipe = new ArrayCollection();
@@ -128,6 +134,18 @@ class Ingredient
                 $recipe->setIngredient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRayon(): ?Rayon
+    {
+        return $this->rayon;
+    }
+
+    public function setRayon(?Rayon $rayon): self
+    {
+        $this->rayon = $rayon;
 
         return $this;
     }
