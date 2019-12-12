@@ -15,11 +15,11 @@ $(document).ready(function () {
         if ($('input#suggestion').val()) {
             ingredient["suggestion"] = $('input#suggestion').val();
         }
-        if (round.value == "default") {
-            errors.push("moet dit ingredient afgerond worden voor het boodschappenlijstje? Je kan vb geen half blik kopen ;-) .");
-        } else {
-            ingredient["round"] = round.value;
-        };
+        // if (round.value == "default") {
+        //     errors.push("moet dit ingredient afgerond worden voor het boodschappenlijstje? Je kan vb geen half blik kopen ;-) .");
+        // } else {
+        //     ingredient["round"] = round.value;
+        // };
         if (unit.value == "default") {
             errors.push("geen maateenheid geselecteerd");
         } else {
@@ -36,10 +36,23 @@ $(document).ready(function () {
             console.log("all set to push");
             console.log(ingredient);
 
-            // fetch('http://localhost:9000/api/setRecipe.php', requestOptions)
-            //     .then(response => response.text())
-            //     .then(result => console.log(JSON.stringify(result)))
-            //     .catch(error => console.log('error :::', error));
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify(ingredient);
+            console.log(raw);
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            fetch('http://localhost:8000/fetch/add/ingredient', requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(JSON.stringify(result)))
+                .catch(error => console.log('error :::', error));
 
         } else {
             errors.forEach(error =>

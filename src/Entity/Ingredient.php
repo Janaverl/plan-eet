@@ -29,11 +29,6 @@ class Ingredient
     private $unit;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $round;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $suggestion;
@@ -79,18 +74,6 @@ class Ingredient
     public function setUnit(string $unit): self
     {
         $this->unit = $unit;
-
-        return $this;
-    }
-
-    public function getRound(): ?bool
-    {
-        return $this->round;
-    }
-
-    public function setRound(bool $round): self
-    {
-        $this->round = $round;
 
         return $this;
     }
