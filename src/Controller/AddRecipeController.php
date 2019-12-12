@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class AddRecipeController extends AbstractController
 {
      /**
-     * @Route("/", name="app_homepage")
+     * @Route("/add", name="cms")
      */
     public function homepage()
     {
-        return $this->render('add_recipe/homepage.html.twig');
+        return $this->render('add_recipe/index.html.twig');
     }
     
     /**
@@ -32,8 +32,6 @@ class AddRecipeController extends AbstractController
         $rayons = $this->getDoctrine()
         ->getRepository(Rayon::class)
         ->findAll();
-
-        dump($rayons);
 
         return $this->render('add_recipe/addingredient.html.twig', [
             'rayons' => $rayons,

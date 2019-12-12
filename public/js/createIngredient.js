@@ -36,19 +36,6 @@ $(document).ready(function () {
             console.log("all set to push");
             console.log(ingredient);
 
-            // var myHeaders = new Headers();
-            // myHeaders.append("Content-Type", "application/json");
-
-            // var raw = JSON.stringify(recipe);
-            // console.log(raw);
-
-            // var requestOptions = {
-            //     method: 'POST',
-            //     headers: myHeaders,
-            //     body: raw,
-            //     redirect: 'follow'
-            // };
-
             // fetch('http://localhost:9000/api/setRecipe.php', requestOptions)
             //     .then(response => response.text())
             //     .then(result => console.log(JSON.stringify(result)))
