@@ -44,12 +44,13 @@ $(document).ready(function () {
                 redirect: 'follow'
             };
 
-            fetch('http://localhost:8000/fetch/add/ingredient', requestOptions)
-                .then(response => response.text())
+            fetch('https://127.0.0.1:8000/fetch/add/ingredient', requestOptions)
+                .then(response => response.json())
                 .then(result => {
-                    console.log(JSON.stringify(result));
-                    console.log(result);
-                    console.log("gelukt!");
+                    $(".success").append(`<li>${JSON.parse(JSON.stringify(result.ingredient))} werd succesvol toegevoegd</li>`);
+                    $('input[type="text"]').val('');
+                    $('select').val("default");
+                    return result;
                 })
                 .catch(error => console.log('error :::', error));
 

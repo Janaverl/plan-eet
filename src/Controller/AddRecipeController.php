@@ -46,7 +46,7 @@ class AddRecipeController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/ingredient", name="fetch_add_ingredient", methods={"POST"})
      */
-    public function show(Request $request){
+    public function show(Request $request) : Response {
         $data = json_decode($request->getContent(), true);
 
         $repository = $this->getDoctrine()->getRepository(Rayon::class);
@@ -71,7 +71,7 @@ class AddRecipeController extends AbstractController{
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        // return new Response('Saved new product with id '.$product->getId());
-        return new JsonResponse('success saving ::: '.$ingredient->getName());
+        // return the JsonRespons if saved
+        return new JsonResponse(['ingredient' => $ingredient->getName()]);
     }
 }
