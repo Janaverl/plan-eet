@@ -15,9 +15,15 @@
             <a href="{{ path('app_homepage') }}" class="w3-bar-item w3-button">Kamp Menu Planner</a>
             <!-- Right-sided navbar links. Hide them on small screens -->
             <div class="w3-right w3-hide-small">
-            <a href="{{ path('cms') }}" class="w3-bar-item w3-button">beheer data</a>
-            <a href="#menu" class="w3-bar-item w3-button">Menu</a>
-            <a href="#contact" class="w3-bar-item w3-button">Contact</a>
+                <div class="w3-dropdown-hover">
+                    <button class="w3-bar-item w3-button">beheer data</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredienten</a>
+                        <a href="{{ path('add_recipe') }}" class="w3-bar-item w3-button">Recepten</a>
+                    </div>
+                </div>
+            <a href="#" class="w3-bar-item w3-button">Menu</a>
+            <a href="#" class="w3-bar-item w3-button">Contact</a>
             </div>
         </div>
     </div>

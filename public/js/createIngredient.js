@@ -15,11 +15,6 @@ $(document).ready(function () {
         if ($('input#suggestion').val()) {
             ingredient["suggestion"] = $('input#suggestion').val();
         }
-        // if (round.value == "default") {
-        //     errors.push("moet dit ingredient afgerond worden voor het boodschappenlijstje? Je kan vb geen half blik kopen ;-) .");
-        // } else {
-        //     ingredient["round"] = round.value;
-        // };
         if (unit.value == "default") {
             errors.push("geen maateenheid geselecteerd");
         } else {
@@ -31,7 +26,7 @@ $(document).ready(function () {
             ingredient["rayon"] = rayon.value;
         };
 
-        // fetch or display errors
+        // fetch the data or display errors
         if (errors.length == 0) {
             console.log("all set to push");
             console.log(ingredient);
@@ -51,7 +46,11 @@ $(document).ready(function () {
 
             fetch('http://localhost:8000/fetch/add/ingredient', requestOptions)
                 .then(response => response.text())
-                .then(result => console.log(JSON.stringify(result)))
+                .then(result => {
+                    console.log(JSON.stringify(result));
+                    console.log(result);
+                    console.log("gelukt!");
+                })
                 .catch(error => console.log('error :::', error));
 
         } else {
@@ -60,5 +59,4 @@ $(document).ready(function () {
             );
         }
     });
-
 });

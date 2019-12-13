@@ -46,9 +46,32 @@ class AddRecipeController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/ingredient", name="fetch_add_ingredient", methods={"POST"})
      */
-
     public function show(Request $request){
         $data = json_decode($request->getContent(), true);
-        return new JsonResponse($data);
+
+        $repository = $this->getDoctrine()->getRepository(Rayon::class);
+
+        // look for a single Rayon by name
+        $rayon = $repository->findOneBy(['name' => $data["rayon"]]);
+
+        // make the
+        $ingredient = new Ingredient();
+        $ingredient->setName($data["name"]);
+        if(isset($data["suggestion"]) && $data["suggestion"] != ""){
+            $ingredient->setSuggestion($data["suggestion"]);     
+        };
+        $ingredient->setUnit($data["unit"]);
+        $ingredient->setRayon($rayon);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($ingredient);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
+        // return new Response('Saved new product with id '.$product->getId());
+        return new JsonResponse('success saving ::: '.$ingredient->getName());
     }
 }

@@ -16,6 +16,10 @@ a{
   text-decoration: none;
 }
 
+.w3-dropdown-hover:first-child{
+  background-color: initial;
+}
+
 .contentwrapper{
   margin: 75px;
   min-height: 70vh;

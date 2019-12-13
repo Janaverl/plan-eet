@@ -29,7 +29,7 @@ class Ingredient
     private $unit;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $suggestion;
 
