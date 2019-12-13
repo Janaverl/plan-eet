@@ -29,6 +29,7 @@
         "symfony/yaml": "5.0.*"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
         "easycorp/easy-log-handler": "^1.0.7",
         "symfony/debug-bundle": "*",
         "symfony/debug-pack": "*",
