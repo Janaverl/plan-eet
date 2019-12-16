@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Rayon;
 use App\Entity\Ingredient;
+use App\Entity\SingleColumnName;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -93,12 +94,20 @@ class AddRecipeController extends AbstractController{
         // // or add an optional message - seen by developers
         // $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
 
-        if($slug != "rayon"){
+        $repository = $this->getDoctrine()->getRepository(SingleColumnName::class);
+        // look for a single Rayon by name
+        $entity = $repository->findOneBy(['name' => $slug]);
+
+        dump($entity);
+
+        if(!$entity){
             return $this->render('general/index.html.twig');
         }else{
             if($slug == "rayon"){
+                $table = "App\\Entity\\".$entity->getTablename();
+
                 $result = $this->getDoctrine()
-                ->getRepository(Rayon::class)
+                ->getRepository($table)
                 ->findAll();
             };
     
@@ -109,7 +118,7 @@ class AddRecipeController extends AbstractController{
                 'slug' => $slug,
                 'values' => $result,
                 'jsdir' => "/js/createRayon.js",
-                'API' => "\/fetch\/add\/rayon"
+                'API' => $entity->getAPI(),
             ]);
         }
     
