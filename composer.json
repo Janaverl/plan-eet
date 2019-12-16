@@ -38,7 +38,7 @@
         "symfony/monolog-bundle": "^3.0",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
-        "symfony/var-dumper": "*"
+        "symfony/var-dumper": "5.0.*"
     },
     "config": {
         "preferred-install": {

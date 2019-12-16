@@ -23,6 +23,11 @@ class AddRecipeController extends AbstractController{
      * @Route("/add/recipe", name="add_recipe")
      */
     public function index(){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        // or add an optional message - seen by developers
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+
         return $this->render('add_recipe/addrecipe.html.twig');
     }
 
@@ -30,6 +35,10 @@ class AddRecipeController extends AbstractController{
      * @Route("/add/ingredient", name="add_ingredient")
      */
     public function ingredient(){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        // or add an optional message - seen by developers
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
         $result = $this->getDoctrine()
         ->getRepository(Rayon::class)
         ->findAll();
