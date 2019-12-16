@@ -16,25 +16,26 @@ $(document).ready(function () {
     $(".confirm").on("click", function (e) {
         $(".errors").empty();
         let errors = [];
-        let rayon = {};
+        let value = {};
         e.preventDefault();
 
         // confirmation and saving te values
         if (!$('input#name').val()) {
             errors.push("geen naam ingevuld")
         } else {
-            rayon["name"] = $('input#name').val();
+            value["name"] = $('input#name').val();
+            value["type"] = slug;
         };
 
         // fetch the data or display errors
         if (errors.length == 0) {
-            console.log("all set to push");
-            console.log(rayon);
+            // console.log("all set to push");
+            // console.log(rayon);
 
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify(rayon);
+            var raw = JSON.stringify(value);
             console.log(raw);
 
             var requestOptions = {
@@ -44,10 +45,10 @@ $(document).ready(function () {
                 redirect: 'follow'
             };
 
-            fetch('https://127.0.0.1:8000/fetch/add/rayon', requestOptions)
+            fetch(route, requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    $(".success").append(`<li>${JSON.parse(JSON.stringify(result.rayon))} werd succesvol toegevoegd</li>`);
+                    $(".success").append(`<li>${JSON.parse(JSON.stringify(result.name))} werd succesvol toegevoegd</li>`);
                     $('input[type="text"]').val('');
                     $('select').val("default");
                     return result;

@@ -85,23 +85,34 @@ class AddRecipeController extends AbstractController{
     }
 
     /**
-     * @Route("/add/rayon", name="add_rayon")
+     * @Route("/add/{slug}", name="add_single")
      */
-    public function rayon(){
+    public function rayon($slug){
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         // // or add an optional message - seen by developers
         // $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
-        
-        $result = $this->getDoctrine()
-        ->getRepository(Rayon::class)
-        ->findAll();
 
-        dump($result);
-
-        return $this->render('add_recipe/addrayon.html.twig', [
-            'rayons' => $result,
-        ]);
+        if($slug != "rayon"){
+            return $this->render('general/index.html.twig');
+        }else{
+            if($slug == "rayon"){
+                $result = $this->getDoctrine()
+                ->getRepository(Rayon::class)
+                ->findAll();
+            };
+    
+            dump($result);
+    
+            return $this->render('add_recipe/addname.html.twig', [
+                'name' => "rayon",
+                'slug' => $slug,
+                'values' => $result,
+                'jsdir' => "/js/createRayon.js",
+                'API' => "\/fetch\/add\/rayon"
+            ]);
+        }
+    
     }
 
     /**
@@ -130,6 +141,6 @@ class AddRecipeController extends AbstractController{
         $entityManager->flush();
 
         // return the JsonRespons if saved
-        return new JsonResponse(['rayon' => $rayon->getName()]);
+        return new JsonResponse(['name' => $rayon->getName()]);
     }
 }
