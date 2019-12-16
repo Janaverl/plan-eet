@@ -63,7 +63,7 @@ $(document).ready(function () {
         })
         .catch(error => console.log('error', error));
 
-    // start searching in the list of ingresients as soon as the user starts typing in the inputfield
+    // start searching in the list of ingredients as soon as the user starts typing in the inputfield
     $("#searchForIngredients").on("keyup", function (e) {
         filterthis($(this).val().toLowerCase(), $(".oneIngredient"));
     });

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AddRecipeController!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/addrecipe.min.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="contentwrapper">
+        <h1>voeg een rayon toe</h1>
+        
+        <div class="cardwrapper">
+                <div class="w3-card step">
+                    <h3>bestaat de rayon nog niet in de database?</h3>
+                    <input type="text" id="searchForRayons" class="w3-input" placeholder="Search for rayons..">
+                    <div class="scrollbox">
+                        <ul class="w3-ul">
+                            {% for rayon in rayons %}
+                                <li>{{rayon.name}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="w3-card step">
+                    <h3>Voeg een nieuwe rayon toe</h3>
+                    <input type="text" id="name" name="name" class="w3-input" placeholder="naam rayon">
+                    <button class="confirm">voeg toe</button>
+                    <ul class="errors"></ul>
+                    <ul class="success"></ul>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/createRayon.js') }}"></script>
+{% endblock %}

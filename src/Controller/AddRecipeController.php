@@ -16,17 +16,17 @@ class AddRecipeController extends AbstractController{
      * @Route("/add", name="cms")
      */
     public function homepage(){
-        return $this->render('add_recipe/index.html.twig');
+        return $this->render('general/index.html.twig');
     }
     
     /**
      * @Route("/add/recipe", name="add_recipe")
      */
     public function index(){
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_USER');
 
         // or add an optional message - seen by developers
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'User tried to access a page without having ROLE_USER');
 
         return $this->render('add_recipe/addrecipe.html.twig');
     }
@@ -55,7 +55,7 @@ class AddRecipeController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/ingredient", name="fetch_add_ingredient", methods={"POST"})
      */
-    public function show(Request $request) : Response {
+    public function addIngredient(Request $request) : Response {
         $data = json_decode($request->getContent(), true);
 
         $repository = $this->getDoctrine()->getRepository(Rayon::class);
@@ -82,5 +82,54 @@ class AddRecipeController extends AbstractController{
 
         // return the JsonRespons if saved
         return new JsonResponse(['ingredient' => $ingredient->getName()]);
+    }
+
+    /**
+     * @Route("/add/rayon", name="add_rayon")
+     */
+    public function rayon(){
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        // // or add an optional message - seen by developers
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+        
+        $result = $this->getDoctrine()
+        ->getRepository(Rayon::class)
+        ->findAll();
+
+        dump($result);
+
+        return $this->render('add_recipe/addrayon.html.twig', [
+            'rayons' => $result,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/fetch/add/rayon", name="fetch_add_rayon", methods={"POST"})
+     */
+    public function addRayon(Request $request) : Response {
+        $data = json_decode($request->getContent(), true);
+
+        // $repository = $this->getDoctrine()->getRepository(Rayon::class);
+
+        // // look for a single Rayon by name
+        // $rayon = $repository->findOneBy(['name' => $data["rayon"]]);
+
+        // make the
+        $rayon = new Rayon();
+        $rayon->setName($data["name"]);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($rayon);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
+        // return the JsonRespons if saved
+        return new JsonResponse(['rayon' => $rayon->getName()]);
     }
 }

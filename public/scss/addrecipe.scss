@@ -15,22 +15,22 @@ h1{
     font-weight: bold;
   }
   
-  .inputwrapper{
+  .cardwrapper{
     display: grid;
     width: 70%;
     margin: auto;
     grid-gap: 40px;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    button{
+      margin: 20px;
+    }
   }
   
   .w3-card {
       padding: 30px;
       /* width: 500px; */
     }
-  button{
-    margin: 20px;
-  }
-  .chooseIngredients{
+  .scrollbox{
     height: 200px;
     /* width: 500px; */
     overflow: auto;
