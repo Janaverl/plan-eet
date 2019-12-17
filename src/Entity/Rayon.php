@@ -4,13 +4,12 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RayonRepository")
- * @UniqueEntity("name")
+ * @UniqueEntity(fields={"name"}, message="This vallue allready exists")
  */
 class Rayon
 {
@@ -22,10 +21,9 @@ class Rayon
     private $id;
 
     /**
-     * @ORM\Column(name="name", type="string", length=255)
-     * @Assert\Name
+     * @ORM\Column(type="string", length=190, unique=true)
      */
-    protected $name;
+    private $name;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ingredient", mappedBy="rayon")
