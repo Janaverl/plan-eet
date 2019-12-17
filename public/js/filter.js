@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // ---------------------------------------------
-    // my functions
+    // my function
     function filterthis(filterBy, filterThis) {
         filterThis.filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(filterBy) > -1)

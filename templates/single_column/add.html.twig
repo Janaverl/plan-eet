@@ -9,11 +9,11 @@
 
 {% block body %}
     <div class="contentwrapper">
-        <h1>voeg een rayon toe</h1>
+        <h1>voeg een {{name}} toe</h1>
         
         <div class="cardwrapper">
                 <div class="w3-card step">
-                    <h3>bestaat de rayon nog niet in de database?</h3>
+                    <h3>Deze waarden zitten al in de database:</h3>
                     <input type="text" class="w3-input filterBy" placeholder="zoek een {{name}} ...">
                     <div class="scrollbox">
                         <ul class="w3-ul">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="w3-card step">
-                    <h3>Voeg een nieuwe rayon toe</h3>
+                    <h3>Voeg een nieuwe {{name}} toe</h3>
                     <input type="text" id="name" name="name" class="w3-input" placeholder="naam {{name}}">
                     <button class="confirm">voeg toe</button>
                     <ul class="errors"></ul>
@@ -41,5 +41,5 @@
         var route = "{{ API }}";
         var slug = "{{ slug }}";
     </script>
-    <script src="{{jsdir}}"></script>
+    <script src="/js/addSingle.js"></script>
 {% endblock %}

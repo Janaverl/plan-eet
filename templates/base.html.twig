@@ -21,7 +21,6 @@
                 {% endif %}
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" class="w3-bar-item w3-button">Logout</a>
-                {% endif %}
                 <div class="w3-dropdown-hover">
                     <button class="w3-bar-item w3-button">Beheer data</button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
@@ -30,6 +29,7 @@
                         <a href="{{ path('add_single', {slug: 'rayon'}) }}" class="w3-bar-item w3-button">Rayon</a>
                     </div>
                 </div>
+                {% endif %}
             <a href="#" class="w3-bar-item w3-button">Menu</a>
             <a href="#" class="w3-bar-item w3-button">Contact</a>
             </div>
