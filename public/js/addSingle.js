@@ -36,16 +36,25 @@ $(document).ready(function () {
             fetch(route, requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    $(".success").append(`<li>${JSON.parse(JSON.stringify(result.name))} werd succesvol toegevoegd</li>`);
+                    if (result.message) {
+                        $(".success").append(`<li>${result.message}</li>`);
+                    };
+                    if (result.error) {
+                        $(".errors").append(`<li>${result.error}</li>`);
+                    };
+
                     $('input[type="text"]').val('');
                     $('select').val("default");
+
                     return result;
                 })
-                .catch(error => console.log('error :::', error));
+                .catch(error => {
+                    console.log('error :::', error);
+                });
 
         } else {
             errors.forEach(error =>
-                $(".errors").append(`<li>${error}</li>`)
+                $(".errors").append(`<li> ${error}</li> `)
             );
         }
     });

@@ -6,3 +6,9 @@ framework:
         # For instance, basic validation constraints will be inferred from Doctrine's metadata.
         #auto_mapping:
         #    App\Entity\: []
+        # App\Repository\RayonRepository:
+        #     constraints:
+        #         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        #             fields: [name]
+        #             # errorPath: lastQuestion
+        #             message: 'This port is already in use on that host.'

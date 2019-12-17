@@ -1,0 +1,6 @@
+App\Entity\Rayon:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+    properties:
+        name:
+            - Name: ~

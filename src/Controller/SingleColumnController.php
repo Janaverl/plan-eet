@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class SingleColumnController extends AbstractController{
     /**
@@ -44,6 +45,7 @@ class SingleColumnController extends AbstractController{
                 'slug' => $slug,
                 'values' => $result,
                 'API' => $entity->getAPI(),
+                // 'message' => $message,
             ]);
         }
     
@@ -71,10 +73,26 @@ class SingleColumnController extends AbstractController{
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($rayon);
 
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
+        $response = new JsonResponse();
+
+        try {
+            // actually executes the queries (i.e. the INSERT query)
+            $entityManager->flush();
+            $response->setData(['message' => $rayon->getName()." succesvol toegevoegd."]);
+            // $message = $rayon->getName()." succesvol toegevoegd.";
+        }
+        catch (UniqueConstraintViolationException $e) {
+            // $error = $rayon->getName()." bestaat reeds.";
+            $response->setData(['error' => $rayon->getName()." bestaat reeds."]);
+        }
+        catch (Exception $e) {
+            $response->setData(['error' => $rayon->getName()." werd niet toegevoegd."]);
+        }
 
         // return the JsonRespons if saved
-        return new JsonResponse(['name' => $rayon->getName()]);
+        // return new JsonResponse(
+        //     ['message' => $message,
+        //     'error' => $error]);
+        return $response;
     }
 }
