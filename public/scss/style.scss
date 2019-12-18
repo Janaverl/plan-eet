@@ -8,17 +8,13 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 5px;
 }
 
-// h1{
-//   color: white;
-// }
+h1{
+  color: white;
+}
 
 a{
   text-decoration: none;
 }
-
-// .w3-dropdown-hover:first-child{
-//   background-color: initial;
-// }
 
 .w3-dropdown-hover button{
   letter-spacing: 4px;
@@ -26,5 +22,16 @@ a{
 
 .contentwrapper{
   margin: 75px;
-  min-height: 70vh;
+  min-height: 85vh;
+}
+
+header.w3-display-container{
+  max-width:1600px;
+  min-width:500px;
+  max-height:100vh;
+  overflow:hidden;
+  img{
+    width: 1600px;
+    height: 800px;
+  }
 }

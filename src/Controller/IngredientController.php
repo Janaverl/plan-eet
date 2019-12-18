@@ -18,16 +18,17 @@ class IngredientController extends AbstractController{
     public function add(){
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        // or add an optional message - seen by developers
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
-        $result = $this->getDoctrine()
+        $allIngredients = $this->getDoctrine()
+        ->getRepository(Ingredient::class)
+        ->findAll();
+
+        $allRayons = $this->getDoctrine()
         ->getRepository(Rayon::class)
         ->findAll();
 
-        dump($result);
-
         return $this->render('ingredient/add.html.twig', [
-            'rayons' => $result,
+            'ingredients' => $allIngredients,
+            'rayons' => $allRayons,
         ]);
     }
 

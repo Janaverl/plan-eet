@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/boxes.min.css') }}">
+{% endblock %}
+
+{% block openbody %}
+    <body style="background-image: url({{ asset('img/space'~random(1, 11)~'.jpg') }})">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/filter.js') }}"></script>
+{% endblock %}

@@ -2,17 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Menuplanner voor op kamp!{% endblock %}</title>
+        <title>{% block title %}Plan-Eet{% endblock %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
         {% endblock %}
     </head>
+    {% block openbody %}
     <body>
-    <!-- Navbar (sit on top) -->
+    {% endblock %}
     <div class="w3-top">
         <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
-            <a href="{{ path('app_homepage') }}" class="w3-bar-item w3-button">Kamp Menu Planner</a>
+            <a href="{{ path('app_homepage') }}" class="w3-bar-item w3-button">Plan-Eet</a>
             <!-- Right-sided navbar links. Hide them on small screens -->
             <div class="w3-right w3-hide-small">
                 {% if not app.user %}
@@ -27,6 +28,8 @@
                         <a href="{{ path('add_recipe') }}" class="w3-bar-item w3-button">Recepten</a>
                         <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredienten</a>
                         <a href="{{ path('add_single', {slug: 'rayon'}) }}" class="w3-bar-item w3-button">Rayon</a>
+                        <a href="{{ path('add_single', {slug: 'recipeType'}) }}" class="w3-bar-item w3-button">Recept Type</a>
+                        <a href="{{ path('add_single', {slug: 'recipeCategory'}) }}" class="w3-bar-item w3-button">Recept Categorie</a>
                     </div>
                 </div>
                 {% endif %}
@@ -34,21 +37,8 @@
             <a href="#" class="w3-bar-item w3-button">Contact</a>
             </div>
         </div>
-        {# <div class="w3-bar w3-white w3-padding">
-            <a href="#" class="w3-bar-item w3-button">Home</a>
-            <a href="#" class="w3-bar-item w3-button">Link 1</a>
-            <div class="w3-dropdown-hover">
-                <button class="w3-button">Dropdown</button>
-                <div class="w3-dropdown-content w3-card-4">
-                <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Link 1</a>
-                <a href="#" class="w3-bar-item w3-button">Link 2</a>
-                <a href="#" class="w3-bar-item w3-button">Link 3</a>
-                </div>
-            </div>
-        </div> #}
     </div>
     {% block body %}{% endblock %}
-    <!-- Footer -->
     <footer class="w3-center w3-light-grey w3-padding-32">
         <p>Eindwerk van Jana Verlinde | Opleiding webcreators 2019-2020</p>
     </footer>
