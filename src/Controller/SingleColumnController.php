@@ -16,13 +16,10 @@ class SingleColumnController extends AbstractController{
      * @Route("/add/name/{slug}", name="add_single")
      */
     public function add($slug){
-        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-        // // or add an optional message - seen by developers
-        // $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $repository = $this->getDoctrine()->getRepository(SingleColumnName::class);
-        // look for a single Rayon by name
+        // look if the slug is in the SingleColumnName-table
         $entity = $repository->findOneBy(['name' => $slug]);
 
         dump($entity);
@@ -30,18 +27,16 @@ class SingleColumnController extends AbstractController{
         if(!$entity){
             return $this->render('general/index.html.twig');
         }else{
-            if($slug == "rayon"){
-                $table = "App\\Entity\\".$entity->getTablename();
+            $table = "App\\Entity\\".$entity->getTablename();
 
-                $result = $this->getDoctrine()
-                ->getRepository($table)
-                ->findAll();
-            };
+            $result = $this->getDoctrine()
+            ->getRepository($table)
+            ->findAll();
     
             dump($result);
     
             return $this->render('single_column/add.html.twig', [
-                'name' => "rayon",
+                'name' => $entity->getTranslation(),
                 'slug' => $slug,
                 'values' => $result,
                 'API' => $entity->getAPI(),
@@ -54,7 +49,7 @@ class SingleColumnController extends AbstractController{
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/fetch/add/rayon", name="fetch_add_rayon", methods={"POST"})
+     * @Route("/fetch/add/{slug}", name="fetch_add_{slug}", methods={"POST"})
      */
     public function fetch(Request $request) : Response {
         $data = json_decode($request->getContent(), true);

@@ -31,6 +31,11 @@ class SingleColumnName
      */
     private $API;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $translation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +73,18 @@ class SingleColumnName
     public function setAPI(string $API): self
     {
         $this->API = $API;
+
+        return $this;
+    }
+
+    public function getTranslation(): ?string
+    {
+        return $this->translation;
+    }
+
+    public function setTranslation(string $translation): self
+    {
+        $this->translation = $translation;
 
         return $this;
     }
