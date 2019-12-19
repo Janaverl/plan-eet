@@ -27,7 +27,7 @@ class IngredientController extends AbstractController{
         ->findAll();
 
         return $this->render('ingredient/add.html.twig', [
-            'ingredients' => $allIngredients,
+            'values' => $allIngredients,
             'rayons' => $allRayons,
         ]);
     }

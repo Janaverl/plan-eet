@@ -5,17 +5,17 @@
         <h1>voeg een ingredient toe</h1>
         
         <div class="cardwrapper">
-            {# <div class="w3-card step">
-                <h3>bestaat het ingredient nog niet in de database?</h3>
-                <input type="text" id="searchForRayons" class="w3-input" placeholder="zoek in ingredienten..">
+            <div class="w3-card step">
+                <h3>Deze waarden zitten al in de database:</h3>
+                <input type="text" class="w3-input filterBy" placeholder="zoek een ingredient ...">
                 <div class="scrollbox">
                     <ul class="w3-ul">
-                        {% for ingredient in ingredients %}
-                            <li>{{rayon.name}}</li>
+                        {% for value in values %}
+                            <li>{{value.name}}</li>
                         {% endfor %}
                     </ul>
                 </div>
-            </div> #}
+            </div>
             <div class="w3-card step generalInformation">
                 <h3>algemene info</h3>
                 <input type="text" id="name" name="name" class="w3-input" placeholder="naam ingredient">
