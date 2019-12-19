@@ -74,17 +74,22 @@ class SingleColumnController extends AbstractController{
             $entityManager->persist($newValue);
 
             try {
+                // message: created
+                // status: 201
+
                 // actually executes the queries (i.e. the INSERT query)
                 $entityManager->flush();
-                $response->setData(['message' => $newValue->getName()." succesvol toegevoegd."]);
-                // $message = $rayon->getName()." succesvol toegevoegd.";
+                $response->setData(['statuscode' => 201]);
             }
             catch (UniqueConstraintViolationException $e) {
-                // $error = $rayon->getName()." bestaat reeds.";
-                $response->setData(['error' => $newValue->getName()." bestaat reeds."]);
+                // message: Unprocessable Entity
+                // status: 422
+                $response->setData(['statuscode' => 422]);
             }
             catch (Exception $e) {
-                $response->setData(['error' => $newValue->getName()." werd niet toegevoegd."]);
+                // message: bad request
+                // status: 400 
+                $response->setData(['statuscode' => 400]);
             }
 
         }

@@ -2,6 +2,9 @@ body{
   min-height: 100vh;
   font-family: "Times New Roman", Georgia, Serif;
 }
+.w3-card.w3-bar {
+  min-height: initial;
+}
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Playfair Display";

@@ -36,11 +36,13 @@ $(document).ready(function () {
             fetch(route, requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    if (result.message) {
-                        $(".success").append(`<li>${result.message}</li>`);
+                    if (result.statuscode == 201) {
+                        $(".success").append(`<li>${value["name"]} werd succesvol toegevoegd.</li>`);
                     };
-                    if (result.error) {
-                        $(".errors").append(`<li>${result.error}</li>`);
+                    if (result.statuscode == 422) {
+                        $(".errors").append(`<li>${value["name"]} bestaat reeds.</li>`);
+                    } else {
+                        $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
                     };
 
                     $('input[type="text"]').val('');
