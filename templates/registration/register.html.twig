@@ -1,17 +1,37 @@
-{% extends 'base.html.twig' %}
+{% extends 'boxes.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <div class="contentwrapper">
-    <h2>Registreer</h2>
+    <div class="contentwrapper">            
+        <div class="cardwrapper">
+            <div class="w3-card step">
+            
+            <h2>Registreer</h2>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            {{ form_start(registrationForm) }}
+                {{ form_row(registrationForm.email, {'attr': {
+                    'class': 'w3-input',
+                    'placeholder': "e-mailadres"
+                    }})
+                }}
+                {{ form_row(registrationForm.plainPassword, {'attr': {
+                    'class': 'w3-input',
+                    'placeholder': 'kies een wachtwoord'
+                    }})
+                }}
+                {{ form_row(registrationForm.agreeTerms) }}
+
+                <button class="btn">Register</button>
+            {{ form_end(registrationForm) }}
+
+            {{ form_errors(registrationForm.email) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+            {{ form_errors(registrationForm.agreeTerms) }}
+
+            </div>
+        </div>
+    
     </div>
 {% endblock %}
