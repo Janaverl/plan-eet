@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use App\Service\Addvalue;
+
 class IngredientController extends AbstractController{
 
      /**
@@ -37,7 +39,7 @@ class IngredientController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/ingredient", name="fetch_add_ingredient", methods={"POST"})
      */
-    public function fetch(Request $request) : Response {
+    public function fetch(Request $request, Addvalue $addvalue) : Response {
         $data = json_decode($request->getContent(), true);
 
         $repository = $this->getDoctrine()->getRepository(Rayon::class);
@@ -45,7 +47,7 @@ class IngredientController extends AbstractController{
         // look for a single Rayon by name
         $rayon = $repository->findOneBy(['name' => $data["rayon"]]);
 
-        // make the
+        // create the object for the new value
         $ingredient = new Ingredient();
         $ingredient->setName($data["name"]);
         if(isset($data["suggestion"]) && $data["suggestion"] != ""){
@@ -59,10 +61,35 @@ class IngredientController extends AbstractController{
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($ingredient);
 
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
+        $response = new JsonResponse();
+        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $ingredient)]);
 
-        // return the JsonRespons if saved
-        return new JsonResponse(['ingredient' => $ingredient->getName()]);
+        // $entityManager = $this->getDoctrine()->getManager();
+
+        // // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        // $entityManager->persist($ingredient);
+        //         // prepare the response
+        //         $response = new JsonResponse();
+
+        // try {
+        //     // message: created
+        //     // status: 201
+
+        //     // actually executes the queries (i.e. the INSERT query)
+        //     $entityManager->flush();
+        //     $response->setData(['statuscode' => 201]);
+        // }
+        // catch (UniqueConstraintViolationException $e) {
+        //     // message: Unprocessable Entity
+        //     // status: 422
+        //     $response->setData(['statuscode' => 422]);
+        // }
+        // catch (Exception $e) {
+        //     // message: bad request
+        //     // status: 400 
+        //     $response->setData(['statuscode' => 400]);
+        // }
+    
+        return $response;
     }
 }

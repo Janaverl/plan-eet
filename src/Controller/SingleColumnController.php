@@ -42,7 +42,6 @@ class SingleColumnController extends AbstractController{
                 // 'message' => $message,
             ]);
         }
-    
     }
 
     /**
@@ -63,7 +62,7 @@ class SingleColumnController extends AbstractController{
         if(!$entity){
             $response->setData(['error' => "Er liep iets mis."]);
         }else{
-            // make the object for the new value
+            // create the object for the new value
             $entityTableName = "App\\Entity\\".$entity->getTablename();
             $newValue = new $entityTableName;
             $newValue->setName($data["name"]);
@@ -91,20 +90,7 @@ class SingleColumnController extends AbstractController{
                 // status: 400 
                 $response->setData(['statuscode' => 400]);
             }
-
         }
-
-
-        // $repository = $this->getDoctrine()->getRepository(Rayon::class);
-
-        // // look for a single Rayon by name
-        // $rayon = $repository->findOneBy(['name' => $data["rayon"]]);
-
-
-        // return the JsonRespons if saved
-        // return new JsonResponse(
-        //     ['message' => $message,
-        //     'error' => $error]);
         return $response;
     }
 }

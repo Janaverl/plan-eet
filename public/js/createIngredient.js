@@ -47,9 +47,18 @@ $(document).ready(function () {
             fetch('https://127.0.0.1:8000/fetch/add/ingredient', requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    $(".success").append(`<li>${JSON.parse(JSON.stringify(result.ingredient))} werd succesvol toegevoegd</li>`);
+                    if (result.statuscode == 201) {
+                        $(".success").append(`<li>${ingredient["name"]} werd succesvol toegevoegd.</li>`);
+                    }
+                    else if (result.statuscode == 422) {
+                        $(".errors").append(`<li>${ingredient["name"]} bestaat reeds.</li>`);
+                    } else {
+                        $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
+                    };
+
                     $('input[type="text"]').val('');
                     $('select').val("default");
+
                     return result;
                 })
                 .catch(error => console.log('error :::', error));
