@@ -25,11 +25,6 @@ class Ingredient
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $unit;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $suggestion;
@@ -44,6 +39,12 @@ class Ingredient
      * @ORM\JoinColumn(nullable=false)
      */
     private $rayon;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Unit", inversedBy="ingredients")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $unit;
 
     public function __construct()
     {
@@ -63,18 +64,6 @@ class Ingredient
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getUnit(): ?string
-    {
-        return $this->unit;
-    }
-
-    public function setUnit(string $unit): self
-    {
-        $this->unit = $unit;
 
         return $this;
     }
@@ -130,6 +119,18 @@ class Ingredient
     public function setRayon(?Rayon $rayon): self
     {
         $this->rayon = $rayon;
+
+        return $this;
+    }
+
+    public function getUnit(): ?Unit
+    {
+        return $this->unit;
+    }
+
+    public function setUnit(?Unit $unit): self
+    {
+        $this->unit = $unit;
 
         return $this;
     }

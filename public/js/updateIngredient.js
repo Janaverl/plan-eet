@@ -6,12 +6,8 @@ $(document).ready(function () {
         let ingredient = {};
         e.preventDefault();
 
-        // confirmation and saving te values
-        if (!$('input#name').val()) {
-            errors.push("geen naam ingevuld")
-        } else {
-            ingredient["name"] = $('input#name').val();
-        };
+        ingredient["name"] = slug;
+
         if ($('input#suggestion').val()) {
             ingredient["suggestion"] = $('input#suggestion').val();
         }
@@ -44,19 +40,16 @@ $(document).ready(function () {
                 redirect: 'follow'
             };
 
-            fetch('/fetch/add/ingredient', requestOptions)
+            fetch('/fetch/update/ingredient', requestOptions)
                 .then(response => response.json())
                 .then(result => {
                     if (result.statuscode == 201) {
-                        $(".success").append(`<li>${ingredient["name"]} werd succesvol toegevoegd.</li>`);
+                        $(".success").append(`<li>${ingredient["name"]} werd succesvol aangepast.</li>`);
                     } else if (result.statuscode == 422) {
                         $(".errors").append(`<li>${ingredient["name"]} bestaat reeds.</li>`);
                     } else {
                         $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
                     };
-
-                    $('input[type="text"]').val('');
-                    $('select').val("default");
 
                     return result;
                 })

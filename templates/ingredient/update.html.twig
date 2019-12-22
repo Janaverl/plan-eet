@@ -5,33 +5,19 @@
         <h1>Pas het ingredient {{value.name}} aan</h1>
         
         <div class="cardwrapper">
-            {# <div class="w3-card step">
-                <h3>Deze waarden zitten al in de database:</h3>
-                <input type="text" class="w3-input filterBy" placeholder="zoek een ingredient ...">
-                <div class="scrollbox">
-                    <ul class="w3-ul">
-                        {% for value in values %}
-                            <li>{{value.name}}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div> #}
             <div class="w3-card step generalInformation">
                 <h3>gegevens van het ingredient: {{value.name}}</h3>
                 <input type="text" id="suggestion" name="suggestion" class="w3-input" placeholder="recept tip (optioneel)" value="{{value.suggestion}}">
 
                 <select class="w3-select w3-border" id="unit" name="unit">
-                    <option class="selectUnit" value="default" disabled selected>eenheid</option>
-                    <option class="selectUnit" value="kg">kg</option>
-                    <option class="selectUnit" value="krop(pen)">krop(pen)</option>
-                    <option class="selectUnit" value="bussel">bussel</option>
-                    <option class="selectUnit" value="blik(ken)">blik(ken)</option>
-                    <option class="selectUnit" value="stuk(s)">stuk(s)</option>
-                    <option class="selectUnit" value="liter">liter</option>
-                    <option class="selectUnit" value="bolletje">bolletje</option>
-                    <option class="selectUnit" value="tas">tas</option>
-                    <option class="selectUnit" value="blokje">blokje</option>
-                    <option class="selectUnit" value="blik">blik</option>                                              
+                    <option class="selectUnit" value="default" disabled selected>kies je eenheid</option>
+                    {% for unit in units %}
+                        {% if unit.name == value.unit.name %}
+                            <option class="selectUnit" value="{{unit.name}}" selected>{{unit.name}}</option>
+                        {% else %}
+                            <option class="selectUnit" value="{{unit.name}}">{{unit.name}}</option>
+                        {% endif %}
+                    {% endfor %}
                 </select>
 
                 <select class="w3-select w3-border" id="rayon" name="rayon">
@@ -58,5 +44,8 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/addIngredient.js') }}"></script>
+    <script>
+        var slug = "{{value.name}}";
+    </script>
+    <script src="{{ asset('js/updateIngredient.js') }}"></script>
 {% endblock %}

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\SingleColumnName;
 use App\Entity\Rayon;
 use App\Entity\RecipeCategory;
+use App\Entity\RecipeType;
+use App\Entity\Unit;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;

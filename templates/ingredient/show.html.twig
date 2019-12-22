@@ -10,11 +10,12 @@
                 <ul class="w3-ul">
                 {% for value in values %}
                     <li>naam: {{value.name}}
-                    | eenheid: {{value.unit}}
+                    | eenheid: {{value.unit.name}}
                     {% if var is defined and var is not null %}
                         | ingredienttip: {{value.suggestion}}
                     {% endif %}
-                    | te vinden in rayon: {{value.rayon.name}}</li>
+                    | te vinden in rayon: {{value.rayon.name}} 
+                    || <a href="{{ path('update_ingredient', {slug: value.name}) }}">pas aan</a></li>
                 {% endfor %}
                 </ul>
             </div>
