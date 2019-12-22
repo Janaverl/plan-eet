@@ -12,7 +12,7 @@ class Addvalue
             // message: created
             // status: 201
 
-            // actually executes the queries (i.e. the INSERT query)
+            // actually executes the queries
             $entityManager->flush();
             $response = 201;
         }

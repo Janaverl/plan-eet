@@ -10,7 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+
+use App\Service\Addvalue;
 
 class SingleColumnController extends AbstractController{
     /**
@@ -20,8 +21,10 @@ class SingleColumnController extends AbstractController{
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         // check if the slug is in the SingleColumnName-table
-        $repository = $this->getDoctrine()->getRepository(SingleColumnName::class);
-        $entity = $repository->findOneBy(['name' => $slug]);
+
+        $entity = $this->getDoctrine()
+            ->getRepository(SingleColumnName::class)
+            ->findOneBy(['name' => $slug]);
 
         if(!$entity){
             return $this->render('general/index.html.twig');
@@ -49,7 +52,7 @@ class SingleColumnController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/{slug}", name="fetch_add_{slug}", methods={"POST"})
      */
-    public function fetch(Request $request, $slug) : Response {
+    public function fetch(Request $request, $slug, Addvalue $addvalue) : Response {
         $data = json_decode($request->getContent(), true);
 
         // check if the slug is in the SingleColumnName-table
@@ -60,7 +63,9 @@ class SingleColumnController extends AbstractController{
         $response = new JsonResponse();
 
         if(!$entity){
-            $response->setData(['error' => "Er liep iets mis."]);
+            // message: page nog found
+            // status: 404
+            $response->setData(['statuscode' => 404]);
         }else{
             // create the object for the new value
             $entityTableName = "App\\Entity\\".$entity->getTablename();
@@ -71,25 +76,8 @@ class SingleColumnController extends AbstractController{
 
             // tell Doctrine you want to (eventually) save the Product (no queries yet)
             $entityManager->persist($newValue);
+            $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $newValue)]);
 
-            try {
-                // message: created
-                // status: 201
-
-                // actually executes the queries (i.e. the INSERT query)
-                $entityManager->flush();
-                $response->setData(['statuscode' => 201]);
-            }
-            catch (UniqueConstraintViolationException $e) {
-                // message: Unprocessable Entity
-                // status: 422
-                $response->setData(['statuscode' => 422]);
-            }
-            catch (Exception $e) {
-                // message: bad request
-                // status: 400 
-                $response->setData(['statuscode' => 400]);
-            }
         }
         return $response;
     }

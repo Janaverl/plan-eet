@@ -1,0 +1,23 @@
+{% extends 'boxes.html.twig' %}
+
+{% block body %}
+    <div class="contentwrapper">
+        <h1>bekijk alle ingredienten</h1>
+        
+        <div class="cardwrapper">
+            <div class="w3-card step">
+                <input type="text" class="w3-input filterBy" placeholder="zoek een ingredient ...">
+                <ul class="w3-ul">
+                {% for value in values %}
+                    <li>naam: {{value.name}}
+                    | eenheid: {{value.unit}}
+                    {% if var is defined and var is not null %}
+                        | ingredienttip: {{value.suggestion}}
+                    {% endif %}
+                    | te vinden in rayon: {{value.rayon.name}}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

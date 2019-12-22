@@ -2,10 +2,10 @@
 
 {% block body %}
     <div class="contentwrapper">
-        <h1>voeg een ingredient toe</h1>
+        <h1>Pas het ingredient {{value.name}} aan</h1>
         
         <div class="cardwrapper">
-            <div class="w3-card step">
+            {# <div class="w3-card step">
                 <h3>Deze waarden zitten al in de database:</h3>
                 <input type="text" class="w3-input filterBy" placeholder="zoek een ingredient ...">
                 <div class="scrollbox">
@@ -15,11 +15,10 @@
                         {% endfor %}
                     </ul>
                 </div>
-            </div>
+            </div> #}
             <div class="w3-card step generalInformation">
-                <h3>algemene info</h3>
-                <input type="text" id="name" name="name" class="w3-input" placeholder="naam ingredient">
-                <input type="text" id="suggestion" name="suggestion" class="w3-input" placeholder="recept tip (optioneel)">
+                <h3>gegevens van het ingredient: {{value.name}}</h3>
+                <input type="text" id="suggestion" name="suggestion" class="w3-input" placeholder="recept tip (optioneel)" value="{{value.suggestion}}">
 
                 <select class="w3-select w3-border" id="unit" name="unit">
                     <option class="selectUnit" value="default" disabled selected>eenheid</option>
@@ -36,16 +35,20 @@
                 </select>
 
                 <select class="w3-select w3-border" id="rayon" name="rayon">
-                    <option class="selectRayon" value="default" disabled selected>rayon</option>
+                    <option class="selectRayon" value="default" disabled>kies je rayon</option>
                     {% for rayon in rayons %}
-                        <option class="selectRayon" value="{{rayon.name}}">{{rayon.name}}</option>
+                        {% if rayon.name == value.rayon.name %}
+                            <option class="selectRayon" value="{{rayon.name}}" selected>{{rayon.name}}</option>
+                        {% else %}
+                            <option class="selectRayon" value="{{rayon.name}}">{{rayon.name}}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
 
             <!-- confirmation and errors -->
             <div class="w3-card step recipe">
-                <button class="confirm">Joepie, alweer een ingredientje bij!</button>
+                <button class="confirm">Pas dit ingredient aan</button>
                 <ul class="errors"></ul>
                 <ul class="success"></ul>
             </div>

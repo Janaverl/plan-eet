@@ -63,33 +63,52 @@ class IngredientController extends AbstractController{
 
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $ingredient)]);
-
-        // $entityManager = $this->getDoctrine()->getManager();
-
-        // // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        // $entityManager->persist($ingredient);
-        //         // prepare the response
-        //         $response = new JsonResponse();
-
-        // try {
-        //     // message: created
-        //     // status: 201
-
-        //     // actually executes the queries (i.e. the INSERT query)
-        //     $entityManager->flush();
-        //     $response->setData(['statuscode' => 201]);
-        // }
-        // catch (UniqueConstraintViolationException $e) {
-        //     // message: Unprocessable Entity
-        //     // status: 422
-        //     $response->setData(['statuscode' => 422]);
-        // }
-        // catch (Exception $e) {
-        //     // message: bad request
-        //     // status: 400 
-        //     $response->setData(['statuscode' => 400]);
-        // }
     
         return $response;
+    }
+    /**
+     * @Route("/show/ingredient", name="show_ingredients")
+     */
+    public function show(){
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $allIngredients = $this->getDoctrine()
+            ->getRepository(Ingredient::class)
+            ->findAll();
+
+        foreach ($allIngredients as $ingredient) {
+            $ingredient->getRayon()->getName();
+        };
+
+        return $this->render('ingredient/show.html.twig', [
+            'values' => $allIngredients,
+            // 'rayons' => $allRayons,
+        ]);
+    }
+
+     /**
+     * @Route("/update/ingredient/{slug}", name="update_ingredient_{slug}")
+     */
+    public function update($slug){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $ingredient = $this->getDoctrine()
+            ->getRepository(Ingredient::class)
+            ->findOneBy(['name' => $slug]);
+
+        if(!$ingredient){
+            return $this->render('general/index.html.twig');
+        }else{
+            $ingredient->getRayon()->getName();
+
+            $allRayons = $this->getDoctrine()
+            ->getRepository(Rayon::class)
+            ->findAll();
+    
+            return $this->render('ingredient/update.html.twig', [
+                'value' => $ingredient,
+                'rayons' => $allRayons,
+            ]);
+        }
     }
 }

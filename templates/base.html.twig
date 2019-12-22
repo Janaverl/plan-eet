@@ -32,6 +32,12 @@
                         <a href="{{ path('add_single', {slug: 'recipeCategory'}) }}" class="w3-bar-item w3-button">Recept Categorie</a>
                     </div>
                 </div>
+                <div class="w3-dropdown-hover">
+                    <button class="w3-bar-item w3-button">Bekijk data</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Ingredienten</a>
+                    </div>
+                </div>
                 {% endif %}
             <a href="#" class="w3-bar-item w3-button">Menu</a>
             <a href="#" class="w3-bar-item w3-button">Contact</a>
