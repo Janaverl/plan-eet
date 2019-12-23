@@ -154,6 +154,8 @@ class IngredientController extends AbstractController{
             ->setUnit($unit);
         if(isset($data["suggestion"]) && $data["suggestion"] != ""){
             $ingredient->setSuggestion($data["suggestion"]);
+        }else{
+            $ingredient->setSuggestion("");
         };
 
         $entityManager = $this->getDoctrine()->getManager();

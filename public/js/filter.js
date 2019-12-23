@@ -9,5 +9,6 @@ $(document).ready(function () {
     // start searching in the list of rayons as soon as the user starts typing in the inputfield
     $(".filterBy").on("keyup", function (e) {
         filterthis($(this).val().toLowerCase(), $("li"));
+        filterthis($(this).val().toLowerCase(), $("tr"));
     });
 });

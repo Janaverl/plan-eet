@@ -6,19 +6,39 @@
         
         <div class="cardwrapper">
             <div class="w3-card step">
-                <input type="text" class="w3-input filterBy" placeholder="zoek een ingredient ...">
-                <ul class="w3-ul">
+            <input type="text" id="searchOne" class="w3-input search" placeholder="zoeken ...">
+            <input type="text" id="searchTwo" class="w3-input search" placeholder="zoeken ...">
+            <input type="text" id="searchThree" class="w3-input search" placeholder="zoeken ...">
+            <input type="text" id="searchFour" class="w3-input search" placeholder="zoeken ...">
+
+                  <table class="w3-table w3-striped w3-bordered" id="allIngredients" width="100%">
+                  <thead>
+                    <tr class="sortTitles">
+                        <th>naam ingredient</th>
+                        <th>eenheid</th>
+                        <th>te vinden in rayon</th>
+                        <th>ingredienttip</th>
+                        <th>pas aan</th>
+                    </tr>
+                    </thead>
+                    <tbody class="searchable">
                 {% for value in values %}
-                    <li>naam: {{value.name}}
-                    | eenheid: {{value.unit.name}}
-                    {% if var is defined and var is not null %}
-                        | ingredienttip: {{value.suggestion}}
-                    {% endif %}
-                    | te vinden in rayon: {{value.rayon.name}} 
-                    || <a href="{{ path('update_ingredient', {slug: value.name}) }}">pas aan</a></li>
+                    <tr>
+                        <td class="name">{{value.name}}</td>
+                        <td class="rayon">{{value.unit.name}}</td>
+                        <td>{{value.rayon.name}}</td>
+                        <td>{{value.suggestion}}</td>
+                        <td class="change"><a href="{{ path('update_ingredient', {slug: value.name}) }}">pas aan</a></td>
+                    </tr>
                 {% endfor %}
-                </ul>
+                </tbody>
+                </table>
             </div>
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/sorttable.js') }}"></script>
+{% endblock %} 

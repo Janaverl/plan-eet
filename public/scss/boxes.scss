@@ -117,4 +117,11 @@ h1{
     -ms-transform: translateX(26px);
     transform: translateX(26px);
   }
-  
+
+  .w3-striped tbody tr.hovered{
+  background-color: lightblue;
+}
+
+.sortTitles th {
+  cursor: pointer;
+  }
