@@ -51,43 +51,46 @@ function sortTable(n) {
     }
 }
 
-$(function () {
-    $('.search').keyup(filter);
+function filter() {
+    const searchFor = [];
 
-    function filter() {
-        var rex1 = new RegExp($('#searchOne').val(), 'i');
-        var rex2 = new RegExp($('#searchTwo').val(), 'i');
-        var rex3 = new RegExp($('#searchTwo').val(), 'i');
-        var rex4 = new RegExp($('#searchTwo').val(), 'i');
-
-        var row = $(".searchable tr")
-
-        // var colIngr = $('.name');
-        // var colRayon = $('.rayon');
-
-        row.hide();
-
-        row.filter(function () {
-            console.log(this);
-
-            var tester = true;
-
-            tester1 = rex1.test($(this).text());
-            tester2 = rex2.test($(this).text());
-            tester3 = rex3.test($(this).text());
-            tester4 = rex4.test($(this).text());
-            console.log(tester);
-
-            tester = tester1 && tester2 && tester3 && tester4;
-
-            return tester;
-        }).show();
+    for (let i = 0; i < $(".search input").length; i++) {
+        searchFor.push(new RegExp($(`.search input:nth-child(${i + 1})`).val(), 'i'));
     }
-});
+
+    const row = $(".searchable tr")
+
+    row.hide();
+
+    row.filter(function () {
+        let tester = true;
+        const that = this;
+
+        searchFor.forEach(function (search) {
+            test = search.test($(that).text());
+
+            if (test == false) {
+                return tester = false;
+            }
+        });
+
+        return tester;
+    }).show();
+}
+
 
 $(document).ready(function () {
     $(".change").hover(function () {
         console.log($(this).parent());
         $(this).parent().toggleClass("hovered")
     });
+
+    $('.search').keyup(filter);
+
+    for (let i = 0; i < $(".sortTitles th").length; i++) {
+        $(`.sortTitles th:nth-child(${i + 1})`).on("click", function () {
+            sortTable(i);
+        })
+    }
+
 });
