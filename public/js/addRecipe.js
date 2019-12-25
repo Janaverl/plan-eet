@@ -3,14 +3,6 @@ $(document).ready(function () {
     myHeaders.append("Content-Type", "application/json");
 
     // ---------------------------------------------
-    // my functions
-    function filterthis(filterBy, filterThis) {
-        filterThis.filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(filterBy) > -1)
-        });
-    }
-
-    // ---------------------------------------------
     // requestoptions for GET
     var requestOptions = {
         method: 'GET',
@@ -18,54 +10,9 @@ $(document).ready(function () {
         redirect: 'follow'
     };
 
-    // ---------------------------------------------
-    // fetch for the categories
-    fetch('http://localhost:9000/api/getCategories.php', requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            let labels = "";
-            result.forEach(function (category) {
-                labels += `<option value="${category.name}">${category.name}</option>`
-            });
-            return $(".selectCategorie").after(labels);
-        })
-        .catch(error => console.log('error', error));
-
-    // ---------------------------------------------
-    // fetch for the types
-    fetch('http://localhost:9000/api/getTypes.php', requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            let labels = "";
-            result.forEach(function (type) {
-                labels += `<option value="${type.name}">${type.name}</option>`
-            });
-            return $(".selectType").after(labels);
-        })
-        .catch(error => console.log('error', error));
-
-    // ---------------------------------------------
-    // fetch for all the ingredients
-    fetch('http://localhost:9000/api/getIngredients.php', requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            let checkboxes = "";
-            result.forEach(function (ingredient) {
-                checkboxes += `<div class="oneIngredient ingredient${ingredient.ingredientID}">`;
-                checkboxes += `<input class="w3-check ingredienten" type="checkbox" name="ingredienten" value="ingredient${ingredient.ingredientID}" />`;
-                checkboxes += `<label for="unitingredient${ingredient.ingredientID}">`;
-                checkboxes += `<input type="number" step="0.01" name="unitingredient${ingredient.ingredientID}" disabled />`;
-                checkboxes += `${ingredient.eenheid}</label>`;
-                checkboxes += `<label for="ingredient${ingredient.ingredientID}"> ${ingredient.naamIngredient}</label>`
-                checkboxes += `</div>`
-            });
-            return $(".chooseIngredients").append(checkboxes);
-        })
-        .catch(error => console.log('error', error));
-
     // start searching in the list of ingredients as soon as the user starts typing in the inputfield
     $("#searchForIngredients").on("keyup", function (e) {
-        filterthis($(this).val().toLowerCase(), $(".oneIngredient"));
+        filterList($(this).val().toLowerCase(), $(".oneIngredient"));
     });
 
     // show only the selected ingredients when the user turned on the switch. Show all the ingredients when the user turns the switch off
@@ -73,29 +20,22 @@ $(document).ready(function () {
         if (this.checked) {
             $('.oneIngredient').css('display', 'none');
             $('input:checkbox[name="ingredienten"]:checked').each(function () {
-                console.log('.oneIngredient .' + $(this).val());
-                $('.oneIngredient.' + $(this).val()).css('display', 'block');
+                $('div.oneIngredient.' + $(this).val()).css('display', 'block');
             });
         } else {
             $('.oneIngredient').css('display', 'block');
         }
     });
 
-    // enable the input value for the ingredient-unit when the ingredient is selected. Disable when it's unselected
-    $(window).load(function () {
-        function enableUnits() {
-            $('.oneIngredient input[type="checkbox"]').on("change", function () {
-                console.log("I asked the radio-buttons, and it told me you've made a change");
-                const value = $(this).val();
-                if (!$('input[name="unit' + value + '"]').attr('disabled')) {
-                    return $('input[name="unit' + value + '"]').attr('disabled', true);
-                } else {
-                    return $('input[name="unit' + value + '"]').attr('disabled', false);
-                }
-            });
-        };
-        window.setTimeout(enableUnits, 1000); // 5 seconds
-    })
+    // enable the input value for the ingredient-unit when the ingredient is selected. Disable when it's not selected
+    $('input:checkbox[name="ingredienten"]').change(function (e) {
+        const value = $(this).val();
+        if (!$('input[name="unit-' + value + '"]').attr('disabled')) {
+            return $('input[name="unit-' + value + '"]').attr('disabled', true);
+        } else {
+            return $('input[name="unit-' + value + '"]').attr('disabled', false);
+        }
+    });
 
 
     // -----------------------------------------------

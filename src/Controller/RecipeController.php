@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Rayon;
+use App\Entity\Recipes;
+use App\Entity\RecipeType;
+use App\Entity\RecipeCategory;
 use App\Entity\Ingredient;
-use App\Entity\SingleColumnName;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,12 +19,36 @@ class RecipeController extends AbstractController{
      * @Route("/add/recipe", name="add_recipe")
      */
     public function add(){
-        // $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('ROLE_USER');
 
-        // // or add an optional message - seen by developers
-        // $this->denyAccessUnlessGranted('ROLE_USER', null, 'User tried to access a page without having ROLE_USER');
+        $allRecipes = $this->getDoctrine()
+            ->getRepository(Recipes::class)
+            ->findAll();
 
-        return $this->render('recipe/add.html.twig');
+        $allCategories = $this->getDoctrine()
+            ->getRepository(RecipeCategory::class)
+            ->findAll();
+
+        $allTypes = $this->getDoctrine()
+            ->getRepository(RecipeType::class)
+            ->findAll();
+
+        $allIngredients = $this->getDoctrine()
+            ->getRepository(Ingredient::class)
+            ->findAll();
+
+        foreach ($allIngredients as $ingredient) {
+                $ingredient->getUnit()->getName();
+        };
+
+        return $this->render('recipe/add.html.twig',
+        [
+            'values' => $allRecipes,
+            'categories' => $allCategories,
+            'types' => $allTypes,
+            'ingredients' => $allIngredients,
+        ]
+        );
     }
 
 }
