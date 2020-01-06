@@ -37,16 +37,17 @@
                     <option class="selectType" value="{{type.name}}">{{type.name}}</option>
                 {% endfor %}
             </select>
+            <input type="number" id="numberOfEaters"><label for="numberOfEaters">eters</label>
+
         </div>
 
         {# create the boxes to select an ingredient #}
         <div class="w3-card step ingredients">
-            <input type="number" id="numberOfEaters"><label for="numberOfEaters">eters</label>
             <h3>kies je ingredienten</h3>
             <input type="text" id="searchForIngredients" class="w3-input" placeholder="zoek naar ingredienten">
             <br>
             <p>
-                <label class="switch">
+                <label class="switch ingredients">
                     <input type="checkbox">
                     <span class="slider"></span>
                 </label>
@@ -66,10 +67,32 @@
             </div>
         </div>
 
-            <div class="w3-card step recipe">
-                <h3><label for="recipe">bereidingswijze</label></h3>
-                <textarea name="recipe" cols="30" rows="10"></textarea>
+        <div class="w3-card step herbs">
+            <h3>kies je kruiden</h3>
+            <input type="text" id="searchForHerbs" class="w3-input" placeholder="zoek naar kruiden">
+            <br>
+            <p>
+                <label class="switch herbs">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+                toon enkel geselecteerde kruiden
+            </p>
+            
+            <div class="scrollbox">
+            {% for herb in herbs %}
+                <div class="oneHerb herb{{herb.id}}">
+                    <input class="w3-check herbs" type="checkbox" name="herbs" value="herb{{herb.id}}"/>
+                    <label for="herb{{herb.id}}">{{herb.name}}</label>
+                </div>
+            {% endfor %}
             </div>
+        </div>
+
+        <div class="w3-card step recipe">
+            <h3><label for="recipe">bereidingswijze</label></h3>
+            <textarea name="recipe" cols="30" rows="10"></textarea>
+        </div>
 
             <!-- confirmation and errord -->
             <div class="w3-card step recipe">

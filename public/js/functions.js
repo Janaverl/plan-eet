@@ -83,3 +83,16 @@ function filterList(filterBy, filterThis) {
         $(this).toggle($(this).text().toLowerCase().indexOf(filterBy) > -1)
     });
 }
+
+function switchselector(that, element, checkbox) {
+    if (that.checked) {
+        console.log("you checked");
+        $(element).css('display', 'none');
+        $('input:checkbox[name="' + checkbox + '"]:checked').each(function () {
+            console.log($(this).val());
+            $('div' + element + '.' + $(this).val()).css('display', 'block');
+        });
+    } else {
+        $(element).css('display', 'block');
+    }
+}

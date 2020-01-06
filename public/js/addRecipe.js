@@ -14,17 +14,16 @@ $(document).ready(function () {
     $("#searchForIngredients").on("keyup", function (e) {
         filterList($(this).val().toLowerCase(), $(".oneIngredient"));
     });
+    $("#searchForHerbs").on("keyup", function (e) {
+        filterList($(this).val().toLowerCase(), $(".oneHerb"));
+    });
 
-    // show only the selected ingredients when the user turned on the switch. Show all the ingredients when the user turns the switch off
-    $(".switch input").change(function (e) {
-        if (this.checked) {
-            $('.oneIngredient').css('display', 'none');
-            $('input:checkbox[name="ingredients"]:checked').each(function () {
-                $('div.oneIngredient.' + $(this).val()).css('display', 'block');
-            });
-        } else {
-            $('.oneIngredient').css('display', 'block');
-        }
+    // show only the selected ingredients/herbs when the user turned on the switch. Show all the ingredients/herbs when the user turns the switch off
+    $(".switch.ingredients input").change(function (e) {
+        switchselector(this, ".oneIngredient", "ingredients");
+    });
+    $(".switch.herbs input").change(function (e) {
+        switchselector(this, ".oneHerb", "herbs");
     });
 
     // enable the input value for the ingredient-unit when the ingredient is selected. Disable when it's not selected
@@ -81,7 +80,6 @@ $(document).ready(function () {
                     errors.push(`geen hoeveelheid ingevuld voor ${$(this).siblings().eq(1).text()}`);
                 } else {
                     const oneIngredient = {};
-                    // oneIngredient["ingredientID"] = $(this).val();
                     oneIngredient["quantity"] = $(this).siblings().children('input').val();
                     // oneIngredient["unit"] = $(this).siblings().first().text();
                     oneIngredient["name"] = $(this).siblings().eq(1).text();
@@ -90,6 +88,16 @@ $(document).ready(function () {
                 }
             });
             recipe["ingredients"] = ingr
+        };
+        if ($(".oneHerb input:checkbox:checked").length != 0) {
+            let herbs = {};
+            let i = 0;
+            $(".oneHerb input:checkbox:checked").each(function () {
+                const oneHerb = $(this).siblings().eq(0).text();
+                herbs[i] = oneHerb;
+                i++;
+            });
+            recipe["herbs"] = herbs
         };
         if (!$('textarea').val()) {
             errors.push("geen bereidingswijze ingevuld");
@@ -126,7 +134,9 @@ $(document).ready(function () {
                         $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
                     };
 
-                    $('input[type="text"]').val('');
+                    $('.w3-check').prop('checked', false);
+                    $('input').val('');
+                    $('textarea').val('');
                     $('select').val("default");
 
                     return result;

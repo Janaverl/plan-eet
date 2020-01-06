@@ -7,6 +7,8 @@ use App\Entity\RecipeType;
 use App\Entity\RecipeCategory;
 use App\Entity\RecipeIngredients;
 use App\Entity\Ingredient;
+use App\Entity\RecipeHerb;
+use App\Entity\Herb;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,6 +41,10 @@ class RecipeController extends AbstractController{
         $allIngredients = $this->getDoctrine()
             ->getRepository(Ingredient::class)
             ->findAll();
+        
+        $allHerbs = $this->getDoctrine()
+        ->getRepository(Herb::class)
+        ->findAll();
 
         foreach ($allIngredients as $ingredient) {
                 $ingredient->getUnit()->getName();
@@ -50,6 +56,7 @@ class RecipeController extends AbstractController{
             'categories' => $allCategories,
             'types' => $allTypes,
             'ingredients' => $allIngredients,
+            'herbs' => $allHerbs,
         ]
         );
     }
@@ -85,6 +92,22 @@ class RecipeController extends AbstractController{
         $entityManager = $this->getDoctrine()->getManager();
         // tell Doctrine you want to (eventually) save the Recipe (no queries yet)
         $entityManager->persist($recipe);
+
+        if(isset($data["herbs"]) && $data["herbs"] != ""){
+            // $recipe->setSuggestion($data["suggestion"]);
+            foreach($data["herbs"] as $herb){
+
+                // look for a single ingredientID by name
+                $herb = $this->getDoctrine()
+                    ->getRepository(Herb::class)
+                    ->findOneBy(['name' => $herb]);
+                
+                $recipeHerb = new RecipeHerb();
+                $recipeHerb->setHerb($herb);
+                $recipeHerb->setRecipe($recipe);
+                $entityManager->persist($recipeHerb);
+            }
+        };
 
         foreach($data["ingredients"] as $ingredient){
             $quantity = $ingredient["quantity"] / $data["numberOfEaters"];
