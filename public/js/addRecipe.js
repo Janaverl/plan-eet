@@ -2,13 +2,13 @@ $(document).ready(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    // ---------------------------------------------
-    // requestoptions for GET
-    var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-    };
+    // // ---------------------------------------------
+    // // requestoptions for GET
+    // var requestOptions = {
+    //     method: 'GET',
+    //     headers: myHeaders,
+    //     redirect: 'follow'
+    // };
 
     // start searching in the list of ingredients as soon as the user starts typing in the inputfield
     $("#searchForIngredients").on("keyup", function (e) {
@@ -19,7 +19,7 @@ $(document).ready(function () {
     $(".switch input").change(function (e) {
         if (this.checked) {
             $('.oneIngredient').css('display', 'none');
-            $('input:checkbox[name="ingredienten"]:checked').each(function () {
+            $('input:checkbox[name="ingredients"]:checked').each(function () {
                 $('div.oneIngredient.' + $(this).val()).css('display', 'block');
             });
         } else {
@@ -28,7 +28,7 @@ $(document).ready(function () {
     });
 
     // enable the input value for the ingredient-unit when the ingredient is selected. Disable when it's not selected
-    $('input:checkbox[name="ingredienten"]').change(function (e) {
+    $('input:checkbox[name="ingredients"]').change(function (e) {
         const value = $(this).val();
         if (!$('input[name="unit-' + value + '"]').attr('disabled')) {
             return $('input[name="unit-' + value + '"]').attr('disabled', true);
@@ -48,18 +48,18 @@ $(document).ready(function () {
         e.preventDefault();
 
         // confirmation and saving te values
-        if (!$('input#naam').val()) {
+        if (!$('input#name').val()) {
             errors.push("geen naam ingevuld")
         } else {
-            recipe["name"] = $('input#naam').val();
+            recipe["name"] = $('input#name').val();
         };
-        if ($('input#receptTip').val()) {
-            recipe["receptTip"] = $('input#receptTip').val();
+        if ($('input#suggestion').val()) {
+            recipe["suggestion"] = $('input#suggestion').val();
         }
-        if (categorie.value == "default") {
+        if (category.value == "default") {
             errors.push("geen categorie geselecteerd");
         } else {
-            recipe["categorie"] = categorie.value;
+            recipe["category"] = category.value;
         };
         if (type.value == "default") {
             errors.push("geen type geselecteerd");
@@ -69,7 +69,7 @@ $(document).ready(function () {
         if (!$("#numberOfEaters").val()) {
             errors.push("geen aantal eters ingevuld");
         } else {
-            recipe["nrOfEaters"] = $("#numberOfEaters").val();
+            recipe["numberOfEaters"] = $("#numberOfEaters").val();
         };
         if ($(".oneIngredient input:checkbox:checked").length == 0) {
             errors.push("geen ingredient geselecteerd");
@@ -81,10 +81,10 @@ $(document).ready(function () {
                     errors.push(`geen hoeveelheid ingevuld voor ${$(this).siblings().eq(1).text()}`);
                 } else {
                     const oneIngredient = {};
-                    oneIngredient["ingredientID"] = $(this).val();
+                    // oneIngredient["ingredientID"] = $(this).val();
                     oneIngredient["quantity"] = $(this).siblings().children('input').val();
-                    oneIngredient["unit"] = $(this).siblings().first().text();
-                    oneIngredient["ingr"] = $(this).siblings().eq(1).text();
+                    // oneIngredient["unit"] = $(this).siblings().first().text();
+                    oneIngredient["name"] = $(this).siblings().eq(1).text();
                     ingr[i] = oneIngredient;
                     i++;
                 }
@@ -92,9 +92,9 @@ $(document).ready(function () {
             recipe["ingredients"] = ingr
         };
         if (!$('textarea').val()) {
-            errors.push("geen recept ingevuld");
+            errors.push("geen bereidingswijze ingevuld");
         } else {
-            recipe["recipe"] = $("textarea").val();
+            recipe["instructions"] = $("textarea").val();
         };
 
         // fetch or display errors
@@ -115,9 +115,22 @@ $(document).ready(function () {
                 redirect: 'follow'
             };
 
-            fetch('http://localhost:9000/api/setRecipe.php', requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(JSON.stringify(result)))
+            fetch('/fetch/add/recipe', requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.statuscode == 201) {
+                        $(".success").append(`<li>${recipe["name"]} werd succesvol toegevoegd.</li>`);
+                    } else if (result.statuscode == 422) {
+                        $(".errors").append(`<li>${recipe["name"]} bestaat reeds.</li>`);
+                    } else {
+                        $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
+                    };
+
+                    $('input[type="text"]').val('');
+                    $('select').val("default");
+
+                    return result;
+                })
                 .catch(error => console.log('error :::', error));
 
         } else {
