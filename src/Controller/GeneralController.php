@@ -7,15 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-use App\Service\MessageGenerator;
-
-
 class GeneralController extends AbstractController
 {
      /**
      * @Route("/", name="app_homepage")
      */
-    public function index(AuthenticationUtils $authenticationUtils, MessageGenerator $messageGenerator): Response
+    public function index(AuthenticationUtils $authenticationUtils): Response
     {
 
         // get the login error if there is one
@@ -24,6 +21,5 @@ class GeneralController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('general/index.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-        // return $this->render('general/index.html.twig');
     }
 }

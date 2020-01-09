@@ -86,7 +86,6 @@ function filterList(filterBy, filterThis) {
 
 function switchselector(that, element, checkbox) {
     if (that.checked) {
-        console.log("you checked");
         $(element).css('display', 'none');
         $('input:checkbox[name="' + checkbox + '"]:checked').each(function () {
             console.log($(this).val());

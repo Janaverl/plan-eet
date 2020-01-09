@@ -6,8 +6,8 @@ $(document).ready(function () {
 
     $('.search').keyup(filterTable);
 
-    for (let i = 0; i < $(".sortTitles th").length; i++) {
-        $(`.sortTitles th:nth-child(${i + 1})`).on("click", function () {
+    for (let i = 0; i < $(".sortable").length; i++) {
+        $(`.sortable:nth-child(${i + 1})`).on("click", function () {
             sortTable(i);
         })
     }

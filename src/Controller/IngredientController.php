@@ -33,10 +33,11 @@ class IngredientController extends AbstractController{
             ->getRepository(Rayon::class)
             ->findAll();
 
-        return $this->render('ingredient/add.html.twig', [
+        return $this->render('ingredient/individual.html.twig', [
             'values' => $allIngredients,
             'rayons' => $allRayons,
             'units' => $allUnits,
+            'mode' => "add",
         ]);
     }
 
@@ -91,7 +92,7 @@ class IngredientController extends AbstractController{
             $ingredient->getUnit()->getName();
         };
 
-        return $this->render('ingredient/show.html.twig', [
+        return $this->render('ingredient/all.html.twig', [
             'values' => $allIngredients,
         ]);
     }
@@ -119,10 +120,11 @@ class IngredientController extends AbstractController{
                 ->getRepository(Unit::class)
                 ->findAll();
     
-            return $this->render('ingredient/update.html.twig', [
+            return $this->render('ingredient/individual.html.twig', [
                 'value' => $ingredient,
                 'rayons' => $allRayons,
-                'units' => $allUnits
+                'units' => $allUnits,
+                'mode' => "update",
             ]);
         }
     }
