@@ -185,16 +185,11 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% if mode == "update" %}
     <script>
         var mode = "{{mode}}";
-        var slug = "{{value.name}}";
+        {% if mode == "update" %}
+            var slug = "{{value.name}}";
+        {% endif %}
     </script>
-     <script src="{{ asset('js/updateRecipe.js') }}"></script>
-
-    {% else %}
-        <script src="{{ asset('js/addRecipe.js') }}"></script>
-
-    {% endif %}
-    {# <script src="{{ asset('js/addRecipe.js') }}"></script> #}
+    <script src="{{ asset('js/recipe.js') }}"></script>
 {% endblock %}

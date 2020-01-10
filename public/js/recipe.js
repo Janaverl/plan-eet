@@ -2,14 +2,6 @@ $(document).ready(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    // // ---------------------------------------------
-    // // requestoptions for GET
-    // var requestOptions = {
-    //     method: 'GET',
-    //     headers: myHeaders,
-    //     redirect: 'follow'
-    // };
-
     // start searching in the list of ingredients as soon as the user starts typing in the inputfield
     $("#searchForIngredients").on("keyup", function (e) {
         filterList($(this).val().toLowerCase(), $(".oneIngredient"));
@@ -111,14 +103,10 @@ $(document).ready(function () {
 
         // fetch or display errors
         if (errors.length == 0) {
-            console.log("all set to push");
-            console.log(recipe);
-
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify(recipe);
-            console.log(raw);
 
             var requestOptions = {
                 method: 'POST',
@@ -127,31 +115,43 @@ $(document).ready(function () {
                 redirect: 'follow'
             };
 
-            // if (mode == "add") {
-            fetch('/fetch/add/recipe', requestOptions)
-                .then(response => response.json())
-                .then(result => {
-                    if (result.statuscode == 201) {
-                        $(".success").append(`<li>${recipe["name"]} werd succesvol toegevoegd.</li>`);
-                    } else if (result.statuscode == 422) {
-                        $(".errors").append(`<li>${recipe["name"]} bestaat reeds.</li>`);
-                    } else {
-                        $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
-                    };
+            if (mode == "add") {
+                fetch('/fetch/add/recipe', requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.statuscode == 201) {
+                            $(".success").append(`<li>${recipe["name"]} werd succesvol toegevoegd.</li>`);
+                        } else if (result.statuscode == 422) {
+                            $(".errors").append(`<li>${recipe["name"]} bestaat reeds.</li>`);
+                        } else {
+                            $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
+                        };
 
-                    $('.w3-check').prop('checked', false);
-                    $('input').val('');
-                    $('textarea').val('');
-                    $('select').val("default");
+                        $('.w3-check').prop('checked', false);
+                        $('input').val('');
+                        $('textarea').val('');
+                        $('select').val("default");
 
-                    return result;
-                })
-                .catch(error => console.log('error :::', error));
-            // } else if (mode == "update") {
+                        return result;
+                    })
+                    .catch(error => console.log('error :::', error));
+            } else if (mode == "update") {
+                fetch('/fetch/update/recipe', requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+                        console.log("result :: " + result)
+                        if (result.statuscode == 201) {
+                            $(".success").append(`<li>${recipe["name"]} werd succesvol aangepast.</li>`);
+                        } else {
+                            $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
+                        };
 
-            // } else {
-            //     $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
-            // }
+                        return result;
+                    })
+                    .catch(error => console.log('error :::', error));
+            } else {
+                $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
+            }
 
         } else {
             errors.forEach(error =>
