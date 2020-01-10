@@ -77,26 +77,7 @@ class IngredientController extends AbstractController{
     
         return $response;
     }
-    /**
-     * @Route("/show/ingredient", name="show_ingredients")
-     */
-    public function show(){
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $allIngredients = $this->getDoctrine()
-            ->getRepository(Ingredient::class)
-            ->findAll();
-
-        foreach ($allIngredients as $ingredient) {
-            $ingredient->getRayon()->getName();
-            $ingredient->getUnit()->getName();
-        };
-
-        return $this->render('ingredient/all.html.twig', [
-            'values' => $allIngredients,
-        ]);
-    }
-
+    
      /**
      * @Route("/update/ingredient/{slug}", name="update_ingredient")
      */
@@ -161,12 +142,32 @@ class IngredientController extends AbstractController{
         };
 
         $entityManager = $this->getDoctrine()->getManager();
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($ingredient);
+        // // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        // $entityManager->persist($ingredient);
 
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $ingredient)]);
     
         return $response;
+    }
+
+    /**
+     * @Route("/show/ingredienten", name="show_ingredients")
+     */
+    public function showall(){
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $allIngredients = $this->getDoctrine()
+            ->getRepository(Ingredient::class)
+            ->findAll();
+
+        foreach ($allIngredients as $ingredient) {
+            $ingredient->getRayon()->getName();
+            $ingredient->getUnit()->getName();
+        };
+
+        return $this->render('ingredient/all.html.twig', [
+            'values' => $allIngredients,
+        ]);
     }
 }

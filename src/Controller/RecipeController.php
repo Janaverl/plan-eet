@@ -43,20 +43,21 @@ class RecipeController extends AbstractController{
             ->findAll();
         
         $allHerbs = $this->getDoctrine()
-        ->getRepository(Herb::class)
-        ->findAll();
+            ->getRepository(Herb::class)
+            ->findAll();
 
         foreach ($allIngredients as $ingredient) {
                 $ingredient->getUnit()->getName();
         };
 
-        return $this->render('recipe/add.html.twig',
+        return $this->render('recipe/individual.html.twig',
         [
             'values' => $allRecipes,
             'categories' => $allCategories,
             'types' => $allTypes,
             'ingredients' => $allIngredients,
             'herbs' => $allHerbs,
+            'mode' => "add",
         ]
         );
     }
@@ -97,7 +98,7 @@ class RecipeController extends AbstractController{
             // $recipe->setSuggestion($data["suggestion"]);
             foreach($data["herbs"] as $herb){
 
-                // look for a single ingredientID by name
+                // look for a single herb by name
                 $herb = $this->getDoctrine()
                     ->getRepository(Herb::class)
                     ->findOneBy(['name' => $herb]);
@@ -129,30 +130,200 @@ class RecipeController extends AbstractController{
         return $response;
     }
 
+    
+     /**
+     * @Route("/update/recept/{slug}", name="update_recipe")
+     */
+    public function update($slug){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $recipe = $this->getDoctrine()
+            ->getRepository(Recipes::class)
+            ->findOneBy(['name' => $slug]);
+
+        if(!$recipe){
+            return $this->render('general/index.html.twig');
+        }else{
+            // $recipe->getRayon()->getName();
+
+            $allCategories = $this->getDoctrine()
+                ->getRepository(RecipeCategory::class)
+                ->findAll();
+
+            $allTypes = $this->getDoctrine()
+                ->getRepository(RecipeType::class)
+                ->findAll();
+
+            $allIngredients = $this->getDoctrine()
+                ->getRepository(Ingredient::class)
+                ->findAll();
+        
+            $allHerbs = $this->getDoctrine()
+                ->getRepository(Herb::class)
+                ->findAll();
+    
+            return $this->render('recipe/individual.html.twig', [
+                'value' => $recipe,
+                'categories' => $allCategories,
+                'types' => $allTypes,
+                'ingredients' => $allIngredients,
+                'herbs' => $allHerbs,
+                'nrOfEaters' => 10,
+                'mode' => "update",
+            ]);
+        }
+    }
+
+     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/fetch/update/recipe", name="fetch_update_recipe", methods={"POST"})
+     */
+    public function updateAction(Request $request, Addvalue $addvalue) : Response {
+        $data = json_decode($request->getContent(), true);
+
+        // look for the recipe by name
+        $recipe = $this->getDoctrine()
+            ->getRepository(Recipes::class)
+            ->findOneBy(['name' => $data["name"]]);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        // check if the category changed
+        if($recipe->getCategory()->getName() != $data["category"]){
+            // look for a single recipecategorie by name
+            $category = $this->getDoctrine()
+                ->getRepository(RecipeCategory::class)
+                ->findOneBy(['name' => $data["category"]]);
+            $recipe->setCategory($category);
+        };
+
+        // check if the type changed
+        if($recipe->getType()->getName() != $data["type"]){
+            // look for a single recipetype by name
+            $type = $this->getDoctrine()
+                ->getRepository(RecipeType::class)
+                ->findOneBy(['name' => $data["type"]]);
+            $recipe->setType($type);
+        };
+
+        if($recipe->getInstructions() != $data["instructions"]){
+            $recipe->setInstructions($data["instructions"]);
+        }
+
+        if(!isset($data["suggestion"])){
+            $recipe->setSuggestion("");
+        }elseif ($recipe->getSuggestion() != $data["suggestion"]){
+                $recipe->setSuggestion($data["suggestion"]);
+        }
+
+        // ------------
+        // UPDATE HERBS
+
+        // search for all the herbs that are in the database for this recipe
+        $allHerbsOld = $recipe->getRecipeHerb();
+
+        // first, let's compare the old herbs with the new herbs, and check wich one we need to DELETE
+        foreach($allHerbsOld as $herbOld){
+            $todelete = TRUE;
+            foreach($data["herbs"] as $herbNew){
+                if($herbNew == $herbOld->getHerb()->getName()){
+                    $todelete = FALSE;
+                }
+            }
+            if($todelete === TRUE){
+                $entityManager->remove($herbOld);
+            }
+        }
+
+        // after that, let's compare the new herbs with the old herbs, and check wich one we need to ADD
+        if(isset($data["herbs"])){
+            foreach($data["herbs"] as $herbNew){
+                $toadd = TRUE;
+                foreach($allHerbsOld as $herbOld){
+                    if($herbNew == $herbOld->getHerb()->getName()){
+                        $toadd = FALSE;
+                    }
+                }
+                if($toadd === TRUE){
+                    // look for a single ingredientID by name
+                    $herb = $this->getDoctrine()
+                        ->getRepository(Herb::class)
+                        ->findOneBy(['name' => $herbNew]);
+                    $recipeHerb = new RecipeHerb();
+                    $recipeHerb->setHerb($herb);
+                    $recipeHerb->setRecipe($recipe);
+                    $entityManager->persist($recipeHerb);
+                }
+            }
+        };
+
+        // ------------
+        // UPDATE INGREDIENTS & QUANTITYS
+
+        // search for all the ingredients that are in the database for this recipe
+
+        $allIngredientsOld = $recipe->getIngredients();
+
+        // first, let's compare the old ingr with the new ingr, and check wich one we need to DELETE
+        foreach($allIngredientsOld as $ingredientOld){
+            $todelete = TRUE;
+            foreach($data["ingredients"] as $ingredientNew){
+                if($ingredientNew["name"] == $ingredientOld->getIngredient()->getName()){
+                    $todelete = FALSE;
+                }
+            }
+            if($todelete === TRUE){
+                $entityManager->remove($ingredientOld);
+            }
+        }
+
+        // after that, let's compare the new ingr with the old ingr, and check wich one we need to ADD or CHANGE THE QUANTITY
+
+        foreach($data["ingredients"] as $ingredientNew){
+            $toadd = TRUE;
+            $quantity = $ingredientNew["quantity"] / $data["numberOfEaters"];
+            foreach($allIngredientsOld as $ingredientOld){
+                if($ingredientNew["name"] == $ingredientOld->getIngredient()->getName()){
+                    $toadd = FALSE;
+                    if($ingredientOld->getQuantity() != $quantity){
+                        $ingredientOld->setQuantity($quantity);
+                    }
+                }
+            }
+            if($toadd === TRUE){
+                $ingr = $this->getDoctrine()
+                    ->getRepository(Ingredient::class)
+                    ->findOneBy(['name' => $ingredientNew]);
+                
+                $recipeIngredient = new RecipeIngredients();
+                $recipeIngredient->setIngredient($ingr)
+                    ->setRecipe($recipe)
+                    ->setQuantity($quantity);
+                $entityManager->persist($recipeIngredient);
+            }
+        }
+
+        $response = new JsonResponse();
+        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $recipe)]);
+    
+        return $response;
+    }
+
+
     /**
      * @Route("/show/recepten", name="show_recipes")
      */
-    public function show(){
+    public function showall(){
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $allRecipes = $this->getDoctrine()
             ->getRepository(Recipes::class)
             ->findAll();
 
-        // foreach ($allRecipes as $recipe) {
-        //     // $recipe->getCategory()->getName();
-        //     // $recipe->getType()->getName();
-        //     // $ingredients = $recipe->getIngredients();
-        //     // $herbs = $recipe->getRecipeHerb();
-        //     // foreach ($herbs as $herb){
-        //     //     $herb->getHerb()->getName();
-        //     // }
-
-        // };
-
         dump($allRecipes);
 
-        return $this->render('recipe/show.html.twig', [
+        return $this->render('recipe/all.html.twig', [
             'values' => $allRecipes,
         ]);
     }

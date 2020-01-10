@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    console.log("updateRecipe.js");
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -47,15 +48,12 @@ $(document).ready(function () {
         e.preventDefault();
 
         // confirmation and saving te values
-        if (mode == "update") {
-            recipe["name"] = slug;
-        } else {
-            if (!$('input#name').val()) {
-                errors.push("geen naam ingevuld")
-            } else {
-                recipe["name"] = $('input#name').val();
-            };
-        }
+        // if (!$('input#name').val()) {
+        //     errors.push("geen naam ingevuld")
+        // } else {
+        //     recipe["name"] = $('input#name').val();
+        // };
+        recipe["name"] = slug;
         if ($('input#suggestion').val()) {
             recipe["suggestion"] = $('input#suggestion').val();
         }
@@ -118,7 +116,7 @@ $(document).ready(function () {
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify(recipe);
-            console.log(raw);
+            console.log("raw :: " + raw);
 
             var requestOptions = {
                 method: 'POST',
@@ -127,14 +125,12 @@ $(document).ready(function () {
                 redirect: 'follow'
             };
 
-            // if (mode == "add") {
-            fetch('/fetch/add/recipe', requestOptions)
+            fetch('/fetch/update/recipe', requestOptions)
                 .then(response => response.json())
                 .then(result => {
+                    console.log("result :: " + result)
                     if (result.statuscode == 201) {
-                        $(".success").append(`<li>${recipe["name"]} werd succesvol toegevoegd.</li>`);
-                    } else if (result.statuscode == 422) {
-                        $(".errors").append(`<li>${recipe["name"]} bestaat reeds.</li>`);
+                        $(".success").append(`<li>${recipe["name"]} werd succesvol aangepast.</li>`);
                     } else {
                         $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
                     };
@@ -147,11 +143,6 @@ $(document).ready(function () {
                     return result;
                 })
                 .catch(error => console.log('error :::', error));
-            // } else if (mode == "update") {
-
-            // } else {
-            //     $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
-            // }
 
         } else {
             errors.forEach(error =>
