@@ -45,7 +45,7 @@
                             </td>
                             <td class="change">
                                 <p><a href="{{ path('update_recipe', {slug: value.name}) }}"><i class="fas fa-pencil-alt"></i></a></p>
-                                <a href="#"><i class="fas fa-eye"></i></a>
+                                <a href="{{ path('show_recipe', {slug: value.name}) }}"><i class="fas fa-eye"></i></a>
                             </td>
 
                         </tr>
@@ -53,36 +53,6 @@
                     </tbody>
                 </table>
             </div>
-            {# <div class="w3-card step">
-            <div class="search d-flex">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-            </div>
-                  <table class="w3-table w3-striped w3-bordered" id="allIngredients" width="100%">
-                  <thead>
-                    <tr class="sortTitles">
-                        <th class="sortable">naam ingredient</th>
-                        <th class="sortable">eh</th>
-                        <th class="sortable">te vinden in rayon</th>
-                        <th class="sortable">ingredienttip</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody class="searchable">
-                {% for value in values %}
-                    <tr>
-                        <td class="name">{{value.name}}</td>
-                        <td class="rayon">{{value.unit.name}}</td>
-                        <td>{{value.rayon.name}}</td>
-                        <td>{{value.suggestion}}</td>
-                        <td class="change"><a href="{{ path('update_ingredient', {slug: value.name}) }}"><i class="fas fa-pencil-alt"></i></a></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-                </table>
-            </div> #}
         </div>
     </div>
 {% endblock %}

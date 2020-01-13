@@ -310,6 +310,50 @@ class RecipeController extends AbstractController{
         return $response;
     }
 
+    
+     /**
+     * @Route("/show/recept/{slug}", name="show_recipe")
+     */
+    public function show($slug){
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $recipe = $this->getDoctrine()
+            ->getRepository(Recipes::class)
+            ->findOneBy(['name' => $slug]);
+
+        if(!$recipe){
+            return $this->render('general/index.html.twig');
+        }else{
+            // $recipe->getRayon()->getName();
+
+            // $allCategories = $this->getDoctrine()
+            //     ->getRepository(RecipeCategory::class)
+            //     ->findAll();
+
+            // $allTypes = $this->getDoctrine()
+            //     ->getRepository(RecipeType::class)
+            //     ->findAll();
+
+            // $allIngredients = $this->getDoctrine()
+            //     ->getRepository(Ingredient::class)
+            //     ->findAll();
+        
+            // $allHerbs = $this->getDoctrine()
+            //     ->getRepository(Herb::class)
+            //     ->findAll();
+    
+            return $this->render('recipe/individual.html.twig', [
+                'value' => $recipe,
+                // 'categories' => $allCategories,
+                // 'types' => $allTypes,
+                // 'ingredients' => $allIngredients,
+                // 'herbs' => $allHerbs,
+                'nrOfEaters' => 10,
+                'mode' => "show",
+            ]);
+        }
+    }
+
 
     /**
      * @Route("/show/recepten", name="show_recipes")

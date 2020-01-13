@@ -27,7 +27,7 @@
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" class="w3-bar-item w3-button">Logout</a>
                 <div class="w3-dropdown-hover">
-                    <button class="w3-bar-item w3-button">Beheer data</button>
+                    <button class="w3-bar-item w3-button">Nieuw toevoegen</button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
                         <a href="{{ path('add_recipe') }}" class="w3-bar-item w3-button">Recepten</a>
                         <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredienten</a>
@@ -39,10 +39,10 @@
                     </div>
                 </div>
                 <div class="w3-dropdown-hover">
-                    <button class="w3-bar-item w3-button">Bekijk data</button>
+                    <button class="w3-bar-item w3-button">Bekijk/pas aan</button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                        <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Ingredienten</a>
                         <a href="{{ path('show_recipes') }}" class="w3-bar-item w3-button">Recepten</a>
+                        <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Ingredienten</a>
                     </div>
                 </div>
                 {% endif %}
