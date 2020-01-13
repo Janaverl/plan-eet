@@ -16,14 +16,24 @@ With those ideas, I made a plan to create a first simple alfa version of the too
 First, I created some pages in vanilla php, jQuery and css. I haven't learned any php-framework at that time.
 After someone told me that I could give a try in a framework, I decided to study about Symfony and meanwhile refactore the work I did into a Symfony-application.
   
-## milestones of the first alfa-version
-* as an admin or user I want to register and login, so that I can use the tool :. =>  DONE
-* as an admin, I want to create, update or see the recipes (and all it's related-data), so it is available for the user in order to plan their meals:
-  * CREATE ingredients, recipes, rayons, ... to the database :. => DONE
-  * READ a sortable & filterable list of all ingredients and recipes in the database :. => DONE
-  * READ an individual ingredient :. => IN PROGRESS
-  * UPDATE ingredients, recipes to the database :. => IN PROGRESS
-* as a user, I want to create or update a camp, so I can plan my meals
-* as a user, I want to choose recipes for every moment that there should be a meal, so I have a schedule and I have a shopping-list
-* as a user, I want to see a shopping-list sorted by the shopping shelves, so it is easy to prepare the shopping
-* as a user, I want to see the daily menu, so it can guide me during the cooking-process of that day
+## projects of the alfa-version
+I split up the project into 6 smaller ones, in order to keep track of the progress.
+The follow-up will be registered in https://github.com/Janaverl/kampmenu/projects .
+
+**010 - login and registration**
+as an admin or user I want to register and login, so that I can use the tool
+
+**020 - CMS for the recipes**
+as an admin, I want to create, update or see the recipes (and all it's related-data), so it is available for the user in order to plan their meals
+
+**030 - create a camp**
+as a user, I want to create or update a camp, so I can plan my meals
+
+**040 - plan the meals of a camp**
+as a user, I want to choose recipes for every moment that there should be a meal, so I have a schedule and I have a shopping-list
+
+**050 - create a shopping list**
+as a user, I want to see a shopping-list sorted by the shopping shelves, so it is easy to prepare the shopping
+
+**060 - guide the user during the camp**
+as a user, I want to see the daily menu, so it can guide me during the cooking-process of that day
