@@ -21,19 +21,25 @@ I split up the project into 6 smaller ones, in order to keep track of the progre
 The follow-up will be registered in https://github.com/Janaverl/kampmenu/projects .
 
 **010 - login and registration**
+
 as an admin or user I want to register and login, so that I can use the tool
 
 **020 - CMS for the recipes**
+
 as an admin, I want to create, update or see the recipes (and all it's related-data), so it is available for the user in order to plan their meals
 
 **030 - create a camp**
+
 as a user, I want to create or update a camp, so I can plan my meals
 
 **040 - plan the meals of a camp**
+
 as a user, I want to choose recipes for every moment that there should be a meal, so I have a schedule and I have a shopping-list
 
 **050 - create a shopping list**
+
 as a user, I want to see a shopping-list sorted by the shopping shelves, so it is easy to prepare the shopping
 
 **060 - guide the user during the camp**
+
 as a user, I want to see the daily menu, so it can guide me during the cooking-process of that day
