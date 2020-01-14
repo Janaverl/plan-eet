@@ -16,12 +16,12 @@
                 <input type="number"  id="nrOfParticipants" name="nrOfParticipants" min="00" max="60" placeholder="aantal deelnemers">
 
                 <p>start van het kamp:</p>
-                <input type="date" id="startdate" name="startdate" class="w3-input" placeholder="begindatum">
+                <input type="date" id="startdate" name="startdate" class="w3-input" min={{"now"|date("Y-m-d")}} placeholder="begindatum">
                 <input type="number" id="starthour" name="starthour" min="00" max="24" placeholder="uur">
                 <input type="number" id="startmin" name="startmin" min="00" max="60" placeholder="min">
                 
                 <p>einde van het kamp:</p>
-                <input type="date" id="enddate" name="enddate" class="w3-input" placeholder="begindatum">
+                <input type="date" id="enddate" name="enddate" class="w3-input" min={{"now"|date("Y-m-d")}} placeholder="begindatum">
                 <input type="number" id="endhour" name="endhour" min="00" max="24" placeholder="uur">
                 <input type="number" id="endmin" name="endmin" min="00" max="60" placeholder="min">
             </div>

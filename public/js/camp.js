@@ -16,6 +16,11 @@ $(document).ready(function () {
         confirmationRequiredInputField(camp, errors, "endhour", "geen einduur ingevuld");
         confirmationRequiredInputField(camp, errors, "endmin", "geen eindminuten ingevuld");
 
+        if ($("input#startdate").val() > $("input#enddate").val()) {
+            errors.push("de einddatum moet na de begindatum komen.")
+        };
+
+
         // fetch the data or display errors
         if (errors.length == 0) {
             console.log("all set to push");
