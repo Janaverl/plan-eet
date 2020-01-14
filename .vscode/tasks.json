@@ -4,11 +4,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Start",
-            "type": "shell",
-            "command": "php -S localhost:8000 -t public"
-        },
-        {
             "label": "symfony dev",
             "type": "shell",
             "command": "symfony server:start"

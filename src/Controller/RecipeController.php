@@ -323,31 +323,9 @@ class RecipeController extends AbstractController{
 
         if(!$recipe){
             return $this->render('general/index.html.twig');
-        }else{
-            // $recipe->getRayon()->getName();
-
-            // $allCategories = $this->getDoctrine()
-            //     ->getRepository(RecipeCategory::class)
-            //     ->findAll();
-
-            // $allTypes = $this->getDoctrine()
-            //     ->getRepository(RecipeType::class)
-            //     ->findAll();
-
-            // $allIngredients = $this->getDoctrine()
-            //     ->getRepository(Ingredient::class)
-            //     ->findAll();
-        
-            // $allHerbs = $this->getDoctrine()
-            //     ->getRepository(Herb::class)
-            //     ->findAll();
-    
+        }else{ 
             return $this->render('recipe/individual.html.twig', [
                 'value' => $recipe,
-                // 'categories' => $allCategories,
-                // 'types' => $allTypes,
-                // 'ingredients' => $allIngredients,
-                // 'herbs' => $allHerbs,
                 'nrOfEaters' => 10,
                 'mode' => "show",
             ]);

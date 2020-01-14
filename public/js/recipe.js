@@ -131,6 +131,7 @@ $(document).ready(function () {
                         $('input').val('');
                         $('textarea').val('');
                         $('select').val("default");
+                        $('.unit').attr('disabled', true);
 
                         return result;
                     })
