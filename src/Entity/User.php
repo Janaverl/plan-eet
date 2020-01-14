@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +36,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Camp", mappedBy="user")
+     */
+    private $camps;
+
+    public function __construct()
+    {
+        $this->camps = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -111,5 +123,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Camp[]
+     */
+    public function getCamps(): Collection
+    {
+        return $this->camps;
+    }
+
+    public function addCamp(Camp $camp): self
+    {
+        if (!$this->camps->contains($camp)) {
+            $this->camps[] = $camp;
+            $camp->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCamp(Camp $camp): self
+    {
+        if ($this->camps->contains($camp)) {
+            $this->camps->removeElement($camp);
+            // set the owning side to null (unless already changed)
+            if ($camp->getUser() === $this) {
+                $camp->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

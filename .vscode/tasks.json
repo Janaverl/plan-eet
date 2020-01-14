@@ -7,6 +7,21 @@
             "label": "symfony dev",
             "type": "shell",
             "command": "symfony server:start"
+        },
+        {
+            "label": "symfony new entity",
+            "type": "shell",
+            "command": "php bin/console make:entity"
+        },
+        {
+            "label": "symfony make migration",
+            "type": "shell",
+            "command": "php bin/console make:migration"
+        },
+        {
+            "label": "symfony migrate",
+            "type": "shell",
+            "command": "php bin/console doctrine:migrations:migrate"
         }
     ]
 }
