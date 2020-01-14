@@ -150,10 +150,17 @@
                 </div>
             {% elseif mode == "show" %}
                 <h4>ingredienten:</h4>
-                <ul>
-                
+                {% set prevRayon = "" %}
                 {% for ingredient in ingredients %}
-                    <li>{{ingredient.quantity*nrOfEaters}} {{ingredient.ingredient.unit.name}} {{ingredient.ingredient.name}} - {{ingredient.ingredient.rayon.name}}</li>
+                    {% if prevRayon != ingredient.ingredient.rayon.name %}
+                        {% if prevRayon != "" %}
+                            </ul>
+                        {% endif %}
+                        <p>{{ingredient.ingredient.rayon.name}}</p>
+                        {% set prevRayon = ingredient.ingredient.rayon.name %}
+                        <ul>
+                    {% endif %}
+                    <li>{{ingredient.quantity*nrOfEaters}} {{ingredient.ingredient.unit.name}} {{ingredient.ingredient.name}}</li>
                 {% endfor %}
                 </ul>
             {% endif %}
@@ -161,49 +168,62 @@
         </div>
 
         <div class="w3-card step herbs">
-             {% if mode == "update" or mode == "add" %}
-            <h3>kies je kruiden</h3>
-            <input type="text" id="searchForHerbs" class="w3-input" placeholder="zoek naar kruiden">
-            <br>
-            <p>
-                <label class="switch herbs">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                </label>
-                toon enkel geselecteerde kruiden
-            </p>
-            
-            <div class="scrollbox">
-            {% for herb in herbs %}
-                {% set added = false %}
-                {% if mode == "update" %}
-                    {% for checkedHerb in value.recipeHerb %}
-                        {% if herb.name == checkedHerb.herb.name %}
-                            {% set added = true %}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-
-                <div class="oneHerb herb{{herb.id}}">
-                    <input class="w3-check herbs" type="checkbox" name="herbs" value="herb{{herb.id}}"
-                    {% if added %}
-                        checked
+            {% if mode == "update" or mode == "add" %}
+                <h3>kies je kruiden</h3>
+                <input type="text" id="searchForHerbs" class="w3-input" placeholder="zoek naar kruiden">
+                <br>
+                <p>
+                    <label class="switch herbs">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    toon enkel geselecteerde kruiden
+                </p>
+                
+                <div class="scrollbox">
+                {% for herb in herbs %}
+                    {% set added = false %}
+                    {% if mode == "update" %}
+                        {% for checkedHerb in value.recipeHerb %}
+                            {% if herb.name == checkedHerb.herb.name %}
+                                {% set added = true %}
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
-                    />
-                    <label for="herb{{herb.id}}">{{herb.name}}</label>
+
+                    <div class="oneHerb herb{{herb.id}}">
+                        <input class="w3-check herbs" type="checkbox" name="herbs" value="herb{{herb.id}}"
+                        {% if added %}
+                            checked
+                        {% endif %}
+                        />
+                        <label for="herb{{herb.id}}">{{herb.name}}</label>
+                    </div>
+                {% endfor %}
                 </div>
-            {% endfor %}
-            </div>
+            {% elseif mode == "show" %}
+                <h4>kruiden:</h4>
+                <ul>
+                {% for herb in value.recipeHerb %}
+                    <li>{{herb.herb.name}}</li>
+                {% endfor %}
+                </ul>
             {% endif %}
         </div>
 
         <div class="w3-card step recipe">
             <h3><label for="recipe">bereidingswijze</label></h3>
-            <textarea name="recipe" cols="30" rows="10">{% if mode == "update" %}{{value.instructions}}{% endif %}
-            </textarea>
+            {% if mode == "update" or mode == "add" %}
+                <textarea name="recipe" cols="30" rows="10">
+                {% if mode == "update"%}{{value.instructions}}{% endif %}
+                </textarea>
+            {% elseif mode == "show" %}
+                <p>{{value.instructions|nl2br}}</p>
+            {% endif %}
         </div>
 
-            <!-- confirmation and errors -->
+        <!-- confirmation and errors -->
+        {% if mode == "update" or mode == "add" %}
             <div class="w3-card step recipe">
                 <button class="confirm">
                     {% if mode == "update" %}
@@ -215,6 +235,7 @@
                 <ul class="errors"></ul>
                 <ul class="success"></ul>
             </div>
+        {% endif %}
     </div>
     </div>
 {% endblock %}
