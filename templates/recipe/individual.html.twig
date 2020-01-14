@@ -151,7 +151,8 @@
             {% elseif mode == "show" %}
                 <h4>ingredienten:</h4>
                 <ul>
-                {% for ingredient in value.ingredients %}
+                
+                {% for ingredient in ingredients %}
                     <li>{{ingredient.quantity*nrOfEaters}} {{ingredient.ingredient.unit.name}} {{ingredient.ingredient.name}} - {{ingredient.ingredient.rayon.name}}</li>
                 {% endfor %}
                 </ul>

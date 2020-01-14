@@ -320,12 +320,18 @@ class RecipeController extends AbstractController{
         $recipe = $this->getDoctrine()
             ->getRepository(Recipes::class)
             ->findOneBy(['name' => $slug]);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $ingredients = $entityManager->getRepository('App:RecipeIngredients')
+            ->findIngredientsSortedByRayon($recipe);
 
         if(!$recipe){
             return $this->render('general/index.html.twig');
         }else{ 
             return $this->render('recipe/individual.html.twig', [
                 'value' => $recipe,
+                'ingredients' => $ingredients,
                 'nrOfEaters' => 10,
                 'mode' => "show",
             ]);

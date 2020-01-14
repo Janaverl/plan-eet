@@ -19,6 +19,22 @@ class RecipeIngredientsRepository extends ServiceEntityRepository
         parent::__construct($registry, RecipeIngredients::class);
     }
 
+     /**
+     * @param Recipes $recipes
+     * @return RecipeIngredients[]
+     */
+    public function findIngredientsSortedByRayon($recipes)
+    {
+        return $this->createQueryBuilder('recipe_ingredients')
+            ->andWhere('recipe_ingredients.recipe = :val')
+            ->setParameter('val', $recipes)
+            ->join('recipe_ingredients.ingredient', 'ingredients')
+            ->join('ingredients.rayon', 'rayon')
+            ->orderBy('rayon.name', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
     // /**
     //  * @return RecipeIngredients[] Returns an array of RecipeIngredients objects
     //  */
