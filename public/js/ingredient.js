@@ -10,11 +10,7 @@ $(document).ready(function () {
         if (mode == "update") {
             ingredient["name"] = slug;
         } else {
-            if (!$('input#name').val()) {
-                errors.push("geen naam ingevuld")
-            } else {
-                ingredient["name"] = $('input#name').val();
-            };
+            confirmationRequiredInputField(ingredient, errors, "name", "geen naam ingevuld");
         }
         if ($('input#suggestion').val()) {
             ingredient["suggestion"] = $('input#suggestion').val();

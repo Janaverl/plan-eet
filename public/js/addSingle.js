@@ -8,12 +8,8 @@ $(document).ready(function () {
         e.preventDefault();
 
         // confirmation and saving te values
-        if (!$('input#name').val()) {
-            errors.push("geen naam ingevuld")
-        } else {
-            value["name"] = $('input#name').val();
-            value["type"] = slug;
-        };
+        confirmationRequiredInputField(value, errors, "name", "geen naam ingevuld");
+        value["type"] = slug;
 
         // fetch the data or display errors
         if (errors.length == 0) {

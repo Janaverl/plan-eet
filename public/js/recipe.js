@@ -42,11 +42,7 @@ $(document).ready(function () {
         if (mode == "update") {
             recipe["name"] = slug;
         } else {
-            if (!$('input#name').val()) {
-                errors.push("geen naam ingevuld")
-            } else {
-                recipe["name"] = $('input#name').val();
-            };
+            confirmationRequiredInputField(recipe, errors, "name", "geen naam ingevuld");
         }
         if ($('input#suggestion').val()) {
             recipe["suggestion"] = $('input#suggestion').val();
@@ -61,11 +57,7 @@ $(document).ready(function () {
         } else {
             recipe["type"] = type.value;
         };
-        if (!$("#numberOfEaters").val()) {
-            errors.push("geen aantal eters ingevuld");
-        } else {
-            recipe["numberOfEaters"] = $("#numberOfEaters").val();
-        };
+        confirmationRequiredInputField(recipe, errors, "numberOfEaters", "geen aantal eters ingevuld");
         if ($(".oneIngredient input:checkbox:checked").length == 0) {
             errors.push("geen ingredient geselecteerd");
         } else {

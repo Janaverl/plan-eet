@@ -94,4 +94,12 @@ function switchselector(that, element, checkbox) {
     } else {
         $(element).css('display', 'block');
     }
-}
+};
+
+function confirmationRequiredInputField(array, errors, id, errormsg) {
+    if (!$(`input#${id}`).val()) {
+        errors.push(errormsg)
+    } else {
+        array[`${id}`] = $(`input#${id}`).val();
+    }
+};
