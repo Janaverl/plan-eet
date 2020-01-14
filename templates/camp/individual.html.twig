@@ -1,0 +1,44 @@
+{% extends 'boxes.html.twig' %}
+
+{% block body %}
+    <div class="contentwrapper">
+
+        {# title #}
+            <h1>voeg een nieuw kamp toe</h1>
+
+        {# all cards #}
+        <div class="cardwrapper">
+            <div class="w3-card step generalInformation">
+                <h3>algemene info</h3>
+
+                <input type="text" id="name" name="name" class="w3-input" placeholder="naam kamp">
+
+                <input type="number" name="nrOfParticipants" min="00" max="60" placeholder="aantal deelnemers">
+
+                <p>start van het kamp:</p>
+                <input type="date" id="name" name="startdate" class="w3-input" placeholder="begindatum">
+                <input type="number" name="starthour" min="00" max="24" placeholder="uur">
+                <input type="number" name="startmin" min="00" max="60" placeholder="min">
+                
+                <p>einde van het kamp:</p>
+                <input type="date" id="name" name="enddate" class="w3-input" placeholder="begindatum">
+                <input type="number" name="endhour" min="00" max="24" placeholder="uur">
+                <input type="number" name="endmin" min="00" max="60" placeholder="min">
+            </div>
+
+            {# card for the confirmation and errors #}
+            <div class="w3-card step recipe">
+                <button class="confirm">
+                        Sla dit kamp op
+                </button>
+                <ul class="errors"></ul>
+                <ul class="success"></ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# <script src="{{ asset('js/ingredient.js') }}"></script> #}
+{% endblock %}
