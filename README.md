@@ -18,7 +18,7 @@ After someone told me that I could give a try in a framework, I decided to study
   
 ## projects of the alfa-version
 I split up the project into 6 smaller ones, in order to keep track of the progress.
-The follow-up will be registered in https://github.com/Janaverl/kampmenu/projects .
+The follow-up will be registered in each [project](../../projects) .
 
 **010 - login and registration**
 
