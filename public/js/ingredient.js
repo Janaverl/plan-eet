@@ -11,20 +11,10 @@ $(document).ready(function () {
             ingredient["name"] = slug;
         } else {
             confirmationRequiredInputField(ingredient, errors, "name", "geen naam ingevuld");
-        }
-        if ($('input#suggestion').val()) {
-            ingredient["suggestion"] = $('input#suggestion').val();
-        }
-        if (unit.value == "default") {
-            errors.push("geen maateenheid geselecteerd");
-        } else {
-            ingredient["unit"] = unit.value;
         };
-        if (rayon.value == "default") {
-            errors.push("geen rayon geselecteerd");
-        } else {
-            ingredient["rayon"] = rayon.value;
-        };
+        confirmationOptionalInputField(ingredient, "suggestion");
+        confirmationRequiredSelect(ingredient, errors, unit, "unit", "geen maateenheid geselecteerd");
+        confirmationRequiredSelect(ingredient, errors, rayon, "rayon", "geen rayon geselecteerd");
 
         // fetch the data or display errors
         if (errors.length == 0) {

@@ -44,54 +44,14 @@ $(document).ready(function () {
         } else {
             confirmationRequiredInputField(recipe, errors, "name", "geen naam ingevuld");
         }
-        if ($('input#suggestion').val()) {
-            recipe["suggestion"] = $('input#suggestion').val();
-        }
-        if (category.value == "default") {
-            errors.push("geen categorie geselecteerd");
-        } else {
-            recipe["category"] = category.value;
-        };
-        if (type.value == "default") {
-            errors.push("geen type geselecteerd");
-        } else {
-            recipe["type"] = type.value;
-        };
+        confirmationOptionalInputField(recipe, "suggestion");
+        confirmationRequiredSelect(recipe, errors, category, "category", "geen categorie geselecteerd");
+        confirmationRequiredSelect(recipe, errors, type, "type", "geen type geselecteerd");
         confirmationRequiredInputField(recipe, errors, "numberOfEaters", "geen aantal eters ingevuld");
-        if ($(".oneIngredient input:checkbox:checked").length == 0) {
-            errors.push("geen ingredient geselecteerd");
-        } else {
-            let ingr = {};
-            let i = 0;
-            $(".oneIngredient input:checkbox:checked").each(function () {
-                if (!$(this).siblings().children('input').val()) {
-                    errors.push(`geen hoeveelheid ingevuld voor ${$(this).siblings().eq(1).text()}`);
-                } else {
-                    const oneIngredient = {};
-                    oneIngredient["quantity"] = $(this).siblings().children('input').val();
-                    // oneIngredient["unit"] = $(this).siblings().first().text();
-                    oneIngredient["name"] = $(this).siblings().eq(1).text();
-                    ingr[i] = oneIngredient;
-                    i++;
-                }
-            });
-            recipe["ingredients"] = ingr
-        };
-        if ($(".oneHerb input:checkbox:checked").length != 0) {
-            let herbs = {};
-            let i = 0;
-            $(".oneHerb input:checkbox:checked").each(function () {
-                const oneHerb = $(this).siblings().eq(0).text();
-                herbs[i] = oneHerb;
-                i++;
-            });
-            recipe["herbs"] = herbs
-        };
-        if (!$('textarea').val()) {
-            errors.push("geen bereidingswijze ingevuld");
-        } else {
-            recipe["instructions"] = $("textarea").val();
-        };
+        confirmationOneIngredient(recipe, errors);
+        confirmationOptionalCheckboxes(recipe, herbs, "oneHerb");
+        confirmationRequiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
+
 
         // fetch or display errors
         if (errors.length == 0) {
