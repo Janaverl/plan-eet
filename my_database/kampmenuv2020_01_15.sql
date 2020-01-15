@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 10 jan 2020 om 15:12
+-- Gegenereerd op: 15 jan 2020 om 20:39
 -- Serverversie: 10.1.32-MariaDB
 -- PHP-versie: 7.2.5
 
@@ -21,6 +21,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `kampmenu`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `camp`
+--
+
+CREATE TABLE `camp` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `nr_of_participants` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `camp`
+--
+
+INSERT INTO `camp` (`id`, `user_id`, `name`, `start_time`, `end_time`, `nr_of_participants`) VALUES
+(1, 22, 'test', '2020-01-16 10:00:00', '2020-01-23 10:00:00', 10),
+(2, 22, 'test2', '2020-01-24 20:03:00', '2020-02-01 21:54:00', 20);
 
 -- --------------------------------------------------------
 
@@ -155,7 +178,34 @@ INSERT INTO `ingredient` (`id`, `name`, `suggestion`, `rayon_id`, `unit_id`) VAL
 (84, 'peterselie (verse)', NULL, 14, 3),
 (85, 'lente-uien', NULL, 14, 3),
 (86, 'mult (verse)', NULL, 14, 3),
-(87, 'rode ui', NULL, 14, 5);
+(87, 'rode ui', NULL, 14, 5),
+(88, 'peer', 'test', 26, 5),
+(89, 'aardbeien', NULL, 26, 1),
+(90, 'pompoen', NULL, 14, 1),
+(91, 'look', NULL, 40, 10);
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `meal_moment`
+--
+
+CREATE TABLE `meal_moment` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `meal_moment`
+--
+
+INSERT INTO `meal_moment` (`id`, `name`) VALUES
+(1, 'ontbijt'),
+(2, 'middagmaal'),
+(3, 'avondmaal'),
+(4, 'tienuurtje'),
+(5, 'vieruurtje'),
+(6, 'avondsnack');
 
 -- --------------------------------------------------------
 
@@ -191,7 +241,9 @@ INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES
 ('20191222115645', '2019-12-22 11:56:54'),
 ('20191222125759', '2019-12-22 12:58:05'),
 ('20200106133203', '2020-01-06 13:32:20'),
-('20200106135116', '2020-01-06 13:51:28');
+('20200106135116', '2020-01-06 13:51:28'),
+('20200114142911', '2020-01-14 14:29:25'),
+('20200115145938', '2020-01-15 14:59:46');
 
 -- --------------------------------------------------------
 
@@ -257,9 +309,11 @@ INSERT INTO `recipes` (`id`, `name`, `instructions`, `suggestion`, `type_id`, `c
 (10, 'Spaghetti', 'Snij de ajuinen en stoof ze aan in wat olijfolie. \nWas alle groenten, snij ze en voeg ze toe (de harde groenten eerst, de zachte laatst)\nDoe de passata erbij en laat even sudderen. \nBak het vlees in een pan en kruid het. Voeg het toe aan de saus. \nDoe er nu alle kruiden bij. Mix de saus indien gewenst.\nBreng water aan de kook en voeg de spaghettislierten toe. Roer af en toe in de pot zodat de slierten niet kleven.\nWanneer de spaghetti gaar is, giet ze dan af en spoel ze met (warm) water om het kleven tegen te gaan (olie is minder effectief). \nDe gemalen kaas kan je als afwerking op de bordjes strooien.\nSmakelijk!', NULL, 10, 6),
 (11, 'Wok met rijst', 'Snij de ajuinen en stoof ze aan in een beetje olijfolie.\nWas de andere groenten en snij ze in fijne stukjes. Voeg eerst de hardere groenten toe en dan de zachtere. Voeg de kruiden toe.\nSnij de lapjes in reepjes en bak deze. Voeg kruiden toe naar smaak. Doe de reepjes bij de groenten.\nBreng water (met bouillon) aan de kook. Als je voor rijst kiest kook deze dan (kijk op de verpakking om te weten hoe lang). Als je voor couscous kiest dan moet je het kokend water over de couscous gieten en het laten opzwellen (dus niet laten koken). Je kan wat boter toevoegen aan de couscous voor de smaak.\nSmakelijk!       ', 'je kan dit ook met couscous maken ipv rijst', 11, 6),
 (12, 'Wraps met gehakt en rauwe groenten', 'Warm de wraps op in de oven (kijk op de verpakking op hoeveel graden en voor hoe lang).\nWas alle groenten en snij ze. Als je rode biet gebruikt kan je deze eerst koken.\nBak het gehakt en kruid het.\n ', 'je kan hier aardappelsla of tabouleh bij serveren', 8, 6),
-(13, 'Aardappelsla ', 'Schil de aardappelen en snij ze in kleinere stukken.\nBreng water aan de kook en kook de aardappelen gaar.\nLaar ze afkoelen en voeg de mayonaise en kruiden toe en fijngesneden augurken.\n', NULL, 3, 4),
+(13, 'Aardappelsla ', 'Schil de aardappelen en snij ze in kleinere stukken.\nBreng water aan de kook en kook de aardappelen gaar.\nLaar ze afkoelen en voeg de mayonaise en kruiden toe en fijngesneden augurken.\n            ', '', 3, 4),
 (14, 'Warmoespuree', 'Breng water aan de kook. Schil de aardappelen, snij ze in stukken en kook ze gaar.\nGiet de aardappelen af en laat ze even uitdampen. Doe ze terug in de pot en pureer ze samen met de boter, melk, eieren, nootmuskaat, peper en zout. \nWas de warmoes en snij ze wat fijner. Stoof de warmoes aan in een kleine hoeveelheid olijfolie (eventueel met wat water bij) totdat ze gekrompen is. \nDoe de gestoofde warmoes bij de puree en stamp nog eens alles goed door elkaar. Proef nog eens en voeg indien gewenst nog wat kruiden toe.        ', 'lekker met fishticks en zelf gemaakte tartaar', 3, 4),
-(15, 'fishsticks	en zelfgemaakte tartaar', 'Bak de fishsticks in de pan of in de oven. \nOm de tartaar te maken, moet je de augurken, de sjalot of kleine ajuin en de kruiden heel fijn snijden. Voeg deze bij de mayonaise en voeg zout en peper toe.\n', 'lekker met warmoespurree', 14, 4);
+(15, 'fishsticks	en zelfgemaakte tartaar', 'Bak de fishsticks in de pan of in de oven. \nOm de tartaar te maken, moet je de augurken, de sjalot of kleine ajuin en de kruiden heel fijn snijden. Voeg deze bij de mayonaise en voeg zout en peper toe.\n                        ', 'lekker met warmoespurree', 14, 4),
+(16, 'aardappelen met kruiden in de oven', 'Snij de aardappelen in stukken (je kan ze schillen indien gewenst).\nHak de kruiden fijn. \nGiet wat olie in de ovenschotel en doe de aardappelen erin en meng ze met de kruiden en de olijfolie. \nVerwarm de oven voor op 150°C. Plaats de schotel in de oven voor 50 à 60 minuten. Draai ze tussendoor af en toe om zodat ze niet aanbranden.\n', NULL, 3, 4),
+(17, 'tzatziki', 'Was de komkommers en rasp ze. Knijp de geraspte komkommers uit zodat het meeste vocht eruit is.\nMeng dit met de yoghurt en laat het een half uurtje in de koelkast staan.\nBreng dan op smaak met fijngehakte munt, peper en zout. Smakelijk!', NULL, 8, 4);
 
 -- --------------------------------------------------------
 
@@ -338,15 +392,23 @@ INSERT INTO `recipe_herb` (`id`, `herb_id`, `recipe_id`) VALUES
 (35, 3, 11),
 (36, 2, 12),
 (37, 3, 12),
-(38, 22, 13),
 (39, 2, 13),
 (40, 25, 13),
 (41, 3, 13),
 (42, 21, 14),
 (43, 2, 14),
 (44, 3, 14),
-(45, 2, 15),
-(46, 3, 15);
+(46, 3, 15),
+(47, 22, 13),
+(48, 2, 15),
+(49, 33, 16),
+(50, 2, 16),
+(51, 25, 16),
+(52, 26, 16),
+(53, 28, 16),
+(54, 3, 16),
+(55, 2, 17),
+(56, 3, 17);
 
 -- --------------------------------------------------------
 
@@ -465,7 +527,12 @@ INSERT INTO `recipe_ingredients` (`id`, `recipe_id`, `ingredient_id`, `quantity`
 (101, 15, 55, 3),
 (102, 15, 49, 0.03),
 (103, 15, 84, 0.03),
-(104, 15, 30, 0.1);
+(104, 15, 30, 0.1),
+(105, 16, 45, 0.15),
+(106, 17, 25, 0.2),
+(107, 17, 91, 0.1),
+(108, 17, 40, 0.03),
+(109, 17, 18, 0.1);
 
 -- --------------------------------------------------------
 
@@ -523,7 +590,8 @@ INSERT INTO `single_column_name` (`id`, `name`, `tablename`, `api`, `translation
 (2, 'recipeCategory', 'RecipeCategory', '/fetch/add/recipeCategory', 'recept categorie'),
 (3, 'recipeType', 'RecipeType', '/fetch/add/recipeType', 'recept type'),
 (4, 'unit', 'Unit', '/fetch/add/unit', 'maateenheid'),
-(5, 'herb', 'Herb', '/fetch/add/herb', 'kruiden');
+(5, 'herb', 'Herb', '/fetch/add/herb', 'kruiden'),
+(6, 'mealMoment', 'MealMoment', '/fetch/add/mealMoment', 'maaltijd moment');
 
 -- --------------------------------------------------------
 
@@ -549,7 +617,8 @@ INSERT INTO `unit` (`id`, `name`) VALUES
 (2, 'krop(pen)'),
 (6, 'liter'),
 (5, 'stuk(s)'),
-(8, 'tas');
+(8, 'tas'),
+(10, 'teentje');
 
 -- --------------------------------------------------------
 
@@ -603,6 +672,13 @@ INSERT INTO `user` (`id`, `email`, `roles`, `password`) VALUES
 --
 
 --
+-- Indexen voor tabel `camp`
+--
+ALTER TABLE `camp`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_C1944230A76ED395` (`user_id`);
+
+--
 -- Indexen voor tabel `herb`
 --
 ALTER TABLE `herb`
@@ -617,6 +693,12 @@ ALTER TABLE `ingredient`
   ADD UNIQUE KEY `UNIQ_6BAF78705E237E06` (`name`),
   ADD KEY `IDX_6BAF7870D3202E52` (`rayon_id`),
   ADD KEY `IDX_6BAF7870F8BD700D` (`unit_id`);
+
+--
+-- Indexen voor tabel `meal_moment`
+--
+ALTER TABLE `meal_moment`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexen voor tabel `migration_versions`
@@ -695,6 +777,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT voor een tabel `camp`
+--
+ALTER TABLE `camp`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT voor een tabel `herb`
 --
 ALTER TABLE `herb`
@@ -704,7 +792,13 @@ ALTER TABLE `herb`
 -- AUTO_INCREMENT voor een tabel `ingredient`
 --
 ALTER TABLE `ingredient`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+
+--
+-- AUTO_INCREMENT voor een tabel `meal_moment`
+--
+ALTER TABLE `meal_moment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT voor een tabel `rayon`
@@ -716,7 +810,7 @@ ALTER TABLE `rayon`
 -- AUTO_INCREMENT voor een tabel `recipes`
 --
 ALTER TABLE `recipes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT voor een tabel `recipe_category`
@@ -728,13 +822,13 @@ ALTER TABLE `recipe_category`
 -- AUTO_INCREMENT voor een tabel `recipe_herb`
 --
 ALTER TABLE `recipe_herb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT voor een tabel `recipe_ingredients`
 --
 ALTER TABLE `recipe_ingredients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT voor een tabel `recipe_type`
@@ -746,13 +840,13 @@ ALTER TABLE `recipe_type`
 -- AUTO_INCREMENT voor een tabel `single_column_name`
 --
 ALTER TABLE `single_column_name`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT voor een tabel `unit`
 --
 ALTER TABLE `unit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT voor een tabel `user`
@@ -763,6 +857,12 @@ ALTER TABLE `user`
 --
 -- Beperkingen voor geëxporteerde tabellen
 --
+
+--
+-- Beperkingen voor tabel `camp`
+--
+ALTER TABLE `camp`
+  ADD CONSTRAINT `FK_C1944230A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Beperkingen voor tabel `ingredient`
