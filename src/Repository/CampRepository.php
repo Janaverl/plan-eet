@@ -19,6 +19,15 @@ class CampRepository extends ServiceEntityRepository
         parent::__construct($registry, Camp::class);
     }
 
+    public function findAllCampsByUser($user)
+    {
+        return $this->createQueryBuilder('all_camps')
+            ->andWhere('all_camps.user = :val')
+            ->setParameter('val', $user)
+            ->getQuery()
+            ->execute();
+    }
+
     // /**
     //  * @return Camp[] Returns an array of Camp objects
     //  */

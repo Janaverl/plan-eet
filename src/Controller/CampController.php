@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Camp;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,5 +56,24 @@ class CampController extends AbstractController
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $camp)]);
     
         return $response;
+    }
+
+    
+    /**
+     * @Route("/show/camps", name="show_camps")
+     */
+    public function showall(){
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $allCamps = $entityManager->getRepository('App:Camp')
+        ->findAllCampsByUser($user);
+
+        return $this->render('camp/all.html.twig', [
+            'values' => $allCamps,
+        ]);
     }
 }
