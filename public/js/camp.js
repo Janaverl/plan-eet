@@ -1,5 +1,13 @@
 $(document).ready(function () {
 
+    $("#startdate").on("change", function (e) {
+        $("#enddate").prop('min', $("#startdate").val());
+    });
+
+    $("#enddate").on("change", function (e) {
+        $("#startdate").prop('max', $("#enddate").val());
+    });
+
     $(".confirm").on("click", function (e) {
         $(".errors").empty();
         let errors = [];
