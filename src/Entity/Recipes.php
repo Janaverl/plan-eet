@@ -56,10 +56,16 @@ class Recipes
      */
     private $RecipeHerb;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Mealcourse", mappedBy="recipe")
+     */
+    private $mealcourses;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
         $this->RecipeHerb = new ArrayCollection();
+        $this->mealcourses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -183,6 +189,37 @@ class Recipes
             // set the owning side to null (unless already changed)
             if ($recipeHerb->getRecipe() === $this) {
                 $recipeHerb->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Mealcourse[]
+     */
+    public function getMealcourses(): Collection
+    {
+        return $this->mealcourses;
+    }
+
+    public function addMealcourse(Mealcourse $mealcourse): self
+    {
+        if (!$this->mealcourses->contains($mealcourse)) {
+            $this->mealcourses[] = $mealcourse;
+            $mealcourse->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMealcourse(Mealcourse $mealcourse): self
+    {
+        if ($this->mealcourses->contains($mealcourse)) {
+            $this->mealcourses->removeElement($mealcourse);
+            // set the owning side to null (unless already changed)
+            if ($mealcourse->getRecipe() === $this) {
+                $mealcourse->setRecipe(null);
             }
         }
 

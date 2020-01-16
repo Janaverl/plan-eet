@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\MealMomentsCamp;
+use App\Entity\Mealcourse;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method MealMomentsCamp|null find($id, $lockMode = null, $lockVersion = null)
- * @method MealMomentsCamp|null findOneBy(array $criteria, array $orderBy = null)
- * @method MealMomentsCamp[]    findAll()
- * @method MealMomentsCamp[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Mealcourse|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Mealcourse|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Mealcourse[]    findAll()
+ * @method Mealcourse[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MealMomentsCampRepository extends ServiceEntityRepository
+class MealcourseRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, MealMomentsCamp::class);
+        parent::__construct($registry, Mealcourse::class);
     }
 
     // /**
-    //  * @return MealMomentsCamp[] Returns an array of MealMomentsCamp objects
+    //  * @return Mealcourse[] Returns an array of Mealcourse objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class MealMomentsCampRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?MealMomentsCamp
+    public function findOneBySomeField($value): ?Mealcourse
     {
         return $this->createQueryBuilder('m')
             ->andWhere('m.exampleField = :val')

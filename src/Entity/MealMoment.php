@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\MealMomentRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MealmomentRepository")
  */
-class MealMoment
+class Mealmoment
 {
     /**
      * @ORM\Id()
@@ -24,13 +24,13 @@ class MealMoment
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MealMomentsCamp", mappedBy="MealMoment")
+     * @ORM\OneToMany(targetEntity="App\Entity\CampMealmoments", mappedBy="mealmoment")
      */
-    private $mealMomentsCamps;
+    private $campMealmoments;
 
     public function __construct()
     {
-        $this->mealMomentsCamps = new ArrayCollection();
+        $this->campMealmoments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,30 +51,30 @@ class MealMoment
     }
 
     /**
-     * @return Collection|MealMomentsCamp[]
+     * @return Collection|CampMealmoments[]
      */
-    public function getMealMomentsCamps(): Collection
+    public function getCampMealmoments(): Collection
     {
-        return $this->mealMomentsCamps;
+        return $this->campMealmoments;
     }
 
-    public function addMealMomentsCamp(MealMomentsCamp $mealMomentsCamp): self
+    public function addCampMealmoment(CampMealmoments $campMealmoment): self
     {
-        if (!$this->mealMomentsCamps->contains($mealMomentsCamp)) {
-            $this->mealMomentsCamps[] = $mealMomentsCamp;
-            $mealMomentsCamp->setMealMoment($this);
+        if (!$this->campMealmoments->contains($campMealmoment)) {
+            $this->campMealmoments[] = $campMealmoment;
+            $campMealmoment->setMealmoment($this);
         }
 
         return $this;
     }
 
-    public function removeMealMomentsCamp(MealMomentsCamp $mealMomentsCamp): self
+    public function removeCampMealmoment(CampMealmoments $campMealmoment): self
     {
-        if ($this->mealMomentsCamps->contains($mealMomentsCamp)) {
-            $this->mealMomentsCamps->removeElement($mealMomentsCamp);
+        if ($this->campMealmoments->contains($campMealmoment)) {
+            $this->campMealmoments->removeElement($campMealmoment);
             // set the owning side to null (unless already changed)
-            if ($mealMomentsCamp->getMealMoment() === $this) {
-                $mealMomentsCamp->setMealMoment(null);
+            if ($campMealmoment->getMealmoment() === $this) {
+                $campMealmoment->setMealmoment(null);
             }
         }
 

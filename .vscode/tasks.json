@@ -8,11 +8,11 @@
             "type": "shell",
             "command": "symfony server:start"
         },
-        {
-            "label": "symfony new entity",
-            "type": "shell",
-            "command": "php bin/console make:entity"
-        },
+        // {
+        //     "label": "symfony new entity",
+        //     "type": "shell",
+        //     "command": "php bin/console make:entity"
+        // },
         {
             "label": "symfony make migration",
             "type": "shell",
