@@ -31,13 +31,15 @@
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
                         <a href="{{ path('add_camp') }}" class="w3-bar-item w3-button">Kamp</a>
                         <a href="{{ path('add_recipe') }}" class="w3-bar-item w3-button">Recepten</a>
-                        <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredienten</a>
-                        <a href="{{ path('add_single', {slug: 'rayon'}) }}" class="w3-bar-item w3-button">Rayon</a>
-                        <a href="{{ path('add_single', {slug: 'recipeType'}) }}" class="w3-bar-item w3-button">Recept Type</a>
-                        <a href="{{ path('add_single', {slug: 'recipeCategory'}) }}" class="w3-bar-item w3-button">Recept Categorie</a>
-                        <a href="{{ path('add_single', {slug: 'unit'}) }}" class="w3-bar-item w3-button">Ingredient eenheid</a>
-                        <a href="{{ path('add_single', {slug: 'herb'}) }}" class="w3-bar-item w3-button">Kruiden</a>
-                        <a href="{{ path('add_single', {slug: 'mealMoment'}) }}" class="w3-bar-item w3-button">Maaltijdmoment</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredienten</a>
+                            <a href="{{ path('add_single', {slug: 'rayon'}) }}" class="w3-bar-item w3-button">Rayon</a>
+                            <a href="{{ path('add_single', {slug: 'recipeType'}) }}" class="w3-bar-item w3-button">Recept Type</a>
+                            <a href="{{ path('add_single', {slug: 'recipeCategory'}) }}" class="w3-bar-item w3-button">Recept Categorie</a>
+                            <a href="{{ path('add_single', {slug: 'unit'}) }}" class="w3-bar-item w3-button">Ingredient eenheid</a>
+                            <a href="{{ path('add_single', {slug: 'herb'}) }}" class="w3-bar-item w3-button">Kruiden</a>
+                            <a href="{{ path('add_single', {slug: 'mealMoment'}) }}" class="w3-bar-item w3-button">Maaltijdmoment</a>
+                        {%endif%}
                     </div>
                 </div>
                 <div class="w3-dropdown-hover">
@@ -45,7 +47,9 @@
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
                         <a href="{{ path('show_camps') }}" class="w3-bar-item w3-button">Mijn kampen</a>
                         <a href="{{ path('show_recipes') }}" class="w3-bar-item w3-button">Recepten</a>
-                        <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Ingredienten</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Ingredienten</a>
+                        {%endif%}
                     </div>
                 </div>
                 {% endif %}

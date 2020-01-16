@@ -44,7 +44,9 @@
                                 </ul>
                             </td>
                             <td class="change">
-                                <p><a href="{{ path('update_recipe', {slug: value.name}) }}"><i class="fas fa-pencil-alt"></i></a></p>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <p><a href="{{ path('update_recipe', {slug: value.name}) }}"><i class="fas fa-pencil-alt"></i></a></p>
+                                {% endif %}
                                 <a href="{{ path('show_recipe', {slug: value.name}) }}"><i class="fas fa-eye"></i></a>
                             </td>
 
