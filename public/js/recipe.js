@@ -19,15 +19,7 @@ $(document).ready(function () {
     });
 
     // enable the input value for the ingredient-unit when the ingredient is selected. Disable when it's not selected
-    $('input:checkbox[name="ingredients"]').change(function (e) {
-        const value = $(this).val();
-        if (!$('input[name="unit-' + value + '"]').attr('disabled')) {
-            return $('input[name="unit-' + value + '"]').attr('disabled', true);
-        } else {
-            return $('input[name="unit-' + value + '"]').attr('disabled', false);
-        }
-    });
-
+    enableChildInputfields("ingredients", "unit");
 
     // -----------------------------------------------
     // validation of all the values

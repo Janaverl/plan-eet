@@ -96,6 +96,17 @@ function switchselector(that, element, checkbox) {
     }
 };
 
+function enableChildInputfields(nameCheckbox, namechildInputfield) {
+    $(`input:checkbox[name="${nameCheckbox}"]`).change(function (e) {
+        const value = $(this).val();
+        if (!$('input[name="unit-' + value + '"]').attr('disabled')) {
+            return $(`input[name="${namechildInputfield}-${value}"]`).attr('disabled', true);
+        } else {
+            return $(`input[name="${namechildInputfield}-${value}"]`).attr('disabled', false);
+        }
+    });
+}
+
 function confirmationRequiredInputField(array, errors, id, errormsg) {
     if (!$(`input#${id}`).val()) {
         errors.push(errormsg)
