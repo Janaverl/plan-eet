@@ -25,7 +25,11 @@ Want to clone this project?
 Read symfony's documentation: [how to set up an existing symfony project](https://symfony.com/doc/current/setup.html#setting-up-an-existing-symfony-project).
 
 ### mysql database
-In the root of this project you'll find a folder "my_database", download the latest version of kampmenu_v20xx.xx.xx.sql . Create a database and change the databasename, databasepassword and serverversion in the .env file on line 28. Execute the sql-file in order to get started with some data.
+In the root of this project you'll find a folder "my_database", download the latest version of kampmenu_v20xx.xx.xx.sql . Create a database and change the databasename, databasepassword and serverversion in the .env file on line 28.
+```
+DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=x.x"
+```
+Execute the sql-file in order to get started with some data.
 
 ### register and log in
 In order to use the CMS: register as a new user and change your role to ["ROLE_ADMIN"] .
