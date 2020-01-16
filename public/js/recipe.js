@@ -67,15 +67,14 @@ $(document).ready(function () {
                             $(".success").append(`<li>${recipe["name"]} werd succesvol toegevoegd.</li>`);
                         } else if (result.statuscode == 422) {
                             $(".errors").append(`<li>${recipe["name"]} bestaat reeds.</li>`);
+                            $('.w3-check').prop('checked', false);
+                            $('input').val('');
+                            $('textarea').val('');
+                            $('select').val("default");
+                            $('.unit').attr('disabled', true);
                         } else {
                             $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
                         };
-
-                        $('.w3-check').prop('checked', false);
-                        $('input').val('');
-                        $('textarea').val('');
-                        $('select').val("default");
-                        $('.unit').attr('disabled', true);
 
                         return result;
                     })

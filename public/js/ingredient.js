@@ -39,14 +39,13 @@ $(document).ready(function () {
                     .then(result => {
                         if (result.statuscode == 201) {
                             $(".success").append(`<li>${ingredient["name"]} werd succesvol toegevoegd.</li>`);
+                            $('input[type="text"]').val('');
+                            $('select').val("default");
                         } else if (result.statuscode == 422) {
                             $(".errors").append(`<li>${ingredient["name"]} bestaat reeds.</li>`);
                         } else {
                             $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
                         };
-
-                        $('input[type="text"]').val('');
-                        $('select').val("default");
 
                         return result;
                     })
