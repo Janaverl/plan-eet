@@ -8,6 +8,8 @@ $(document).ready(function () {
         $("#startdate").prop('max', $("#enddate").val());
     });
 
+    enableChildInputfields("mealmoments", "time");
+
     $(".confirm").on("click", function (e) {
         $(".errors").empty();
         let errors = [];
@@ -18,16 +20,14 @@ $(document).ready(function () {
         confirmationRequiredInputField(camp, errors, "name", "geen naam ingevuld");
         confirmationRequiredInputField(camp, errors, "nrOfParticipants", "geen aantal deelnemers ingevuld");
         confirmationRequiredInputField(camp, errors, "startdate", "geen begindatum ingevuld");
-        confirmationRequiredInputField(camp, errors, "starthour", "geen beginuur ingevuld");
-        confirmationRequiredInputField(camp, errors, "startmin", "geen beginminuten ingevuld");
+        confirmationRequiredInputField(camp, errors, "starttime", "geen beginuur ingevuld");
         confirmationRequiredInputField(camp, errors, "enddate", "geen einddatum ingevuld");
-        confirmationRequiredInputField(camp, errors, "endhour", "geen einduur ingevuld");
-        confirmationRequiredInputField(camp, errors, "endmin", "geen eindminuten ingevuld");
+        confirmationRequiredInputField(camp, errors, "endtime", "geen einduur ingevuld");
+        confirmationOptionalCheckboxesWithChildinput(camp, errors, "onemealmoment", "mealmoment", "time", "geen tijdstip ingevuld")
 
         if ($("input#startdate").val() > $("input#enddate").val()) {
             errors.push("de einddatum moet na de begindatum komen.")
         };
-
 
         // fetch the data or display errors
         if (errors.length == 0) {
@@ -51,12 +51,12 @@ $(document).ready(function () {
                 .then(result => {
                     if (result.statuscode == 201) {
                         $(".success").append(`<li>${camp["name"]} werd succesvol toegevoegd.</li>`);
+                        $('input').val('');
+                        $('.w3-check').prop('checked', false);
+                        $('.time').attr('disabled', true);
                     } else {
                         $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
                     };
-
-                    $('input[type="text"]').val('');
-                    $('select').val("default");
 
                     return result;
                 })

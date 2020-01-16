@@ -99,7 +99,7 @@ function switchselector(that, element, checkbox) {
 function enableChildInputfields(nameCheckbox, namechildInputfield) {
     $(`input:checkbox[name="${nameCheckbox}"]`).change(function (e) {
         const value = $(this).val();
-        if (!$('input[name="unit-' + value + '"]').attr('disabled')) {
+        if (!$(`input[name="${namechildInputfield}-${value}"]`).attr('disabled')) {
             return $(`input[name="${namechildInputfield}-${value}"]`).attr('disabled', true);
         } else {
             return $(`input[name="${namechildInputfield}-${value}"]`).attr('disabled', false);
@@ -169,5 +169,25 @@ function confirmationOneIngredient(array, errors) {
             }
         });
         array["ingredients"] = ingr
+    };
+}
+
+function confirmationOptionalCheckboxesWithChildinput(array, errors, classname, name, nameChild, errormsgChild) {
+    if ($(`.${classname} input:checkbox:checked`).length != 0) {
+        let subArray = {};
+        let i = 0;
+        $(`.${classname} input:checkbox:checked`).each(function () {
+            const value = $(this).val();
+            if (!$(`input[name="${nameChild}-${value}"]`).val()) {
+                errors.push(`${errormsgChild} voor ${$(`label[for="${value}"]`).text()}`);
+            } else {
+                const oneValue = {};
+                oneValue[name] = $(`label[for="${value}"]`).text();
+                oneValue[nameChild] = $(`input[name="${nameChild}-${value}"]`).val();
+                subArray[i] = oneValue;
+                i++;
+            }
+        });
+        array[name] = subArray
     };
 }

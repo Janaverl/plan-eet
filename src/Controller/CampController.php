@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Camp;
 use App\Entity\User;
+use App\Entity\Mealmoment;
+use App\Entity\CampMealmoments;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,9 +22,17 @@ class CampController extends AbstractController
      */
     public function add()
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_USER');
 
-        return $this->render('camp/individual.html.twig');
+        $allMealmoments = $this->getDoctrine()
+            ->getRepository(Mealmoment::class)
+            ->findAll();
+
+        dump($allMealmoments);
+
+        return $this->render('camp/individual.html.twig', [
+            'mealmoments' => $allMealmoments,
+        ]);
     }
 
     
@@ -35,8 +45,8 @@ class CampController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         $user = $this->getUser();
-        $startTime = date_format(date_create($data["startdate"]." ".$data["starthour"].":".$data["startmin"]),"Y/m/d H:i:s");
-        $endTime = date_format(date_create($data["enddate"]." ".$data["endhour"].":".$data["endmin"]),"Y/m/d H:i:s");
+        $startTime = date_format(date_create($data["startdate"]." ".$data["starttime"]),"Y/m/d H:i:s");
+        $endTime = date_format(date_create($data["enddate"]." ".$data["endtime"]),"Y/m/d H:i:s");
         $startTime = new \DateTime($startTime);
         $endTime = new \DateTime($endTime);
 
@@ -51,6 +61,23 @@ class CampController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         // tell Doctrine you want to (eventually) save the Recipe (no queries yet)
         $entityManager->persist($camp);
+
+        if(isset($data["mealmoment"]) && $data["mealmoment"] != ""){
+            foreach($data["mealmoment"] as $mealmoment){
+                $time = date('i', strtotime($mealmoment["time"]));
+
+                // look for a single mealmoment by name
+                $mealmoment = $this->getDoctrine()
+                    ->getRepository(Mealmoment::class)
+                    ->findOneBy(['name' => $mealmoment["mealmoment"]]);
+                $campMealmoment = new CampMealmoments();
+                $campMealmoment->setCamp($camp);
+                $campMealmoment->setMealmoment($mealmoment);
+                $campMealmoment->setTime($time);
+                $entityManager->persist($campMealmoment);
+            }
+
+        }
 
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $camp)]);

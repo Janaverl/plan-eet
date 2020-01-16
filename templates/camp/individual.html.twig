@@ -17,13 +17,22 @@
 
                 <p>start van het kamp:</p>
                 <input type="date" id="startdate" name="startdate" class="w3-input" min={{"now"|date("Y-m-d")}} placeholder="begindatum">
-                <input type="number" id="starthour" name="starthour" min="00" max="24" placeholder="uur">
-                <input type="number" id="startmin" name="startmin" min="00" max="60" placeholder="min">
-                
+                <input type="time" id="starttime" name="starttime" placeholder="uur">                
                 <p>einde van het kamp:</p>
                 <input type="date" id="enddate" name="enddate" class="w3-input" min={{"now"|date("Y-m-d")}} placeholder="begindatum">
-                <input type="number" id="endhour" name="endhour" min="00" max="24" placeholder="uur">
-                <input type="number" id="endmin" name="endmin" min="00" max="60" placeholder="min">
+                <input type="time" id="endtime" name="endtime" placeholder="uur">
+                
+            </div>
+
+            <div class="w3-card step">
+                <h3>kies de maaltijden die je wil voorzien en het uur</h3>
+                {% for mealmoment in mealmoments %}
+                    <div class="onemealmoment mealmoment{{mealmoment.id}}">
+                        <input class="w3-check mealmoments" type="checkbox" name="mealmoments" value="mealmoment{{mealmoment.id}}"/>
+                        <input type="time" class="time" name="time-mealmoment{{mealmoment.id}}" disabled>
+                        <label for="mealmoment{{mealmoment.id}}">{{mealmoment.name}}</label>
+                    </div>
+                {% endfor %}
             </div>
 
             {# card for the confirmation and errors #}
