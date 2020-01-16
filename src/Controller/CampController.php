@@ -6,6 +6,7 @@ use App\Entity\Camp;
 use App\Entity\User;
 use App\Entity\Mealmoment;
 use App\Entity\CampMealmoments;
+use App\Entity\CampDay;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +28,6 @@ class CampController extends AbstractController
         $allMealmoments = $this->getDoctrine()
             ->getRepository(Mealmoment::class)
             ->findAll();
-
-        dump($allMealmoments);
 
         return $this->render('camp/individual.html.twig', [
             'mealmoments' => $allMealmoments,
@@ -64,19 +63,28 @@ class CampController extends AbstractController
 
         if(isset($data["mealmoment"]) && $data["mealmoment"] != ""){
             foreach($data["mealmoment"] as $mealmoment){
-                $time = date('i', strtotime($mealmoment["time"]));
+                $time = explode(':', $mealmoment['time']);
+                $minutes = ($time[0] * 60.0 + $time[1] * 1.0);
 
                 // look for a single mealmoment by name
                 $mealmoment = $this->getDoctrine()
                     ->getRepository(Mealmoment::class)
                     ->findOneBy(['name' => $mealmoment["mealmoment"]]);
                 $campMealmoment = new CampMealmoments();
-                $campMealmoment->setCamp($camp);
-                $campMealmoment->setMealmoment($mealmoment);
-                $campMealmoment->setTime($time);
+                $campMealmoment->setCamp($camp)
+                    ->setMealmoment($mealmoment)
+                    ->setTime($minutes);
                 $entityManager->persist($campMealmoment);
             }
+        }
 
+        $campdaycount = 0;
+        for($i = $startTime; $i <= $endTime; $i->modify('+1 day')){
+            $campday = new Campday();
+            $campday->setCamp($camp)
+                ->setCampdaycount($campdaycount);
+            $entityManager->persist($campday);
+            $campdaycount += 1;
         }
 
         $response = new JsonResponse();
