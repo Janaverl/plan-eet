@@ -125,7 +125,7 @@ class RecipeController extends AbstractController{
         }
 
         $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $recipe)]);
+        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
     
         return $response;
     }
@@ -305,7 +305,7 @@ class RecipeController extends AbstractController{
         }
 
         $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $recipe)]);
+        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
     
         return $response;
     }

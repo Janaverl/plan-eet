@@ -73,7 +73,7 @@ class IngredientController extends AbstractController{
         $entityManager->persist($ingredient);
 
         $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $ingredient)]);
+        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
     
         return $response;
     }
@@ -146,7 +146,7 @@ class IngredientController extends AbstractController{
         // $entityManager->persist($ingredient);
 
         $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $ingredient)]);
+        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
     
         return $response;
     }

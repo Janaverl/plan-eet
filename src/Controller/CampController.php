@@ -80,7 +80,7 @@ class CampController extends AbstractController
         }
 
         $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager, $camp)]);
+        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
     
         return $response;
     }

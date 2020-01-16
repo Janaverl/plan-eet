@@ -6,7 +6,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class Addvalue
 {
-    public function tryCatch($entityManager, $newValue)
+    public function tryCatch($entityManager)
     {
         try {
             // message: created
