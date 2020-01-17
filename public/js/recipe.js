@@ -41,66 +41,15 @@ $(document).ready(function () {
         confirmationRequiredSelect(recipe, errors, type, "type", "geen type geselecteerd");
         confirmationRequiredInputField(recipe, errors, "numberOfEaters", "geen aantal eters ingevuld");
         confirmationOneIngredient(recipe, errors);
-        confirmationOptionalCheckboxes(recipe, herbs, "oneHerb");
+        confirmationOptionalCheckboxes(recipe, errors, "oneHerb");
         confirmationRequiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
 
-
-        // fetch or display errors
-        if (errors.length == 0) {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify(recipe);
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-
-            if (mode == "add") {
-                fetch('/fetch/add/recipe', requestOptions)
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.statuscode == 201) {
-                            $(".success").append(`<li>${recipe["name"]} werd succesvol toegevoegd.</li>`);
-                        } else if (result.statuscode == 422) {
-                            $(".errors").append(`<li>${recipe["name"]} bestaat reeds.</li>`);
-                            $('.w3-check').prop('checked', false);
-                            $('input').val('');
-                            $('textarea').val('');
-                            $('select').val("default");
-                            $('.unit').attr('disabled', true);
-                        } else {
-                            $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
-                        };
-
-                        return result;
-                    })
-                    .catch(error => console.log('error :::', error));
-            } else if (mode == "update") {
-                fetch('/fetch/update/recipe', requestOptions)
-                    .then(response => response.json())
-                    .then(result => {
-                        console.log("result :: " + result)
-                        if (result.statuscode == 201) {
-                            $(".success").append(`<li>${recipe["name"]} werd succesvol aangepast.</li>`);
-                        } else {
-                            $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
-                        };
-
-                        return result;
-                    })
-                    .catch(error => console.log('error :::', error));
-            } else {
-                $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
-            }
-
+        if (mode == "add") {
+            postdata(recipe, errors, '/fetch/add/recipe', 'toegevoegd', true);
+        } else if (mode == "update") {
+            postdata(recipe, errors, '/fetch/update/recipe', 'aangepast', false);
         } else {
-            errors.forEach(error =>
-                $(".errors").append(`<li>${error}</li>`)
-            );
+            $(".errors").append(`<li>Er liep iets mis.</li>`);
         }
     });
 

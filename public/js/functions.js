@@ -191,3 +191,55 @@ function confirmationOptionalCheckboxesWithChildinput(array, errors, classname, 
         array[name] = subArray
     };
 }
+
+/*
+fetch or display errors
+type data = assoc. array
+type errors = array
+type route = string
+type slug = string
+type clearfields = boolean
+*/
+function postdata(data, errors, route, slug, clearfields) {
+
+    if (errors.length == 0) {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify(data);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch(route, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.statuscode == 201) {
+                    $(".success").append(`<li>${data["name"]} werd succesvol ${slug}.</li>`);
+                    if (clearfields) {
+                        $('.w3-check').prop('checked', false);
+                        $('input').val('');
+                        $('textarea').val('');
+                        $('select').val("default");
+                        $('.unit').attr('disabled', true);
+                        $('.time').attr('disabled', true);
+                    }
+                } else if (result.statuscode == 422) {
+                    $(".errors").append(`<li>${data["name"]} bestaat reeds.</li>`);
+                } else {
+                    $(".errors").append(`<li>Er liep iets mis..</li>`);
+                };
+
+                return result;
+            })
+            .catch(error => console.log('error :::', error));
+    } else {
+        errors.forEach(error =>
+            $(".errors").append(`<li>${error}</li>`)
+        );
+    }
+}

@@ -29,42 +29,6 @@ $(document).ready(function () {
             errors.push("de einddatum moet na de begindatum komen.")
         };
 
-        // fetch the data or display errors
-        if (errors.length == 0) {
-            console.log("all set to push");
-            console.log(camp);
-
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify(camp);
-            console.log(raw);
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-            fetch('/fetch/add/camp', requestOptions)
-                .then(response => response.json())
-                .then(result => {
-                    if (result.statuscode == 201) {
-                        $(".success").append(`<li>${camp["name"]} werd succesvol toegevoegd.</li>`);
-                        $('input').val('');
-                        $('.w3-check').prop('checked', false);
-                        $('.time').attr('disabled', true);
-                    } else {
-                        $(".errors").append(`<li>Er liep iets mis. Probeer opnieuw.</li>`);
-                    };
-
-                    return result;
-                })
-                .catch(error => console.log('error :::', error));
-        } else {
-            errors.forEach(error =>
-                $(".errors").append(`<li>${error}</li>`)
-            );
-        }
+        postdata(camp, errors, '/fetch/add/camp', 'toegevoegd', true);
     });
 });
