@@ -1,0 +1,20 @@
+{% extends 'boxes.html.twig' %}
+
+{% block body %}
+    <div class="contentwrapper">
+        <h1>Plan hier je kampmenu</h1>
+        
+        <div class="cardwrapper">
+            <div class="w3-card step">
+                <p>kalender komt hier</p>
+
+                {{dump(value)}}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/sorttable.js') }}"></script>
+{% endblock %} 

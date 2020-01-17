@@ -94,6 +94,29 @@ class CampController extends AbstractController
     }
 
     
+    
+     /**
+     * @Route("/update/camp/{slug}{id}", name="update_camp")
+     */
+    public function update($slug, $id){
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $camp = $this->getDoctrine()
+            ->getRepository(Camp::class)
+            ->findOneBy(['id' => $id]);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+
+        if(!$camp){
+            return $this->render('general/index.html.twig');
+        }else{ 
+            return $this->render('camp/callenderindividual.html.twig', [
+                'value' => $camp,
+            ]);
+        }
+    }
+
+    
     /**
      * @Route("/show/camps", name="show_camps")
      */

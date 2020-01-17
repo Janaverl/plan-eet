@@ -32,7 +32,7 @@
                         <td>{{value.startTime|date("d/m/Y - H:i")}}</td>
                         <td>{{value.endTime|date("d/m/Y - H:i")}}</td>
                         <td>{{value.nrOfParticipants}}</td>
-                        <td class="change"><a href="#"><i class="fas fa-pencil-alt"></i></a></td>
+                        <td class="change"><a href="{{ path('update_camp', {slug: value.name, id: value.id}) }}"><i class="fas fa-pencil-alt"></i></a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
