@@ -11,8 +11,7 @@ So I became a specialist. I saw that it wasn't easy for everyone to plan meals, 
 The day I decided that I would become a professional programmer, I knew what my first big project would be: an online guide and planning tool for meals at youth camps.
 
 ### the process
-I started to write user-storys and design the database.
-I wrote down a lot of user stories, thought about different scenario's and brainstormed a lot.
+I wrote down a lot of user stories, designed the database, thought about different scenario's and brainstormed a lot.
 With those ideas, I made a plan to create a first simple alfa version of the tool.
 
 First, I created some pages in vanilla php, jQuery and css. I haven't learned any php-framework at that time.
