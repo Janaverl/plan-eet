@@ -71,12 +71,12 @@ class Campday
     /**
      * @return Collection|Campmeal[]
      */
-    public function getCampMeals(): Collection
+    public function getCampmeals(): Collection
     {
         return $this->campmeals;
     }
 
-    public function addCampMeal(CampMeal $campmeal): self
+    public function addCampmeal(CampMeal $campmeal): self
     {
         if (!$this->campmeals->contains($campmeal)) {
             $this->campmeals[] = $campmeal;

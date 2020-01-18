@@ -25,7 +25,7 @@ class Campmeal
     private $campMealmoment;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Campday", inversedBy="campMeals")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Campday", inversedBy="campmeals")
      * @ORM\JoinColumn(nullable=false)
      */
     private $campday;
