@@ -2,15 +2,18 @@ $(document).ready(function () {
 
     $("#startdate").on("change", function (e) {
         $("#enddate").prop('min', $("#startdate").val());
+        // console.log($("#enddate").val());
     });
 
     $("#enddate").on("change", function (e) {
         $("#startdate").prop('max', $("#enddate").val());
+        // console.log($("#startdate").val());
     });
 
     enableChildInputfields("mealmoments", "time");
 
     $(".confirm").on("click", function (e) {
+        console.log($("#startdate").val());
         $(".errors").empty();
         let errors = [];
         let camp = {};

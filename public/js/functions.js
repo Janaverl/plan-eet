@@ -214,6 +214,7 @@ function postdata(data, errors, route, slug, clearfields) {
             body: raw,
             redirect: 'follow'
         };
+        console.log(raw);
 
         fetch(route, requestOptions)
             .then(response => response.json())

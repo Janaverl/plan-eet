@@ -30,13 +30,13 @@ class Campday
     private $campdaycount;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CampMeal", mappedBy="campday")
+     * @ORM\OneToMany(targetEntity="App\Entity\Campmeal", mappedBy="campday")
      */
-    private $campMeals;
+    private $campmeals;
 
     public function __construct()
     {
-        $this->campMeals = new ArrayCollection();
+        $this->campmeals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,30 +69,30 @@ class Campday
     }
 
     /**
-     * @return Collection|CampMeal[]
+     * @return Collection|Campmeal[]
      */
     public function getCampMeals(): Collection
     {
-        return $this->campMeals;
+        return $this->campmeals;
     }
 
-    public function addCampMeal(CampMeal $campMeal): self
+    public function addCampMeal(CampMeal $campmeal): self
     {
-        if (!$this->campMeals->contains($campMeal)) {
-            $this->campMeals[] = $campMeal;
-            $campMeal->setCampday($this);
+        if (!$this->campmeals->contains($campmeal)) {
+            $this->campmeals[] = $campmeal;
+            $campmeal->setCampday($this);
         }
 
         return $this;
     }
 
-    public function removeCampMeal(CampMeal $campMeal): self
+    public function removeCampMeal(Campmeal $campmeal): self
     {
-        if ($this->campMeals->contains($campMeal)) {
-            $this->campMeals->removeElement($campMeal);
+        if ($this->campmeals->contains($campmeal)) {
+            $this->campmeals->removeElement($campmeal);
             // set the owning side to null (unless already changed)
-            if ($campMeal->getCampday() === $this) {
-                $campMeal->setCampday(null);
+            if ($campmeal->getCampday() === $this) {
+                $campmeal->setCampday(null);
             }
         }
 

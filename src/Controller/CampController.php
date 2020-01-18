@@ -44,10 +44,10 @@ class CampController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         $user = $this->getUser();
-        $startTime = date_format(date_create($data["startdate"]." ".$data["starttime"]),"Y/m/d H:i:s");
-        $endTime = date_format(date_create($data["enddate"]." ".$data["endtime"]),"Y/m/d H:i:s");
-        $startTime = new \DateTime($startTime);
-        $endTime = new \DateTime($endTime);
+        $start = date_format(date_create($data["startdate"]." ".$data["starttime"]),"Y/m/d H:i:s");
+        $end = date_format(date_create($data["enddate"]." ".$data["endtime"]),"Y/m/d H:i:s");
+        $startTime = new \DateTime($start);
+        $endTime = new \DateTime($end);
 
         // create the object for the new value
         $camp = new Camp();
@@ -56,6 +56,8 @@ class CampController extends AbstractController
             ->setEndTime($endTime)
             ->setNrOfParticipants($data["nrOfParticipants"])
             ->setUser($user);
+
+        dump($camp);
 
         $entityManager = $this->getDoctrine()->getManager();
         // tell Doctrine you want to (eventually) save the Recipe (no queries yet)
@@ -79,13 +81,16 @@ class CampController extends AbstractController
         }
 
         $campdaycount = 0;
-        for($i = $startTime; $i <= $endTime; $i->modify('+1 day')){
+        $campdayOne = new \DateTime($start);
+        for($i = $campdayOne; $i <= $endTime; $i->modify('+1 day')){
             $campday = new Campday();
             $campday->setCamp($camp)
                 ->setCampdaycount($campdaycount);
             $entityManager->persist($campday);
             $campdaycount += 1;
         }
+
+        dump($camp);
 
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
