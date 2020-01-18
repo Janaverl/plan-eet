@@ -101,14 +101,14 @@ class CampController extends AbstractController
     
     
      /**
-     * @Route("/update/camp/{slug}{id}", name="update_camp")
+     * @Route("/update/camp/{slug}", name="update_camp")
      */
-    public function update($slug, $id){
-        $this->denyAccessUnlessGranted('ROLE_USER');
+    public function update($slug){
+        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
-            ->findOneBy(['id' => $id]);
+            ->findOneBy(['name' => $slug]);
         
         $entityManager = $this->getDoctrine()->getManager();
 
