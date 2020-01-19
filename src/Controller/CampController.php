@@ -121,6 +121,9 @@ class CampController extends AbstractController
         }
     }
 
+    public function createAllMealEvents(){
+        
+    }
        
      /**
      * @param Response
@@ -135,8 +138,8 @@ class CampController extends AbstractController
             ->findOneBy(['name' => $slug]);
 
         $data["start"] = $camp->getStartTime()->format('Y-m-d');
-        $endday = $camp->getEndTime()->modify('+1 day');
-        $data["end"] = $endday->format('Y-m-d');
+        $endday = clone $camp->getEndTime();
+        $data["end"] = $endday->modify('+1 day')->format('Y-m-d');
         
         $mealmoments = $camp->getCampMealmoments();
 
@@ -145,7 +148,6 @@ class CampController extends AbstractController
         foreach($mealmoments as $mealmoment){
             $timeStart = $mealmoment->gettime();
             $timeEnd = $timeStart + 60;
-
             array_push($data["mealhours"], [
                 "daysOfWeek" => "[0, 1, 2, 3, 4, 5, 6]",
                 "startTime" => $converttime->decimal_to_time($timeStart),
@@ -155,32 +157,38 @@ class CampController extends AbstractController
 
         $data["allthemeals"] = [];
 
-        $campdayOne = new \DateTime($data["start"]);
-        for($i = $campdayOne; $i <= $endday; $i->modify('+1 day')){
+        $firstcampMoment = clone $camp->getStartTime();
+        $lastcampMoment = $camp->getEndTime();
+
+        for($i = $firstcampMoment; $i <= $lastcampMoment; $i->modify('+1 day')){
             $date = $i->format('Y-m-d');
             foreach($mealmoments as $mealmoment){
                 $timeStart = $mealmoment->gettime();
                 $timeEnd = $timeStart + 60;
-                array_push($data["allthemeals"], [
-                    "title" => $mealmoment->getMealmoment()->getName(),
-                    "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
-                    "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
-                ]);
+                $mealTimeStart = new \Datetime($date.'T'.$converttime->decimal_to_time($timeStart));
+                if($mealTimeStart < $camp->getStartTime()){
+                    array_push($data["allthemeals"], [
+                        "rendering" => 'background',
+                        "className" => 'fc-nonbusiness',
+                        "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
+                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
+                    ]);
+                } else if($lastcampMoment < $mealTimeStart){
+                    array_push($data["allthemeals"], [
+                        "rendering" => 'background',
+                        "className" => 'fc-nonbusiness',
+                        "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
+                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
+                    ]);
+                }else{
+                    array_push($data["allthemeals"], [
+                        "title" => $mealmoment->getMealmoment()->getName(),
+                        "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
+                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
+                    ]);
+                }
             }
         }
-
-        // $data["allthemeals"] = [
-        //     [
-        //         "title" => 'middagmaal met een hele lange titel',
-        //         "start" => '2020-01-20T12:00:00',
-        //         "end" => '2020-01-20T13:00:00'
-        //     ],
-        //     [
-        //         "title" => 'avondmaal',
-        //         "start" => '2020-01-20T18:00:00',
-        //         "end" => '2020-01-20T19:00:00',
-        //     ]
-        // ];
 
         $json = new JsonResponse();
         $json->setData(json_encode($data));
