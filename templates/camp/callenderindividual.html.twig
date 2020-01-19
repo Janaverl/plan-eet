@@ -33,5 +33,8 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        var slug = "{{value.name}}";
+    </script>
     <script src="{{ asset('js/mycallendar.js') }}"></script>
 {% endblock %} 

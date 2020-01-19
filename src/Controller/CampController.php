@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 use App\Service\Addvalue;
+use App\Service\Converttime;
 
 class CampController extends AbstractController
 {
@@ -40,7 +41,7 @@ class CampController extends AbstractController
      * @return JsonResponse
      * @Route("/fetch/add/camp", name="fetch_add_camp", methods={"POST"})
      */
-    public function addAction(Request $request, Addvalue $addvalue) : Response {
+    public function addAction(Converttime $converttime, Request $request, Addvalue $addvalue) : Response {
         $data = json_decode($request->getContent(), true);
 
         $user = $this->getUser();
@@ -65,8 +66,7 @@ class CampController extends AbstractController
 
         if(isset($data["mealmoment"]) && $data["mealmoment"] != ""){
             foreach($data["mealmoment"] as $mealmoment){
-                $time = explode(':', $mealmoment['time']);
-                $minutes = ($time[0] * 60.0 + $time[1] * 1.0);
+                $time = $converttime->time_to_decimal($mealmoment['time']);
 
                 // look for a single mealmoment by name
                 $mealmoment = $this->getDoctrine()
@@ -119,6 +119,72 @@ class CampController extends AbstractController
                 'value' => $camp,
             ]);
         }
+    }
+
+       
+     /**
+     * @param Response
+     * @return JsonResponse
+     * @Route("/fetch/update/camp/{slug}", name="fetch_update_camp", methods={"GET"})
+     */
+    public function updateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue) : Response {
+        $data = [];
+        
+        $camp = $this->getDoctrine()
+            ->getRepository(Camp::class)
+            ->findOneBy(['name' => $slug]);
+
+        $data["start"] = $camp->getStartTime()->format('Y-m-d');
+        $endday = $camp->getEndTime()->modify('+1 day');
+        $data["end"] = $endday->format('Y-m-d');
+        
+        $mealmoments = $camp->getCampMealmoments();
+
+        $data["mealhours"] = [];
+
+        foreach($mealmoments as $mealmoment){
+            $timeStart = $mealmoment->gettime();
+            $timeEnd = $timeStart + 60;
+
+            array_push($data["mealhours"], [
+                "daysOfWeek" => "[0, 1, 2, 3, 4, 5, 6]",
+                "startTime" => $converttime->decimal_to_time($timeStart),
+                "endTime" => $converttime->decimal_to_time($timeEnd)
+            ]);
+        }
+
+        $data["allthemeals"] = [];
+
+        $campdayOne = new \DateTime($data["start"]);
+        for($i = $campdayOne; $i <= $endday; $i->modify('+1 day')){
+            $date = $i->format('Y-m-d');
+            foreach($mealmoments as $mealmoment){
+                $timeStart = $mealmoment->gettime();
+                $timeEnd = $timeStart + 60;
+                array_push($data["allthemeals"], [
+                    "title" => $mealmoment->getMealmoment()->getName(),
+                    "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
+                    "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
+                ]);
+            }
+        }
+
+        // $data["allthemeals"] = [
+        //     [
+        //         "title" => 'middagmaal met een hele lange titel',
+        //         "start" => '2020-01-20T12:00:00',
+        //         "end" => '2020-01-20T13:00:00'
+        //     ],
+        //     [
+        //         "title" => 'avondmaal',
+        //         "start" => '2020-01-20T18:00:00',
+        //         "end" => '2020-01-20T19:00:00',
+        //     ]
+        // ];
+
+        $json = new JsonResponse();
+        $json->setData(json_encode($data));
+        return $json;
     }
 
     

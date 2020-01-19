@@ -192,6 +192,7 @@ function confirmationOptionalCheckboxesWithChildinput(array, errors, classname, 
     };
 }
 
+
 /*
 fetch or display errors
 type data = assoc. array
