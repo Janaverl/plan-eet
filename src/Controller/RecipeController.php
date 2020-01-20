@@ -349,8 +349,6 @@ class RecipeController extends AbstractController{
             ->getRepository(Recipes::class)
             ->findAll();
 
-        dump($allRecipes);
-
         return $this->render('recipe/all.html.twig', [
             'values' => $allRecipes,
         ]);

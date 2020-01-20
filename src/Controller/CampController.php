@@ -154,6 +154,8 @@ class CampController extends AbstractController
         $firstcampMoment = clone $camp->getStartTime();
         $lastcampMoment = $camp->getEndTime();
 
+        $day = 0;
+
         for($i = $firstcampMoment; $i <= $lastcampMoment; $i->modify('+1 day')){
             $date = $i->format('Y-m-d');
             foreach($mealmoments as $mealmoment){
@@ -178,10 +180,12 @@ class CampController extends AbstractController
                     array_push($data["allthemeals"], [
                         "title" => $mealmoment->getMealmoment()->getName(),
                         "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
-                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
+                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd),
+                        "url" => '/add/meal/'.$mealmoment->getMealmoment()->getName().'?camp='.$camp->getId().'?day='.$day
                     ]);
                 }
             }
+            $day++;
         }
 
         $json = new JsonResponse();
@@ -189,7 +193,6 @@ class CampController extends AbstractController
         return $json;
     }
 
-    
     /**
      * @Route("/show/camps", name="show_camps")
      */

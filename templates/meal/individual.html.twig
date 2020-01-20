@@ -1,0 +1,33 @@
+{% extends 'boxes.html.twig' %}
+
+{% block body %}
+    <div class="contentwrapper">
+
+        {# title #}
+        <h1>voeg hier je maaltijd toe</h1>
+
+        {# all cards #}
+        <div class="cardwrapper">
+            <div class="w3-card step generalInformation">
+                <h3>algemene info</h3>
+            </div>
+
+            <div class="w3-card step">
+                <h3>kies de gerechten die je wil voorzien</h3>
+            </div>
+
+            {# card for the confirmation and errors #}
+            <div class="w3-card step recipe">
+                <button class="confirm">
+                        Sla deze maaltijd op
+                </button>
+                <ul class="errors"></ul>
+                <ul class="success"></ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
