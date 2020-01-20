@@ -4,6 +4,11 @@ body{
   min-height: 100vh;
   font-family: "Times New Roman", Georgia, Serif;
 }
+
+.w3-top{
+  z-index: 10;
+}
+
 .w3-card.w3-bar {
   min-height: initial;
 }
