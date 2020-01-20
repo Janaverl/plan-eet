@@ -73,7 +73,7 @@ class CampController extends AbstractController
                 $campMealmoment = new CampMealmoments();
                 $campMealmoment->setCamp($camp)
                     ->setMealmoment($mealmoment)
-                    ->setTime($minutes);
+                    ->setTime($time);
                 $entityManager->persist($campMealmoment);
             }
         }

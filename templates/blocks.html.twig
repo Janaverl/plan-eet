@@ -28,15 +28,15 @@
         <tr class="sortTitles">
             {% if app.request.get('_route') == 'add_meal' %}
                 <th width="10%"></th>
-            {% endif%}
+            {% endif %}
             <th class="sortable" width="30%">naam recept</th>
             <th class="sortable" width="12%">categorie</th>
             <th class="sortable" width="12%">type</th>
-            <th width="20%">ingredienten (voor {{nrOfEaters}} eters)</th>
+            <th width="20%">ingredienten</th>
             <th width="16%">kruiden</th>
             {% if app.request.get('_route') == 'show_recipes' %}
                 <th width="10%"></th>
-            {% endif%}
+            {% endif %}
         </tr>
         </thead>
         <tbody class="searchable">
@@ -46,27 +46,49 @@
                     <td>                        
                         <input class="w3-check recipe" type="checkbox" name="recipe" value="recipe{{recipe.id}}"/>
                     </td>
-                {% endif%}
+                {% endif %}
                 <td>
                     {{recipe.name}}
                     <br>
                     <span><i>{{recipe.suggestion}}</i></span>
+                    <br>
+                    <button onclick="document.getElementById('details{{recipe.name}}').style.display='block'"class="w3-button">bekijk recept</button>
+                    <div id="details{{recipe.name}}" class="w3-modal">
+                        <div class="w3-modal-content">
+                            <div class="w3-container">
+                            <span onclick="document.getElementById('details{{recipe.name}}').style.display='none'"
+                            class="w3-button w3-display-topright">&times;</span>
+                            <p>ingredienten(voor {{nrOfEaters}} personen)</p>
+                            <ul>
+                                {% for ingr in recipe.ingredients %}
+                                    <li>{{ingr.quantity*nrOfEaters}} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
+                                {% endfor %}
+                            </ul>
+                            <p>bereidingswijze</p>
+                            <p>{{recipe.instructions|nl2br}}</p>
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 <td>{{recipe.category.name}}</td>
                 <td>{{recipe.type.name}}</td>
                 <td>
-                    <ul>
                     {% for ingr in recipe.ingredients %}
-                        <li>{{ingr.quantity*nrOfEaters}} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
+                        {% if loop.last %}
+                            {{ingr.ingredient.name}}
+                        {% else %}
+                            {{ingr.ingredient.name}},
+                        {% endif %}
                     {% endfor %}
-                    </ul>
                 </td>
                 <td>
-                    <ul>
-                    {% for allherbs in recipe.recipeHerb %}
-                        <li>{{allherbs.herb.name}}</li>
+                    {% for herb in recipe.recipeHerb %}
+                        {% if loop.last %}
+                            {{herb.herb.name}}
+                        {% else %}
+                            {{herb.herb.name}},
+                        {% endif %}
                     {% endfor %}
-                    </ul>
                 </td>
                 {% if app.request.get('_route') == 'show_recipes' %}
                     <td class="change">

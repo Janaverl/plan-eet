@@ -41,7 +41,7 @@ class MealController extends AbstractController
         return $this->render('meal/individual.html.twig', [
             'recipes' => $allRecipes,
             'camp' => $camp,
-            'mealday' => $mealday,
+            'mealday' => $campday,
             'meal' => $slug,
             'campday' => $_GET["day"],
         ]);
