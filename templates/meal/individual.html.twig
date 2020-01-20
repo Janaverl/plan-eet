@@ -7,11 +7,13 @@
 
         {# title #}
         <h1>voeg hier je maaltijd toe</h1>
-
         {# all cards #}
         <div class="cardwrapper">
             <div class="w3-card step">
-                <input type="text" id="nameMeal" class="w3-input" placeholder="naam van de maaltijd">
+                <h4>kamp: {{camp.name}}</h4>
+                <p>{{mealday}} - {{meal}}</p>
+                <p>Kies een maaltijdnaam en voeg recepten toe aan je menu.</p>
+                <input type="text" id="name" class="w3-input" placeholder="naam van de maaltijd">
                 <p>
                     <label class="switch recipes">
                         <input type="checkbox">
@@ -39,6 +41,12 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        let meal = {};
+        meal["mealmoment"] = "{{ meal }}"
+        meal["mealday"] = "{{ mealday }}"
+        meal["campid"] = "{{ camp.id }} "
+    </script>
     <script src="{{ asset('js/sorttable.js') }}"></script>
     <script src="{{ asset('js/meal.js') }}"></script>
 {% endblock %}

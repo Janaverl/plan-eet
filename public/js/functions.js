@@ -150,6 +150,21 @@ function confirmationOptionalCheckboxes(array, name, className) {
     };
 }
 
+function confirmationRequiredCheckboxes(array, errors, className, name) {
+    if ($(`.${className} input:checkbox:checked`).length == 0) {
+        errors.push(`geen ${name} geselecteerd`);
+    } else {
+        let subArray = {};
+        let i = 0;
+        $(`.${className} input:checkbox:checked`).each(function () {
+            const oneValue = $(this).val();
+            subArray[i] = oneValue;
+            i++;
+        });
+        array[name] = subArray
+    };
+}
+
 function confirmationOneIngredient(array, errors) {
     if ($(".oneIngredient input:checkbox:checked").length == 0) {
         errors.push("geen ingredient geselecteerd");

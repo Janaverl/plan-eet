@@ -181,7 +181,7 @@ class CampController extends AbstractController
                         "title" => $mealmoment->getMealmoment()->getName(),
                         "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
                         "end" => $date.'T'.$converttime->decimal_to_time($timeEnd),
-                        "url" => '/add/meal/'.$mealmoment->getMealmoment()->getName().'?camp='.$camp->getId().'?day='.$day
+                        "url" => '/add/meal/'.$mealmoment->getMealmoment()->getName().'?camp='.$camp->getId().'&day='.$day
                     ]);
                 }
             }
