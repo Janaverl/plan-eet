@@ -58,8 +58,6 @@ class CampController extends AbstractController
             ->setNrOfParticipants($data["nrOfParticipants"])
             ->setUser($user);
 
-        dump($camp);
-
         $entityManager = $this->getDoctrine()->getManager();
         // tell Doctrine you want to (eventually) save the Recipe (no queries yet)
         $entityManager->persist($camp);
@@ -90,8 +88,6 @@ class CampController extends AbstractController
             $campdaycount += 1;
         }
 
-        dump($camp);
-
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
     
@@ -103,16 +99,18 @@ class CampController extends AbstractController
      /**
      * @Route("/update/camp/{slug}", name="update_camp")
      */
-    public function update($slug){
+    public function updateAction($slug){
         // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
-            ->findOneBy(['name' => $slug]);
+            ->findOneBy(['id' => $_GET["camp"]]);
         
         $entityManager = $this->getDoctrine()->getManager();
 
         if(!$camp){
+            return $this->render('general/index.html.twig');
+        }else if($camp->getName() != $slug){
             return $this->render('general/index.html.twig');
         }else{ 
             return $this->render('camp/callenderindividual.html.twig', [
@@ -120,22 +118,18 @@ class CampController extends AbstractController
             ]);
         }
     }
-
-    public function createAllMealEvents(){
-        
-    }
        
      /**
      * @param Response
      * @return JsonResponse
      * @Route("/fetch/update/camp/{slug}", name="fetch_update_camp", methods={"GET"})
      */
-    public function updateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue) : Response {
+    public function fetchUpdateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue) : Response {
         $data = [];
         
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
-            ->findOneBy(['name' => $slug]);
+            ->findOneBy(['id' => $_GET["camp"]]);
 
         $data["start"] = $camp->getStartTime()->format('Y-m-d');
         $endday = clone $camp->getEndTime();
