@@ -1,28 +1,22 @@
 {% extends 'boxes.html.twig' %}
 
+{% use 'blocks.html.twig' %}
+
 {% block body %}
     <div class="contentwrapper">
         <h1>voeg een {{name}} toe</h1>
         
         <div class="cardwrapper">
-                <div class="w3-card step">
-                    <h3>Deze waarden zitten al in de database:</h3>
-                    <input type="text" class="w3-input filterBy" placeholder="zoek een {{name}} ...">
-                    <div class="scrollbox">
-                        <ul class="w3-ul">
-                            {% for value in values %}
-                                <li>{{value.name}}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                <div class="w3-card step">
-                    <h3>Voeg een nieuw(e) {{name}} toe</h3>
-                    <input type="text" id="name" name="name" class="w3-input" placeholder="naam {{name}}">
-                    <button class="confirm">voeg toe</button>
-                    <ul class="errors"></ul>
-                    <ul class="success"></ul>
-                </div>
+            {% block show_all_names %}
+                {{ parent() }}
+            {% endblock %}
+            <div class="w3-card step">
+                <h3>Voeg een nieuw(e) {{name}} toe</h3>
+                <input type="text" id="name" name="name" class="w3-input" placeholder="naam {{name}}">
+                <button class="confirm">voeg toe</button>
+                <ul class="errors"></ul>
+                <ul class="success"></ul>
+            </div>
         </div>
     </div>
 {% endblock %}

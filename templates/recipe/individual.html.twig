@@ -1,5 +1,7 @@
 {% extends 'boxes.html.twig' %}
 
+{% use 'blocks.html.twig' %}
+
 {% block body %}
     <div class="contentwrapper">
 
@@ -15,17 +17,10 @@
     {# all cards #}
     <div class="cardwrapper">
         {% if mode == "add" %}
-            <div class="w3-card step">
-                <h3>Deze waarden zitten al in de database:</h3>
-                <input type="text" class="w3-input filterBy" placeholder="zoek een recept ...">
-                <div class="scrollbox">
-                    <ul class="w3-ul">
-                        {% for value in values %}
-                            <li>{{value.name}}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+            {% block show_all_names %}
+                {% set name = "recept" %}
+                {{ parent() }}
+            {% endblock %}
         {% endif %}
 
         <div class="w3-card step generalInformation">

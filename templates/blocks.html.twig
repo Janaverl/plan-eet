@@ -8,6 +8,20 @@
     {# <button class="w3-button w3-light-grey w3-section addSearchFields">Voeg extra zoekvelden toe <i class="fas fa-plus-square"></i></button> #}
 {% endblock %}
 
+{% block show_all_names %}
+    <div class="w3-card step">
+        <h3>Deze waarden zitten al in de database:</h3>
+        <input type="text" class="w3-input filterBy" placeholder="zoek een {{name}} ...">
+        <div class="scrollbox">
+            <ul class="w3-ul">
+                {% for value in values %}
+                    <li>{{value.name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
 {% block table_all_recipes %}
     <table class="w3-table w3-striped w3-bordered" id="allRecipes" width="100%">
         <thead>
