@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Recipes;
 use App\Entity\Campmeal;
 use App\Entity\Camp;
 use App\Entity\User;

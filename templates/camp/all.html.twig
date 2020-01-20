@@ -1,18 +1,16 @@
 {% extends 'boxes.html.twig' %}
 
+{% use 'blocks.html.twig'%}
+
 {% block body %}
     <div class="contentwrapper">
         <h1>bekijk al jouw kampen</h1>
         
         <div class="cardwrapper">
             <div class="w3-card step">
-            <div class="search d-flex">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-                <input type="text" class="w3-input search" placeholder="zoeken ...">
-            </div>
-            {# <button class="w3-button w3-light-grey w3-section addSearchFields">Voeg extra zoekvelden toe <i class="fas fa-plus-square"></i></button> #}
+                {% block filtertable %}
+                    {{ parent() }}
+                {% endblock %}
 
             {# TODO: responsive table https://css-tricks.com/responsive-data-tables/ #}
                   <table class="w3-table w3-striped w3-bordered" id="allIngredients" width="100%">

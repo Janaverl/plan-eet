@@ -1,17 +1,16 @@
 {% extends 'boxes.html.twig' %}
 
+{% use 'blocks.html.twig'%}
+
 {% block body %}
     <div class="contentwrapper">
         <h1>bekijk alle recepten</h1>
         
         <div class="cardwrapper">
             <div class="w3-card step">
-                <div class="search d-flex">
-                    <input type="text" class="w3-input search" placeholder="zoeken ...">
-                    <input type="text" class="w3-input search" placeholder="zoeken ...">
-                    <input type="text" class="w3-input search" placeholder="zoeken ...">
-                    <input type="text" class="w3-input search" placeholder="zoeken ...">
-                </div>
+                {% block filtertable %}
+                    {{ parent() }}
+                {% endblock %}
                 <table class="w3-table w3-striped w3-bordered" id="allIngredients" width="100%">
                   <thead>
                     <tr class="sortTitles">
