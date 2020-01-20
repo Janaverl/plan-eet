@@ -27,15 +27,15 @@
         <thead>
         <tr class="sortTitles">
             {% if app.request.get('_route') == 'add_meal' %}
-                <th></th>
+                <th width="10%"></th>
             {% endif%}
-            <th class="sortable">naam recept</th>
-            <th class="sortable">categorie</th>
-            <th class="sortable">type</th>
-            <th>ingredienten</th>
-            <th>kruiden</th>
+            <th class="sortable" width="30%">naam recept</th>
+            <th class="sortable" width="12%">categorie</th>
+            <th class="sortable" width="12%">type</th>
+            <th width="20%">ingredienten (voor {{nrOfEaters}} eters)</th>
+            <th width="16%">kruiden</th>
             {% if app.request.get('_route') == 'show_recipes' %}
-                <th></th>
+                <th width="10%"></th>
             {% endif%}
         </tr>
         </thead>
@@ -47,13 +47,17 @@
                         <input class="w3-check recipe" type="checkbox" name="recipe" value="recipe{{recipe.id}}"/>
                     </td>
                 {% endif%}
-                <td>{{recipe.name}}</td>
+                <td>
+                    {{recipe.name}}
+                    <br>
+                    <span><i>{{recipe.suggestion}}</i></span>
+                </td>
                 <td>{{recipe.category.name}}</td>
                 <td>{{recipe.type.name}}</td>
                 <td>
                     <ul>
                     {% for ingr in recipe.ingredients %}
-                        <li>{{ingr.ingredient.name}}</li>
+                        <li>{{ingr.quantity*nrOfEaters}} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
                     {% endfor %}
                     </ul>
                 </td>
@@ -72,7 +76,6 @@
                         <a href="{{ path('show_recipe', {slug: recipe.name}) }}"><i class="fas fa-eye"></i></a>
                     </td>
                 {% endif %}
-
             </tr>
         {% endfor %}
         </tbody>

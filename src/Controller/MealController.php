@@ -24,9 +24,13 @@ class MealController extends AbstractController
         $allRecipes = $this->getDoctrine()
             ->getRepository(Recipes::class)
             ->findAll();
+        $camp = $this->getDoctrine()
+            ->getRepository(Camp::class)
+            ->findOneBy(['id' => $_GET["camp"]]);
 
         return $this->render('meal/individual.html.twig', [
             'recipes' => $allRecipes,
+            'camp' => $camp,
         ]);
     }
 }

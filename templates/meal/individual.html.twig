@@ -23,6 +23,7 @@
                     {{ parent() }}
                 {% endblock %}
                 {% block table_all_recipes %}
+                    {% set nrOfEaters = camp.nrOfParticipants %}
                     {{ parent() }}
                 {% endblock %}
 

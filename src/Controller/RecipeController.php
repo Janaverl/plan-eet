@@ -351,6 +351,7 @@ class RecipeController extends AbstractController{
 
         return $this->render('recipe/all.html.twig', [
             'values' => $allRecipes,
+            'nrOfEaters' => 10,
         ]);
     }
 }
