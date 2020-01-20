@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
             navLinks: true, // click on day/week names to navigate views
             editable: true,
             slotDuration: '01:00',
+            snapDuration: '00:30',
             eventOverlap: true, // makes it possible to overlap events during the planning process
             // TODO: get businessdates from mealmoments
             businessHours: mealHours,
