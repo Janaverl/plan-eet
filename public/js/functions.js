@@ -84,15 +84,15 @@ function filterList(filterBy, filterThis) {
     });
 }
 
-function switchselector(that, element, checkbox) {
+function switchselector(that, elementtype, elementclass, checkbox) {
     if (that.checked) {
-        $(element).css('display', 'none');
+        $(elementclass).css('display', 'none');
         $('input:checkbox[name="' + checkbox + '"]:checked').each(function () {
             console.log($(this).val());
-            $('div' + element + '.' + $(this).val()).css('display', 'block');
+            $(`${elementtype}${elementclass}.` + $(this).val()).css('display', '');
         });
     } else {
-        $(element).css('display', 'block');
+        $(`${elementtype}${elementclass}`).css('display', '');
     }
 };
 

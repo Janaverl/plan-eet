@@ -26,7 +26,7 @@ class MealController extends AbstractController
             ->findAll();
 
         return $this->render('meal/individual.html.twig', [
-            'values' => $allRecipes,
+            'recipes' => $allRecipes,
         ]);
     }
 }

@@ -1,5 +1,7 @@
 {% extends 'boxes.html.twig' %}
 
+{% use 'blocks.html.twig'%}
+
 {% block body %}
     <div class="contentwrapper">
 
@@ -8,16 +10,22 @@
 
         {# all cards #}
         <div class="cardwrapper">
-            <div class="w3-card step generalInformation">
-                <h3>algemene info</h3>
-            </div>
-
             <div class="w3-card step">
-                <h3>kies de gerechten die je wil voorzien</h3>
-            </div>
+                <input type="text" id="nameMeal" class="w3-input" placeholder="naam van de maaltijd">
+                <p>
+                    <label class="switch recipes">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    toon enkel geselecteerde recepten
+                </p>
+                {% block filtertable %}
+                    {{ parent() }}
+                {% endblock %}
+                {% block table_all_recipes %}
+                    {{ parent() }}
+                {% endblock %}
 
-            {# card for the confirmation and errors #}
-            <div class="w3-card step recipe">
                 <button class="confirm">
                         Sla deze maaltijd op
                 </button>
@@ -30,4 +38,6 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/sorttable.js') }}"></script>
+    <script src="{{ asset('js/meal.js') }}"></script>
 {% endblock %}

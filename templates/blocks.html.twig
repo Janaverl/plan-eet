@@ -7,3 +7,60 @@
     </div>
     {# <button class="w3-button w3-light-grey w3-section addSearchFields">Voeg extra zoekvelden toe <i class="fas fa-plus-square"></i></button> #}
 {% endblock %}
+
+{% block table_all_recipes %}
+    <table class="w3-table w3-striped w3-bordered" id="allRecipes" width="100%">
+        <thead>
+        <tr class="sortTitles">
+            {% if app.request.get('_route') == 'add_meal' %}
+                <th></th>
+            {% endif%}
+            <th class="sortable">naam recept</th>
+            <th class="sortable">categorie</th>
+            <th class="sortable">type</th>
+            <th>ingredienten</th>
+            <th>kruiden</th>
+            {% if app.request.get('_route') == 'show_recipes' %}
+                <th></th>
+            {% endif%}
+        </tr>
+        </thead>
+        <tbody class="searchable">
+        {% for recipe in recipes %}
+            <tr class="onerecipe recipe{{recipe.id}}">
+                {% if app.request.get('_route') == 'add_meal' %}
+                    <td>                        
+                        <input class="w3-check recipe" type="checkbox" name="recipe" value="recipe{{recipe.id}}"/>
+                    </td>
+                {% endif%}
+                <td>{{recipe.name}}</td>
+                <td>{{recipe.category.name}}</td>
+                <td>{{recipe.type.name}}</td>
+                <td>
+                    <ul>
+                    {% for ingr in recipe.ingredients %}
+                        <li>{{ingr.ingredient.name}}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                    {% for allherbs in recipe.recipeHerb %}
+                        <li>{{allherbs.herb.name}}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                {% if app.request.get('_route') == 'show_recipes' %}
+                    <td class="change">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <p><a href="{{ path('update_recipe', {slug: recipe.name}) }}"><i class="fas fa-pencil-alt"></i></a></p>
+                        {% endif %}
+                        <a href="{{ path('show_recipe', {slug: recipe.name}) }}"><i class="fas fa-eye"></i></a>
+                    </td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

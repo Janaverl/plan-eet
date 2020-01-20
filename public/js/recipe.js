@@ -12,10 +12,10 @@ $(document).ready(function () {
 
     // show only the selected ingredients/herbs when the user turned on the switch. Show all the ingredients/herbs when the user turns the switch off
     $(".switch.ingredients input").change(function (e) {
-        switchselector(this, ".oneIngredient", "ingredients");
+        switchselector(this, "div", ".oneIngredient", "ingredients");
     });
     $(".switch.herbs input").change(function (e) {
-        switchselector(this, ".oneHerb", "herbs");
+        switchselector(this, "div", ".oneHerb", "herbs");
     });
 
     // enable the input value for the ingredient-unit when the ingredient is selected. Disable when it's not selected
