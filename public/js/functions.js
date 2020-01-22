@@ -187,7 +187,7 @@ function confirmationOneIngredient(array, errors) {
     };
 }
 
-function confirmationOptionalCheckboxesWithChildinput(array, errors, classname, name, nameChild, errormsgChild) {
+function confirmationOptionalCheckboxesWithChildinput(array, errors, classname, groupname, name, nameChild, errormsgChild) {
     if ($(`.${classname} input:checkbox:checked`).length != 0) {
         let subArray = {};
         let i = 0;
@@ -203,7 +203,7 @@ function confirmationOptionalCheckboxesWithChildinput(array, errors, classname, 
                 i++;
             }
         });
-        array[name] = subArray
+        array[groupname] = subArray
     };
 }
 

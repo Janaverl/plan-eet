@@ -25,7 +25,7 @@ $(document).ready(function () {
         confirmationRequiredInputField(camp, errors, "starttime", "geen beginuur ingevuld");
         confirmationRequiredInputField(camp, errors, "enddate", "geen einddatum ingevuld");
         confirmationRequiredInputField(camp, errors, "endtime", "geen einduur ingevuld");
-        confirmationOptionalCheckboxesWithChildinput(camp, errors, "onemealmoment", "mealmoment", "time", "geen tijdstip ingevuld")
+        confirmationOptionalCheckboxesWithChildinput(camp, errors, "onemealmoment", "mealmoments", "mealmoment", "time", "geen tijdstip ingevuld")
 
         if ($("input#startdate").val() > $("input#enddate").val()) {
             errors.push("de einddatum moet na de begindatum komen.")

@@ -3,19 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Camp;
-use App\Entity\User;
 use App\Entity\Mealmoment;
-use App\Entity\CampMealmoments;
-use App\Entity\CampDay;
+use App\Service\Addvalue;
+use App\Service\CampServices;
+use App\Service\Converttime;
+use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
-
-use App\Service\Addvalue;
-use App\Service\Converttime;
 
 class CampController extends AbstractController
 {
@@ -26,6 +24,7 @@ class CampController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
+        // get all mealmoments, so the user can select them and add them to the camp he is creating
         $allMealmoments = $this->getDoctrine()
             ->getRepository(Mealmoment::class)
             ->findAll();
@@ -35,101 +34,91 @@ class CampController extends AbstractController
         ]);
     }
 
-    
-     /**
+    /**
      * @param Request $request
      * @return JsonResponse
      * @Route("/fetch/add/camp", name="fetch_add_camp", methods={"POST"})
      */
-    public function addAction(Converttime $converttime, Request $request, Addvalue $addvalue) : Response
+    public function addAction(Converttime $converttime, Request $request, Addvalue $addvalue, CampServices $campServices): Response
     {
         $data = json_decode($request->getContent(), true);
 
+        // define the entitymanager, because you will need to send data later in this API
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // collect all the data needed to process and send to the database
         $user = $this->getUser();
-        $start = date_format(date_create($data["startdate"]." ".$data["starttime"]),"Y/m/d H:i:s");
-        $end = date_format(date_create($data["enddate"]." ".$data["endtime"]),"Y/m/d H:i:s");
+
+        $start = date_format(date_create($data["startdate"] . " " . $data["starttime"]), "Y/m/d H:i:s");
+        $end = date_format(date_create($data["enddate"] . " " . $data["endtime"]), "Y/m/d H:i:s");
         $startTime = new \DateTime($start);
         $endTime = new \DateTime($end);
 
-        // create the object for the new value
+        // create the object for the new camp and set all his variables
         $camp = new Camp();
+
         $camp->setName($data["name"])
             ->setStartTime($startTime)
             ->setEndTime($endTime)
             ->setNrOfParticipants($data["nrOfParticipants"])
             ->setUser($user);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        // tell Doctrine you want to (eventually) save the Recipe (no queries yet)
+        // tell Doctrine you want to (eventually) save the camp (no queries yet)
         $entityManager->persist($camp);
 
-        if(isset($data["mealmoment"]) && $data["mealmoment"] != ""){
-            foreach($data["mealmoment"] as $mealmoment){
-                $time = $converttime->time_to_decimal($mealmoment['time']);
-
-                // look for a single mealmoment by name
-                $mealmoment = $this->getDoctrine()
-                    ->getRepository(Mealmoment::class)
-                    ->findOneBy(['name' => $mealmoment["mealmoment"]]);
-                $campMealmoment = new CampMealmoments();
-                $campMealmoment->setCamp($camp)
-                    ->setMealmoment($mealmoment)
-                    ->setTime($time);
-                $entityManager->persist($campMealmoment);
-            }
+        if (isset($data["mealmoments"])) {
+            $campServices->create_mealmoments($camp, $data["mealmoments"], $converttime, $entityManager);
         }
 
-        $campdaycount = 0;
-        $campdayOne = new \DateTime($start);
-        for($i = $campdayOne; $i <= $endTime; $i->modify('+1 day')){
-            $campday = new Campday();
-            $campday->setCamp($camp)
-                ->setCampdaycount($campdaycount);
-            $entityManager->persist($campday);
-            $campdaycount += 1;
-        }
+        $campServices->create_campdays($camp, $data["startdate"], $data["enddate"], $entityManager);
 
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
-    
+
         return $response;
     }
 
-    
-    
-     /**
+    /**
      * @Route("/update/camp/{slug}", name="update_camp")
      */
-    public function updateAction($slug)
+    public function updateAction($slug, ValidateRoute $validateRoute)
     {
-        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
 
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
-        
-        $entityManager = $this->getDoctrine()->getManager();
 
-        if(!$camp){
-            return $this->render('general/index.html.twig');
-        }else if($camp->getName() != $slug){
-            return $this->render('general/index.html.twig');
-        }else{ 
+        if (isset($camp)) {
+            if ($validateRoute->has_matching_slug($slug, $camp->getName()) && $validateRoute->is_created_by_user($this->getUser(), $camp->getUser())) {
+                $pageCanLoad = true;
+            } else {
+                $pageCanLoad = false;
+            }
+        } else {
+            $pageCanLoad = false;
+        };
+
+        if ($pageCanLoad) {
             return $this->render('camp/callenderindividual.html.twig', [
                 'value' => $camp,
             ]);
+        } else {
+            return $this->render('general/index.html.twig');
         }
     }
-       
-     /**
+
+    /**
      * @param Response
      * @return JsonResponse
      * @Route("/fetch/update/camp/{slug}", name="fetch_update_camp", methods={"GET"})
      */
-    public function fetchUpdateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue) : Response
+    public function fetchUpdateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue): Response
     {
         $data = [];
-        
+
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
@@ -137,18 +126,18 @@ class CampController extends AbstractController
         $data["start"] = $camp->getStartTime()->format('Y-m-d');
         $endday = clone $camp->getEndTime();
         $data["end"] = $endday->modify('+1 day')->format('Y-m-d');
-        
+
         $mealmoments = $camp->getCampMealmoments();
 
         $data["mealhours"] = [];
 
-        foreach($mealmoments as $mealmoment){
+        foreach ($mealmoments as $mealmoment) {
             $timeStart = $mealmoment->gettime();
             $timeEnd = $timeStart + 60;
             array_push($data["mealhours"], [
                 "daysOfWeek" => "[0, 1, 2, 3, 4, 5, 6]",
                 "startTime" => $converttime->decimal_to_time($timeStart),
-                "endTime" => $converttime->decimal_to_time($timeEnd)
+                "endTime" => $converttime->decimal_to_time($timeEnd),
             ]);
         }
 
@@ -159,32 +148,32 @@ class CampController extends AbstractController
 
         $day = 0;
 
-        for($i = $firstcampMoment; $i <= $lastcampMoment; $i->modify('+1 day')){
+        for ($i = $firstcampMoment; $i <= $lastcampMoment; $i->modify('+1 day')) {
             $date = $i->format('Y-m-d');
-            foreach($mealmoments as $mealmoment){
+            foreach ($mealmoments as $mealmoment) {
                 $timeStart = $mealmoment->gettime();
                 $timeEnd = $timeStart + 60;
-                $mealTimeStart = new \Datetime($date.'T'.$converttime->decimal_to_time($timeStart));
-                if($mealTimeStart < $camp->getStartTime()){
+                $mealTimeStart = new \Datetime($date . 'T' . $converttime->decimal_to_time($timeStart));
+                if ($mealTimeStart < $camp->getStartTime()) {
                     array_push($data["allthemeals"], [
                         "rendering" => 'background',
                         "className" => 'fc-nonbusiness',
-                        "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
-                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
+                        "start" => $date . 'T' . $converttime->decimal_to_time($timeStart),
+                        "end" => $date . 'T' . $converttime->decimal_to_time($timeEnd),
                     ]);
-                } else if($lastcampMoment < $mealTimeStart){
+                } else if ($lastcampMoment < $mealTimeStart) {
                     array_push($data["allthemeals"], [
                         "rendering" => 'background',
                         "className" => 'fc-nonbusiness',
-                        "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
-                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd)
+                        "start" => $date . 'T' . $converttime->decimal_to_time($timeStart),
+                        "end" => $date . 'T' . $converttime->decimal_to_time($timeEnd),
                     ]);
-                }else{
+                } else {
                     array_push($data["allthemeals"], [
                         "title" => $mealmoment->getMealmoment()->getName(),
-                        "start" => $date.'T'.$converttime->decimal_to_time($timeStart),
-                        "end" => $date.'T'.$converttime->decimal_to_time($timeEnd),
-                        "url" => '/add/meal/'.$mealmoment->getMealmoment()->getName().'?camp='.$camp->getId().'&day='.$day
+                        "start" => $date . 'T' . $converttime->decimal_to_time($timeStart),
+                        "end" => $date . 'T' . $converttime->decimal_to_time($timeEnd),
+                        "url" => '/add/meal/' . $mealmoment->getMealmoment()->getName() . '?camp=' . $camp->getId() . '&day=' . $day,
                     ]);
                 }
             }
@@ -208,7 +197,7 @@ class CampController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $allCamps = $entityManager->getRepository('App:Camp')
-        ->findAllCampsByUser($user);
+            ->findAllCampsByUser($user);
 
         return $this->render('camp/all.html.twig', [
             'values' => $allCamps,
