@@ -41,7 +41,8 @@ class CampController extends AbstractController
      * @return JsonResponse
      * @Route("/fetch/add/camp", name="fetch_add_camp", methods={"POST"})
      */
-    public function addAction(Converttime $converttime, Request $request, Addvalue $addvalue) : Response {
+    public function addAction(Converttime $converttime, Request $request, Addvalue $addvalue) : Response
+    {
         $data = json_decode($request->getContent(), true);
 
         $user = $this->getUser();
@@ -99,7 +100,8 @@ class CampController extends AbstractController
      /**
      * @Route("/update/camp/{slug}", name="update_camp")
      */
-    public function updateAction($slug){
+    public function updateAction($slug)
+    {
         // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $camp = $this->getDoctrine()
@@ -124,7 +126,8 @@ class CampController extends AbstractController
      * @return JsonResponse
      * @Route("/fetch/update/camp/{slug}", name="fetch_update_camp", methods={"GET"})
      */
-    public function fetchUpdateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue) : Response {
+    public function fetchUpdateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue) : Response
+    {
         $data = [];
         
         $camp = $this->getDoctrine()
@@ -196,7 +199,8 @@ class CampController extends AbstractController
     /**
      * @Route("/show/camps", name="show_camps")
      */
-    public function showall(){
+    public function showall()
+    {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $user = $this->getUser();

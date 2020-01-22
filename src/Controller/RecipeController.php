@@ -18,12 +18,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Service\Addvalue;
 
-class RecipeController extends AbstractController{
+class RecipeController extends AbstractController
+{
     
     /**
      * @Route("/add/recipe", name="add_recipe")
      */
-    public function add(){
+    public function add()
+    {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $allRecipes = $this->getDoctrine()
@@ -67,7 +69,8 @@ class RecipeController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/recipe", name="fetch_add_recipe", methods={"POST"})
      */
-    public function addAction(Request $request, Addvalue $addvalue) : Response {
+    public function addAction(Request $request, Addvalue $addvalue) : Response
+    {
         $data = json_decode($request->getContent(), true);
 
         // look for a single recipecategorie by name
@@ -134,7 +137,8 @@ class RecipeController extends AbstractController{
      /**
      * @Route("/update/recept/{slug}", name="update_recipe")
      */
-    public function update($slug){
+    public function update($slug)
+    {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $recipe = $this->getDoctrine()
@@ -179,7 +183,8 @@ class RecipeController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/update/recipe", name="fetch_update_recipe", methods={"POST"})
      */
-    public function updateAction(Request $request, Addvalue $addvalue) : Response {
+    public function updateAction(Request $request, Addvalue $addvalue) : Response
+    {
         $data = json_decode($request->getContent(), true);
 
         // look for the recipe by name
@@ -280,7 +285,8 @@ class RecipeController extends AbstractController{
 
         // after that, let's compare the new ingr with the old ingr, and check wich one we need to ADD or CHANGE THE QUANTITY
 
-        foreach($data["ingredients"] as $ingredientNew){
+        foreach($data["ingredients"] as $ingredientNew)
+        {
             $toadd = TRUE;
             $quantity = $ingredientNew["quantity"] / $data["numberOfEaters"];
             foreach($allIngredientsOld as $ingredientOld){
@@ -314,7 +320,8 @@ class RecipeController extends AbstractController{
      /**
      * @Route("/show/recept/{slug}", name="show_recipe")
      */
-    public function show($slug){
+    public function show($slug)
+    {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $recipe = $this->getDoctrine()
@@ -342,7 +349,8 @@ class RecipeController extends AbstractController{
     /**
      * @Route("/show/recepten", name="show_recipes")
      */
-    public function showall(){
+    public function showall()
+    {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $allRecipes = $this->getDoctrine()

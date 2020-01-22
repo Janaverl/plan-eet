@@ -15,11 +15,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Service\Addvalue;
 
-class SingleColumnController extends AbstractController{
+class SingleColumnController extends AbstractController
+{
     /**
      * @Route("/add/name/{slug}", name="add_single")
      */
-    public function add($slug){
+    public function add($slug)
+    {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         // check if the slug is in the SingleColumnName-table
@@ -54,7 +56,8 @@ class SingleColumnController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/{slug}", name="fetch_add_{slug}", methods={"POST"})
      */
-    public function fetch(Request $request, $slug, Addvalue $addvalue) : Response {
+    public function fetch(Request $request, $slug, Addvalue $addvalue) : Response
+    {
         $data = json_decode($request->getContent(), true);
 
         // check if the slug is in the SingleColumnName-table

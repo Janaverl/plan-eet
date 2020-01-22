@@ -13,12 +13,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Service\Addvalue;
 
-class IngredientController extends AbstractController{
+class IngredientController extends AbstractController
+{
 
      /**
      * @Route("/add/ingredient", name="add_ingredient")
      */
-    public function add(){
+    public function add()
+    {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $allIngredients = $this->getDoctrine()
@@ -46,7 +48,8 @@ class IngredientController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/add/ingredient", name="fetch_add_ingredient", methods={"POST"})
      */
-    public function addAction(Request $request, Addvalue $addvalue) : Response {
+    public function addAction(Request $request, Addvalue $addvalue) : Response
+    {
         $data = json_decode($request->getContent(), true);
 
         // look for a single Rayon by name
@@ -81,7 +84,8 @@ class IngredientController extends AbstractController{
      /**
      * @Route("/update/ingredient/{slug}", name="update_ingredient")
      */
-    public function update($slug){
+    public function update($slug)
+    {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $ingredient = $this->getDoctrine()
@@ -115,7 +119,8 @@ class IngredientController extends AbstractController{
      * @return JsonResponse
      * @Route("/fetch/update/ingredient", name="fetch_update_ingredient", methods={"POST"})
      */
-    public function updateAction(Request $request, Addvalue $addvalue): Response{
+    public function updateAction(Request $request, Addvalue $addvalue): Response
+    {
         $data = json_decode($request->getContent(), true);
 
         // look for a single Rayon by name
@@ -154,7 +159,8 @@ class IngredientController extends AbstractController{
     /**
      * @Route("/show/ingredienten", name="show_ingredients")
      */
-    public function showall(){
+    public function showall()
+    {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $allIngredients = $this->getDoctrine()
