@@ -41,7 +41,7 @@ $(document).ready(function () {
         confirmationRequiredSelect(recipe, errors, type, "type", "geen type geselecteerd");
         confirmationRequiredInputField(recipe, errors, "numberOfEaters", "geen aantal eters ingevuld");
         confirmationOneIngredient(recipe, errors);
-        confirmationOptionalCheckboxes(recipe, errors, "oneHerb");
+        confirmationOptionalCheckboxes(recipe, "herbs", "oneHerb");
         confirmationRequiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
 
         if (mode == "add") {
