@@ -6,7 +6,7 @@ use App\Entity\Camp;
 use App\Entity\Mealmoment;
 use App\Service\Addvalue;
 use App\Service\CampServices;
-use App\Service\Converttime;
+use App\Service\Fullcalendar;
 use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,7 +39,7 @@ class CampController extends AbstractController
      * @return JsonResponse
      * @Route("/fetch/add/camp", name="fetch_add_camp", methods={"POST"})
      */
-    public function addAction(Converttime $converttime, Request $request, Addvalue $addvalue, CampServices $campServices): Response
+    public function addAction(Request $request, Addvalue $addvalue, CampServices $campServices): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -67,7 +67,7 @@ class CampController extends AbstractController
         $entityManager->persist($camp);
 
         if (isset($data["mealmoments"])) {
-            $campServices->create_mealmoments($camp, $data["mealmoments"], $converttime, $entityManager);
+            $campServices->create_mealmoments($camp, $data["mealmoments"], $entityManager);
         }
 
         $campServices->create_campdays($camp, $data["startdate"], $data["enddate"], $entityManager);
@@ -115,73 +115,30 @@ class CampController extends AbstractController
      * @return JsonResponse
      * @Route("/fetch/update/camp/{slug}", name="fetch_update_camp", methods={"GET"})
      */
-    public function fetchUpdateAction($slug, Converttime $converttime, Request $request, Addvalue $addvalue): Response
+    public function fetchUpdateAction($slug, Request $request, Addvalue $addvalue, Fullcalendar $fullcalendar): Response
     {
-        $data = [];
-
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
 
-        $data["start"] = $camp->getStartTime()->format('Y-m-d');
-        $endday = clone $camp->getEndTime();
-        $data["end"] = $endday->modify('+1 day')->format('Y-m-d');
+        // We need a clone of these Datetime-values, because we will modify this.
+        $firstday = clone $camp->getStartTime();
+        $lastday = clone $camp->getEndTime();
 
-        $mealmoments = $camp->getCampMealmoments();
+        $dataWeWillSend = array(
+            "start" => "",
+            "end" => "",
+            "mealhours" => [],
+            "allthemeals" => []
+        );
 
-        $data["mealhours"] = [];
-
-        foreach ($mealmoments as $mealmoment) {
-            $timeStart = $mealmoment->gettime();
-            $timeEnd = $timeStart + 60;
-            array_push($data["mealhours"], [
-                "daysOfWeek" => "[0, 1, 2, 3, 4, 5, 6]",
-                "startTime" => $converttime->decimal_to_time($timeStart),
-                "endTime" => $converttime->decimal_to_time($timeEnd),
-            ]);
-        }
-
-        $data["allthemeals"] = [];
-
-        $firstcampMoment = clone $camp->getStartTime();
-        $lastcampMoment = $camp->getEndTime();
-
-        $day = 0;
-
-        for ($i = $firstcampMoment; $i <= $lastcampMoment; $i->modify('+1 day')) {
-            $date = $i->format('Y-m-d');
-            foreach ($mealmoments as $mealmoment) {
-                $timeStart = $mealmoment->gettime();
-                $timeEnd = $timeStart + 60;
-                $mealTimeStart = new \Datetime($date . 'T' . $converttime->decimal_to_time($timeStart));
-                if ($mealTimeStart < $camp->getStartTime()) {
-                    array_push($data["allthemeals"], [
-                        "rendering" => 'background',
-                        "className" => 'fc-nonbusiness',
-                        "start" => $date . 'T' . $converttime->decimal_to_time($timeStart),
-                        "end" => $date . 'T' . $converttime->decimal_to_time($timeEnd),
-                    ]);
-                } else if ($lastcampMoment < $mealTimeStart) {
-                    array_push($data["allthemeals"], [
-                        "rendering" => 'background',
-                        "className" => 'fc-nonbusiness',
-                        "start" => $date . 'T' . $converttime->decimal_to_time($timeStart),
-                        "end" => $date . 'T' . $converttime->decimal_to_time($timeEnd),
-                    ]);
-                } else {
-                    array_push($data["allthemeals"], [
-                        "title" => $mealmoment->getMealmoment()->getName(),
-                        "start" => $date . 'T' . $converttime->decimal_to_time($timeStart),
-                        "end" => $date . 'T' . $converttime->decimal_to_time($timeEnd),
-                        "url" => '/add/meal/' . $mealmoment->getMealmoment()->getName() . '?camp=' . $camp->getId() . '&day=' . $day,
-                    ]);
-                }
-            }
-            $day++;
-        }
+        $dataWeWillSend["start"] = $firstday->format('Y-m-d');
+        $dataWeWillSend["end"] = $lastday->modify('+1 day')->format('Y-m-d');
+        $dataWeWillSend["mealhours"] = $fullcalendar->create_businesshours($camp->getCampMealmoments(), 60);
+        $dataWeWillSend["allthemeals"] = $fullcalendar->create_events($camp);
 
         $json = new JsonResponse();
-        $json->setData(json_encode($data));
+        $json->setData(json_encode($dataWeWillSend));
         return $json;
     }
 

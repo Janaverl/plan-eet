@@ -5,15 +5,22 @@ namespace App\Service;
 use App\Entity\CampDay;
 use App\Entity\CampMealmoments;
 use App\Entity\Mealmoment;
+use App\Service\Converttime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class CampServices extends AbstractController
 {
-    public function create_mealmoments(object $camp, $mealmoments = "", $converttime, $entityManager): void
+    protected $converttime;
+
+    public function __construct(Converttime $converttime)
+    {
+        $this->converttime = $converttime;
+    }
+    public function create_mealmoments(object $camp, $mealmoments = "", $entityManager): void
     {
         foreach ($mealmoments as $mealmoment) {
-            $time = $converttime->time_to_decimal($mealmoment['time']);
+            $time = $this->converttime->time_to_decimal($mealmoment['time']);
 
             // look for a single mealmoment by name
             $mealmoment = $this->getDoctrine()
@@ -48,5 +55,4 @@ class CampServices extends AbstractController
             $campdaycount += 1;
         }
     }
-
 }
