@@ -158,6 +158,7 @@ class RecipeController extends AbstractController
 
     /**
      * @param Request $request
+     * @param Addvalue $addvalue
      * @return Response
      * @Route("/fetch/update/recipe", name="fetch_update_recipe", methods={"POST"})
      */

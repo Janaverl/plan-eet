@@ -2,21 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Ingredient;
 use App\Entity\Rayon;
 use App\Entity\Unit;
-use App\Entity\Ingredient;
+use App\Service\Addvalue;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-use App\Service\Addvalue;
+use Symfony\Component\Routing\Annotation\Route;
 
 class IngredientController extends AbstractController
 {
 
-     /**
+    /**
      * @Route("/add/ingredient", name="add_ingredient")
      */
     public function add()
@@ -45,43 +44,45 @@ class IngredientController extends AbstractController
 
     /**
      * @param Request $request
-     * @return JsonResponse
+     * @param Addvalue $addvalue
+     * @return Response
      * @Route("/fetch/add/ingredient", name="fetch_add_ingredient", methods={"POST"})
      */
-    public function addAction(Request $request, Addvalue $addvalue) : Response
+    public function addAction(Request $request, Addvalue $addvalue): Response
     {
         $data = json_decode($request->getContent(), true);
 
-        // look for a single Rayon by name
+        // define the entitymanager, because you will need to send data later in this API
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // collect all the data needed and process it, so it can be send to the database
         $rayon = $this->getDoctrine()
             ->getRepository(Rayon::class)
             ->findOneBy(['name' => $data["rayon"]]);
 
-        // look for a single Unit by name
         $unit = $this->getDoctrine()
             ->getRepository(Unit::class)
             ->findOneBy(['name' => $data["unit"]]);
 
-        // create the object for the new value
+        // create the object for the new ingredient
         $ingredient = new Ingredient();
         $ingredient->setName($data["name"])
             ->setRayon($rayon)
             ->setUnit($unit);
-        if(isset($data["suggestion"]) && $data["suggestion"] != ""){
+        if (isset($data["suggestion"]) && $data["suggestion"] != "") {
             $ingredient->setSuggestion($data["suggestion"]);
         };
 
-        $entityManager = $this->getDoctrine()->getManager();
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($ingredient);
 
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
-    
+
         return $response;
     }
-    
-     /**
+
+    /**
      * @Route("/update/ingredient/{slug}", name="update_ingredient")
      */
     public function update($slug)
@@ -92,11 +93,13 @@ class IngredientController extends AbstractController
             ->getRepository(Ingredient::class)
             ->findOneBy(['name' => $slug]);
 
-        if(!$ingredient){
-            return $this->render('general/index.html.twig');
-        }else{
-            $ingredient->getRayon()->getName();
+        if (isset($ingredient)) {
+            $pageCanLoad = true;
+        } else {
+            $pageCanLoad = false;
+        };
 
+        if ($pageCanLoad) {
             $allRayons = $this->getDoctrine()
                 ->getRepository(Rayon::class)
                 ->findAll();
@@ -104,24 +107,41 @@ class IngredientController extends AbstractController
             $allUnits = $this->getDoctrine()
                 ->getRepository(Unit::class)
                 ->findAll();
-    
+
             return $this->render('ingredient/individual.html.twig', [
                 'value' => $ingredient,
                 'rayons' => $allRayons,
                 'units' => $allUnits,
                 'mode' => "update",
             ]);
+        } else {
+
+            return $this->render('general/index.html.twig');
+
         }
     }
 
-     /**
+    /**
      * @param Request $request
-     * @return JsonResponse
+     * @param Addvalue $addvalue
+     * @return Response
      * @Route("/fetch/update/ingredient", name="fetch_update_ingredient", methods={"POST"})
      */
     public function updateAction(Request $request, Addvalue $addvalue): Response
     {
         $data = json_decode($request->getContent(), true);
+
+        if (!isset($data["suggestion"])) {
+            $data["suggestion"] = "";
+        };
+
+        // define the entitymanager, because you will need to send data later in this API
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // look for the ingredient by name
+        $ingredient = $this->getDoctrine()
+            ->getRepository(Ingredient::class)
+            ->findOneBy(['name' => $data["name"]]);
 
         // look for a single Rayon by name
         $rayon = $this->getDoctrine()
@@ -133,26 +153,16 @@ class IngredientController extends AbstractController
             ->getRepository(Unit::class)
             ->findOneBy(['name' => $data["unit"]]);
 
-        // look for the ingredient by name
-        $ingredient = $this->getDoctrine()
-            ->getRepository(Ingredient::class)
-            ->findOneBy(['name' => $data["name"]]);
-        
         $ingredient->setRayon($rayon)
-            ->setUnit($unit);
-        if(isset($data["suggestion"]) && $data["suggestion"] != ""){
-            $ingredient->setSuggestion($data["suggestion"]);
-        }else{
-            $ingredient->setSuggestion("");
-        };
+            ->setUnit($unit)
+            ->setSuggestion($data["suggestion"]);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        // // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        // $entityManager->persist($ingredient);
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($ingredient);
 
         $response = new JsonResponse();
         $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
-    
+
         return $response;
     }
 
@@ -166,11 +176,6 @@ class IngredientController extends AbstractController
         $allIngredients = $this->getDoctrine()
             ->getRepository(Ingredient::class)
             ->findAll();
-
-        foreach ($allIngredients as $ingredient) {
-            $ingredient->getRayon()->getName();
-            $ingredient->getUnit()->getName();
-        };
 
         return $this->render('ingredient/all.html.twig', [
             'values' => $allIngredients,
