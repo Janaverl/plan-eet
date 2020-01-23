@@ -4,9 +4,10 @@ namespace App\Service;
 
 use App\Service\Converttime;
 
-// this class prepares the arrays with the fullcalendar.io-syntax,
-// so the javascript can hadle this information directly after receiving this data from the API
-
+/**
+ * this class prepares the arrays with the fullcalendar.io-syntax,
+ * so the javascript can hadle this information directly after receiving this data from the API
+ */
 class Fullcalendar
 {
     protected $converttime;
@@ -15,7 +16,11 @@ class Fullcalendar
     {
         $this->converttime = $converttime;
     }
-
+    /**
+     * @param object $moments
+     * @param integer $durationInMinutes
+     * @return array
+     */
     public function create_businesshours(object $moments, int $durationInMinutes): array
     {
         $businesshours = [];
@@ -31,6 +36,10 @@ class Fullcalendar
         return $businesshours;
     }
 
+    /**
+     * @param object $camp
+     * @return array
+     */
     public function create_events(object $camp): array
     {
         $firstcampMoment = $camp->getStartTime();

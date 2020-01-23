@@ -4,9 +4,16 @@ namespace App\Service;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
+/**
+ * Undocumented class
+ */
 class Addvalue
 {
-    public function tryCatch($entityManager)
+    /**
+     * @param object $entityManager
+     * @return integer
+     */
+    public function tryCatch(object $entityManager): int
     {
         try {
             // message: created

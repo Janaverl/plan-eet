@@ -17,7 +17,14 @@ class CampServices extends AbstractController
     {
         $this->converttime = $converttime;
     }
-    public function create_mealmoments(object $camp, $mealmoments = "", $entityManager): void
+
+    /**
+     * @param object $camp
+     * @param string $mealmoments
+     * @param object $entityManager
+     * @return void
+     */
+    public function create_mealmoments(object $camp, array $mealmoments = [], object $entityManager): void
     {
         foreach ($mealmoments as $mealmoment) {
             $time = $this->converttime->time_to_decimal($mealmoment['time']);
@@ -36,7 +43,15 @@ class CampServices extends AbstractController
             $entityManager->persist($campMealmoment);
         }
     }
-    public function create_campdays(object $camp, string $firstday, string $lastday, $entityManager): void
+
+    /**
+     * @param object $camp
+     * @param string $firstday
+     * @param string $lastday
+     * @param object $entityManager
+     * @return void
+     */
+    public function create_campdays(object $camp, string $firstday, string $lastday, object $entityManager): void
     {
         $campdaycount = 0;
 
