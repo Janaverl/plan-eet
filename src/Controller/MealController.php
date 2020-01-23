@@ -28,9 +28,9 @@ class MealController extends AbstractController
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
 
-        $startday = $camp->getStartTime();
-        $mealday = $startday->modify('+' . $_GET["day"] . ' day')->format('Y-m-d');
         $campday = $_GET["day"];
+        $startday = $camp->getStartTime();
+        $mealday = $startday->modify('+' . $campday . ' day')->format('Y-m-d');
 
         return $this->render('meal/individual.html.twig', [
             'recipes' => $allRecipes,

@@ -36,7 +36,9 @@ class CampController extends AbstractController
 
     /**
      * @param Request $request
-     * @return JsonResponse
+     * @param Addvalue $addvalue
+     * @param CampServices $campServices
+     * @return Response
      * @Route("/fetch/add/camp", name="fetch_add_camp", methods={"POST"})
      */
     public function addAction(Request $request, Addvalue $addvalue, CampServices $campServices): Response
@@ -46,7 +48,7 @@ class CampController extends AbstractController
         // define the entitymanager, because you will need to send data later in this API
         $entityManager = $this->getDoctrine()->getManager();
 
-        // collect all the data needed to process and send to the database
+        // collect all the data needed and process it, so it can be send to the database
         $user = $this->getUser();
 
         $start = date_format(date_create($data["startdate"] . " " . $data["starttime"]), "Y/m/d H:i:s");
@@ -92,7 +94,7 @@ class CampController extends AbstractController
             ->findOneBy(['id' => $_GET["camp"]]);
 
         if (isset($camp)) {
-            if ($validateRoute->has_matching_slug($slug, $camp->getName()) && $validateRoute->is_created_by_user($this->getUser(), $camp->getUser())) {
+            if ($validateRoute->object_matches_to_slug($slug, $camp->getName()) && $validateRoute->is_created_by_user($this->getUser(), $camp->getUser())) {
                 $pageCanLoad = true;
             } else {
                 $pageCanLoad = false;
