@@ -4,6 +4,9 @@ namespace App\Service;
 
 use App\Service\Converttime;
 
+// this class prepares the arrays with the fullcalendar.io-syntax,
+// so the javascript can hadle this information directly after receiving this data from the API
+
 class Fullcalendar
 {
     protected $converttime;
@@ -12,6 +15,7 @@ class Fullcalendar
     {
         $this->converttime = $converttime;
     }
+
     public function create_businesshours(object $moments, int $durationInMinutes): array
     {
         $businesshours = [];
