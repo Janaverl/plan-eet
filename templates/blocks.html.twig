@@ -34,9 +34,7 @@
             <th class="sortable" width="12%">type</th>
             <th width="20%">ingredienten</th>
             <th width="16%">kruiden</th>
-            {% if app.request.get('_route') == 'show_recipes' %}
-                <th width="10%"></th>
-            {% endif %}
+            <th width="10%"></th>
         </tr>
         </thead>
         <tbody class="searchable">
@@ -51,24 +49,6 @@
                     {{recipe.name}}
                     <br>
                     <span><i>{{recipe.suggestion}}</i></span>
-                    <br>
-                    <button onclick="document.getElementById('details{{recipe.name}}').style.display='block'"class="w3-button">bekijk recept</button>
-                    <div id="details{{recipe.name}}" class="w3-modal">
-                        <div class="w3-modal-content">
-                            <div class="w3-container">
-                            <span onclick="document.getElementById('details{{recipe.name}}').style.display='none'"
-                            class="w3-button w3-display-topright">&times;</span>
-                            <p>ingredienten(voor {{nrOfEaters}} personen)</p>
-                            <ul>
-                                {% for ingr in recipe.ingredients %}
-                                    <li>{{ingr.quantity*nrOfEaters}} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
-                                {% endfor %}
-                            </ul>
-                            <p>bereidingswijze</p>
-                            <p>{{recipe.instructions|nl2br}}</p>
-                            </div>
-                        </div>
-                    </div>
                 </td>
                 <td>{{recipe.category.name}}</td>
                 <td>{{recipe.type.name}}</td>
@@ -90,14 +70,40 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                {% if app.request.get('_route') == 'show_recipes' %}
                     <td class="change">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <p><a href="{{ path('update_recipe', {slug: recipe.name}) }}"><i class="fas fa-pencil-alt"></i></a></p>
+                        {% if app.request.get('_route') == 'show_recipes' %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <p><a href="{{ path('update_recipe', {slug: recipe.name}) }}"><i class="fas fa-pencil-alt"></i></a></p>
+                            {% endif %}
                         {% endif %}
-                        <a href="{{ path('show_recipe', {slug: recipe.name}) }}"><i class="fas fa-eye"></i></a>
+                    <a onclick="document.getElementById('details{{recipe.name}}').style.display='block'"><i class="fas fa-eye"></i></a>
+                    <div id="details{{recipe.name}}" class="w3-modal">
+                        <div class="w3-modal-content">
+                            <div class="w3-card">
+                                <span
+                                    onclick="document.getElementById('details{{recipe.name}}').style.display='none'"
+                                    class="w3-button w3-display-topright"
+                                >&times;</span>
+                                <h5>{{recipe.name}}</h5>
+                                <span><i>{{recipe.suggestion}}</i></span>
+                                <h6>ingredienten(voor {{nrOfEaters}} personen)</h6>
+                                <ul>
+                                    {% for ingr in recipe.ingredients %}
+                                        <li>{{ingr.quantity*nrOfEaters}} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
+                                    {% endfor %}
+                                </ul>
+                                <h6>kruiden</h6>
+                                <ul>
+                                    {% for herb in recipe.recipeherb %}
+                                        <li>{{herb.herb.name}}</li>
+                                    {% endfor %}
+                                </ul>
+                                <h6>bereidingswijze</h6>
+                                <p>{{recipe.instructions|nl2br}}</p>
+                            </div>
+                        </div>
+                    </div>
                     </td>
-                {% endif %}
             </tr>
         {% endfor %}
         </tbody>

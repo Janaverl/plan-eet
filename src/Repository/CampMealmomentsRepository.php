@@ -20,31 +20,53 @@ class CampMealmomentsRepository extends ServiceEntityRepository
     }
 
     // /**
+    //  * Undocumented function
+    //  *
+    //  * @param object $entityManager
+    //  * @param object $camp
+    //  * @param string $mealmomentname
+    //  * @return array
+    //  */
+    // public function findOneByCampAndMealmomentname(object $entityManager, object $camp, string $mealmomentname): array
+    // {
+    //     $mealmoment = $entityManager->getRepository('App:Mealmoment')
+    //         ->findOneBy(['name' => $mealmomentname]);
+
+    //     return $this->createQueryBuilder('this_campmealmoment')
+    //         ->andWhere('this_campmealmoment.camp = :camp')
+    //         ->setParameter('camp', $camp)
+    //         ->andWhere('this_campmealmoment.mealmoment = :val')
+    //         ->setParameter('val', $mealmoment)
+    //         ->getQuery()
+    //         ->execute();
+    // }
+
+    // /**
     //  * @return CampMealmoments[] Returns an array of CampMealmoments objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    return $this->createQueryBuilder('c')
+    ->andWhere('c.exampleField = :val')
+    ->setParameter('val', $value)
+    ->orderBy('c.id', 'ASC')
+    ->setMaxResults(10)
+    ->getQuery()
+    ->getResult()
+    ;
     }
-    */
+     */
 
     /*
-    public function findOneBySomeField($value): ?CampMealmoments
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+public function findOneBySomeField($value): ?CampMealmoments
+{
+return $this->createQueryBuilder('c')
+->andWhere('c.exampleField = :val')
+->setParameter('val', $value)
+->getQuery()
+->getOneOrNullResult()
+;
+}
+ */
 }

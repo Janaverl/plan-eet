@@ -167,7 +167,7 @@ class RecipeController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (!isset($data["suggestion"])) {
-            $data["suggestion"] = "";
+            $data["suggestion"] = NULL;
         };
         if (!isset($data["herbs"])) {
             $data["herbs"] = [];

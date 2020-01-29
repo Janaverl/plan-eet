@@ -58,11 +58,13 @@ class RecipeServices extends AbstractController
     }
 
     /**
-     * @param string $newValue
-     * @param string $oldValue
+     * Undocumented function
+     *
+     * @param string|null $newValue
+     * @param string|null $oldValue
      * @return boolean
      */
-    public function is_this_string_changed(string $newValue, string $oldValue): bool
+    public function is_this_string_changed(?string $newValue, ?string $oldValue): bool
     {
         if ($newValue === $oldValue) {
             return false;

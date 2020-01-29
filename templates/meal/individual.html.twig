@@ -11,9 +11,14 @@
         <div class="cardwrapper">
             <div class="w3-card step">
                 <h4>kamp: {{camp.name}}</h4>
-                <p>{{mealday}} - {{meal}}</p>
+                <p>dag {{mealday}} - {{meal}}</p>
                 <p>Kies een maaltijdnaam en voeg recepten toe aan je menu.</p>
                 <input type="text" id="name" class="w3-input" placeholder="naam van de maaltijd">
+                <button class="confirm">
+                    Sla deze maaltijd op
+                </button>
+                <ul class="errors"></ul>
+                <ul class="success"></ul>
                 <p>
                     <label class="switch recipes">
                         <input type="checkbox">
@@ -28,12 +33,6 @@
                     {% set nrOfEaters = camp.nrOfParticipants %}
                     {{ parent() }}
                 {% endblock %}
-
-                <button class="confirm">
-                        Sla deze maaltijd op
-                </button>
-                <ul class="errors"></ul>
-                <ul class="success"></ul>
             </div>
         </div>
     </div>
@@ -43,9 +42,9 @@
     {{ parent() }}
     <script>
         let meal = {};
-        meal["mealmoment"] = "{{ meal }}"
-        meal["mealday"] = "{{ mealday }}"
-        meal["campid"] = "{{ camp.id }} "
+        meal["mealmoment"] = "{{meal}}"
+        meal["mealday"] = "{{mealday}}"
+        meal["campid"] = "{{camp.id}}"
     </script>
     <script src="{{ asset('js/sorttable.js') }}"></script>
     <script src="{{ asset('js/meal.js') }}"></script>

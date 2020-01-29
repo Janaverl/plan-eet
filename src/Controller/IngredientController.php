@@ -132,7 +132,7 @@ class IngredientController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (!isset($data["suggestion"])) {
-            $data["suggestion"] = "";
+            $data["suggestion"] = null;
         };
 
         // define the entitymanager, because you will need to send data later in this API
