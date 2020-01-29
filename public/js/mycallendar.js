@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data = JSON.parse(result);
             console.log(data);
             makecallendar(data);
+            document.getElementById("loader").style.display = "none";
         })
         .catch(error => console.log("error", error));
 

@@ -123,6 +123,9 @@ class CampController extends AbstractController
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
 
+        // define the entitymanager, because you will need to send data later in this API
+        $entityManager = $this->getDoctrine()->getManager();
+
         // We need a clone of these Datetime-values, because we will modify this.
         $firstday = clone $camp->getStartTime();
         $lastday = clone $camp->getEndTime();
@@ -137,7 +140,7 @@ class CampController extends AbstractController
         $dataWeWillSend["start"] = $firstday->format('Y-m-d');
         $dataWeWillSend["end"] = $lastday->modify('+1 day')->format('Y-m-d');
         $dataWeWillSend["mealhours"] = $fullcalendar->create_businesshours($camp->getCampMealmoments(), 60);
-        $dataWeWillSend["allthemeals"] = $fullcalendar->create_events($camp);
+        $dataWeWillSend["allthemeals"] = $fullcalendar->create_events($camp, $entityManager);
 
         $json = new JsonResponse();
         $json->setData(json_encode($dataWeWillSend));
