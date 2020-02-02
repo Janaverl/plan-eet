@@ -6,6 +6,7 @@ use App\Entity\Camp;
 use App\Entity\Campday;
 use App\Entity\Campmeal;
 use App\Entity\CampMealmoments;
+use App\Entity\Ingredient;
 use App\Entity\Mealcourse;
 use App\Entity\Mealmoment;
 use App\Entity\Recipes;
@@ -18,6 +19,63 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MealController extends AbstractController
 {
+    /**
+     * @Route("/show/meal/{slug}", name="show_meal")
+     */
+    public function show($slug)
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // define the entitymanager, because you will need to send data later in this API
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $camp = $entityManager->getRepository(Camp::class)
+            ->findOneBy([
+                'id' => $_GET["camp"],
+                'user' => $this->getUser(),
+            ]);
+
+        $campmealmoment = $entityManager->getRepository(CampMealmoments::class)
+            ->findOneBy([
+                'camp' => $camp,
+                'mealmoment' => $this->getDoctrine()
+                    ->getRepository(Mealmoment::class)
+                    ->findOneBy([
+                        'name' => $slug,
+                    ]),
+            ]);
+
+        $campday = $entityManager->getRepository(Campday::class)
+            ->findOneBy([
+                'camp' => $camp,
+                'campdaycount' => $_GET["day"],
+            ]);
+
+        $campmeal = $entityManager->getRepository(Campmeal::class)
+            ->findOneBy([
+                'campMealmoment' => $campmealmoment,
+                'campday' => $campday,
+            ]);
+
+        $mealcourses = $entityManager->getRepository(Mealcourse::class)
+            ->findByCampmeal($campmeal);
+
+        // $new = $this->getDoctrine()
+        //     ->getRepository(Campmeal::class)
+        //     ->findIngrByCampmeal();
+
+        $ingredients = $this->getDoctrine()
+            ->getRepository(Ingredient::class)
+            ->findArrayByCampmeal($_GET["camp"], $slug, $_GET["day"]);
+
+        return $this->render('meal/show.html.twig', [
+            'courses' => $mealcourses,
+            'ingredients' => $ingredients,
+
+        ]);
+
+    }
+
     /**
      * @Route("/add/meal/{slug}", name="add_meal")
      */

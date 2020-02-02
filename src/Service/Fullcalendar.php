@@ -78,10 +78,13 @@ class Fullcalendar
                     if ($campmeal) {
                         $oneEventThatNeedsToBeCreated["title"] = $campmeal->getName();
                         $oneEventThatNeedsToBeCreated["color"] = 'green';
+                        $oneEventThatNeedsToBeCreated["url"] = '/show/meal/' . $mealmoment->getMealmoment()->getName() . '?camp=' . $camp->getId() . '&day=' . $daycount;
+
                     } else {
                         $oneEventThatNeedsToBeCreated["title"] = $mealmoment->getMealmoment()->getName();
+                        $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmoment->getMealmoment()->getName() . '?camp=' . $camp->getId() . '&day=' . $daycount;
+
                     }
-                    $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmoment->getMealmoment()->getName() . '?camp=' . $camp->getId() . '&day=' . $daycount;
                 }
                 array_push($allTheEvents, $oneEventThatNeedsToBeCreated);
             }

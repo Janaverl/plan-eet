@@ -1,0 +1,52 @@
+{% extends 'boxes.html.twig' %}
+
+{% use 'blocks.html.twig'%}
+
+{% block body %}
+    <div class="contentwrapper">
+
+        {# title #}
+        <h1>Jouw maaltijd:</h1>
+        {# all cards #}
+        <div class="cardwrapper">
+            <div class="w3-card step">
+                <h4>Jouw recepten:</h4>
+                <ul>
+                {% for course in courses %}
+                    <p>{{ course.recipe.name }}</p>
+                    {% for ingr in course.recipe.ingredients %}
+                        <li>{{ingr.quantity}} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="w3-card step">
+                <h4>Jouw boodschappen:</h4>
+                {% set rayon = "" %}
+                <ul>
+                {% for ingredient in ingredients %}
+                    {% if rayon != ingredient.r_name %}
+                        </ul>
+                        <p>{{ingredient.r_name}}</p>
+                        <ul>
+                        {% set rayon = ingredient.r_name %}
+                    {% endif %}
+                    <li>{{ingredient.quantity|number_format(2)}} {{ingredient.u_name}} {{ingredient.name}}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# <script>
+        let meal = {};
+        meal["mealmoment"] = "{{meal}}"
+        meal["mealday"] = "{{mealday}}"
+        meal["campid"] = "{{camp.id}}"
+    </script>
+    <script src="{{ asset('js/sorttable.js') }}"></script>
+    <script src="{{ asset('js/meal.js') }}"></script> #}
+{% endblock %}
