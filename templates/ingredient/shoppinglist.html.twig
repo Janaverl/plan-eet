@@ -8,6 +8,12 @@
         
         <div class="cardwrapper">
             <div class="w3-card step">
+                    <h5> {{camp.name}} </h5>
+                    <h5> van: {{camp.startTime|date("d/m/Y - H:i")}} </h5>
+                    <h5> tot: {{camp.endTime|date("d/m/Y - H:i")}} </h5>
+                    <h5> {{camp.nrOfParticipants}} deelnemers </h5>
+
+                    <p>{{message}}</p>
                 {% set rayon = "" %}
                 <ul>
                 {% for ingredient in ingredients %}

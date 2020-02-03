@@ -81,9 +81,9 @@ class CampController extends AbstractController
     }
 
     /**
-     * @Route("/update/camp/{slug}", name="update_camp")
+     * @Route("/show/camp/meals/{slug}", name="show_camp_meals")
      */
-    public function updateAction($slug, ValidateRoute $validateRoute)
+    public function showCampMeals($slug, ValidateRoute $validateRoute)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -179,7 +179,7 @@ class CampController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $allCamps = $entityManager->getRepository('App:Camp')
-            ->findAllCampsByUserFromNow($user);
+            ->findAllCampsByUserFuture($user);
 
         return $this->render('camp/all.html.twig', [
             'values' => $allCamps,

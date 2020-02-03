@@ -46,6 +46,8 @@ class Fullcalendar
         $firstcampMoment = $camp->getStartTime();
         $lastcampMoment = $camp->getEndTime();
 
+        $campid = $camp->getId();
+
         $dateOfMeal = clone $camp->getStartTime();
 
         $allTheEvents = [];
@@ -76,13 +78,19 @@ class Fullcalendar
                             'campMealmoment' => $mealmoment,
                         ]);
                     if ($campmeal) {
+                        $mealmomentname = $mealmoment->getMealmoment()->getName();
                         $oneEventThatNeedsToBeCreated["title"] = $campmeal->getName();
                         $oneEventThatNeedsToBeCreated["color"] = 'green';
-                        $oneEventThatNeedsToBeCreated["url"] = '/show/meal/' . $mealmoment->getMealmoment()->getName() . '?camp=' . $camp->getId() . '&day=' . $daycount;
+                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldDaycount"] = $daycount;
+                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldMealmoment"] = $mealmomentname;
+                        $oneEventThatNeedsToBeCreated["url"] = '/show/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
 
                     } else {
-                        $oneEventThatNeedsToBeCreated["title"] = $mealmoment->getMealmoment()->getName();
-                        $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmoment->getMealmoment()->getName() . '?camp=' . $camp->getId() . '&day=' . $daycount;
+                        $mealmomentname = $mealmoment->getMealmoment()->getName();
+                        $oneEventThatNeedsToBeCreated["title"] = $mealmomentname;
+                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldDaycount"] = $daycount;
+                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldMealmoment"] = $mealmomentname;
+                        $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
 
                     }
                 }

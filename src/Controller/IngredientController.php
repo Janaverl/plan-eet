@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Camp;
 use App\Entity\Ingredient;
 use App\Entity\Rayon;
 use App\Entity\Unit;
 use App\Service\Addvalue;
+use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -185,18 +187,44 @@ class IngredientController extends AbstractController
     /**
      * @Route("/show/ingredienten/{slug}", name="show_ingredients_camp")
      */
-    public function showallforcamp($slug)
+    public function showallforcamp($slug, ValidateRoute $validateRoute)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $camp = $this->getDoctrine()
+            ->getRepository(Camp::class)
+            ->findOneBy(['id' => $slug]);
 
-        $allIngredients = $entityManager->getRepository('App:Ingredient')
-            ->findArrayByCamp($slug);
+        $pageCanLoad = true;
 
-        return $this->render('ingredient/shoppinglist.html.twig', [
-            'ingredients' => $allIngredients,
-        ]);
+        if (!isset($camp)) {
+            $pageCanLoad = false;
+        } else if (!$validateRoute->is_created_by_user($this->getUser(), $camp->getUser())) {
+            $pageCanLoad = false;
+        }
+
+        if ($pageCanLoad) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $allIngredients = $entityManager->getRepository('App:Ingredient')
+                ->findArrayByCamp($slug);
+
+            dump($allIngredients);
+
+            if ($allIngredients == []) {
+                $message = "geen ingredienten toegevoegd voor dit kamp";
+            } else {
+                $message = "uw boodschappenlijstje:";
+            }
+
+            return $this->render('ingredient/shoppinglist.html.twig', [
+                'message' => $message,
+                'ingredients' => $allIngredients,
+                'camp' => $camp,
+            ]);
+        } else {
+            return $this->render('general/index.html.twig');
+        }
     }
 
 }

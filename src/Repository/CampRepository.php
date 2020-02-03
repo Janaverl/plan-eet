@@ -44,14 +44,14 @@ class CampRepository extends ServiceEntityRepository
             ->execute();
     }
 
-    public function findAllCampsByUserFromNow($user)
+    public function findAllCampsByUserFuture($user)
     {
         $now = new \DateTime();
 
         return $this->createQueryBuilder('all_camps')
             ->andWhere('all_camps.user = :val')
             ->setParameter('val', $user)
-            ->andWhere('all_camps.endTime > :time')
+            ->andWhere('all_camps.startTime > :time')
             ->setParameter('time', $now)
             ->orderBy('all_camps.startTime', 'ASC')
             ->getQuery()

@@ -13,11 +13,11 @@
                 <h4>Jouw recepten:</h4>
                 <ul>
                 {% for course in courses %}
-                    <p>{{ course.recipe.name }}</p>
+                    <p>{{ course.recipe.name }}  <a onclick="document.getElementById('details{{course.recipe.name}}').style.display='block'"><i class="fas fa-eye"></i></a>
+</p>
                     {% for ingr in course.recipe.ingredients %}
                         <li>{{ ingr.quantity*nrOfEaters }} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
                     {% endfor %}
-                    <a onclick="document.getElementById('details{{course.recipe.name}}').style.display='block'"><i class="fas fa-eye"></i></a>
                     <div id="details{{course.recipe.name}}" class="w3-modal">
                         <div class="w3-modal-content">
                             <div class="w3-card">

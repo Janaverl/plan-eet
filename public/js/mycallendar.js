@@ -49,8 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
             editable: true,
             slotDuration: '01:00',
             snapDuration: '00:30',
+            eventDrop: function (info) {
+                info.event.setExtendedProp("changed", true)
+                console.log(info.event);
+            },
             eventOverlap: true, // makes it possible to overlap events during the planning process
-            // TODO: get businessdates from mealmoments
             businessHours: mealHours,
             eventConstraint: 'businessHours',
             events: allthemeals,
@@ -58,5 +61,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         calendar.render();
+
+        $("#change").on("click", function (e) {
+            e.preventDefault();
+
+            var allEvents = calendar.getEvents().map(function (events) { console.log("start :::" + events.start); return events.start });
+
+            if (hasDuplicates(allEvents)) {
+                window.alert("Helaas, er zijn dagen waarop meerdere maaltijden zijn gepland. Versleep dit best eerst vooraleer je de wijzigingen kan opslaan.");
+            } else {
+                window.alert("all set to change. TODO");
+                // TODO: save the changes
+            };
+        });
     }
 });
