@@ -165,4 +165,28 @@ class CampController extends AbstractController
             'values' => $allCamps,
         ]);
     }
+
+    /**
+     * @Route("/show/camps/future", name="show_camps_future")
+     */
+    public function showallfuture()
+    {
+        
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $now = new \DateTime();
+
+        $data = $entityRepository->getByDate($now);
+
+        $allCamps = $entityManager->getRepository('App:Camp')
+            ->findAllCampsByUser($user);
+
+        return $this->render('camp/all.html.twig', [
+            'values' => $allCamps,
+        ]);
+    }
 }
