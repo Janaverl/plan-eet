@@ -60,10 +60,6 @@ class MealController extends AbstractController
         $mealcourses = $entityManager->getRepository(Mealcourse::class)
             ->findByCampmeal($campmeal);
 
-        // $new = $this->getDoctrine()
-        //     ->getRepository(Campmeal::class)
-        //     ->findIngrByCampmeal();
-
         $ingredients = $this->getDoctrine()
             ->getRepository(Ingredient::class)
             ->findArrayByCampmeal($_GET["camp"], $slug, $_GET["day"]);
@@ -71,7 +67,7 @@ class MealController extends AbstractController
         return $this->render('meal/show.html.twig', [
             'courses' => $mealcourses,
             'ingredients' => $ingredients,
-
+            'nrOfEaters' => $camp->getNrOfParticipants(),
         ]);
 
     }
