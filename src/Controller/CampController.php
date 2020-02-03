@@ -163,6 +163,7 @@ class CampController extends AbstractController
 
         return $this->render('camp/all.html.twig', [
             'values' => $allCamps,
+            'title' => "bekijk al jouw kampen",
         ]);
     }
 
@@ -171,22 +172,58 @@ class CampController extends AbstractController
      */
     public function showallfuture()
     {
-        
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $user = $this->getUser();
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        $now = new \DateTime();
-
-        $data = $entityRepository->getByDate($now);
-
         $allCamps = $entityManager->getRepository('App:Camp')
-            ->findAllCampsByUser($user);
+            ->findAllCampsByUserFromNow($user);
 
         return $this->render('camp/all.html.twig', [
             'values' => $allCamps,
+            'title' => "bekijk al jouw geplande kampen",
+        ]);
+    }
+
+    /**
+     * @Route("/show/camps/past", name="show_camps_past")
+     */
+    public function showallpast()
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $allCamps = $entityManager->getRepository('App:Camp')
+            ->findAllCampsByUserPast($user);
+
+        return $this->render('camp/all.html.twig', [
+            'values' => $allCamps,
+            'title' => "bekijk al jouw afgelopen kampen",
+        ]);
+    }
+
+    /**
+     * @Route("/show/camps/now", name="show_camps_now")
+     */
+    public function showallnow()
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $allCamps = $entityManager->getRepository('App:Camp')
+            ->findAllCampsByUserPresent($user);
+
+        return $this->render('camp/all.html.twig', [
+            'values' => $allCamps,
+            'title' => "bekijk al jouw kampen die nu bezig zijn",
         ]);
     }
 }

@@ -26,11 +26,19 @@
                 {% endif %}
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" class="w3-bar-item w3-button">Logout</a>
+                                    <div class="w3-dropdown-hover">
+                    <button class="w3-bar-item w3-button">Kampen</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="{{ path('add_camp') }}" class="w3-bar-item w3-button">Kamp toevoegen</a>
+                        <a href="{{ path('show_camps_now') }}" class="w3-bar-item w3-button">Lopende kampen</a>
+                        <a href="{{ path('show_camps_future') }}" class="w3-bar-item w3-button">Geplande kampen</a>
+                        <a href="{{ path('show_camps_past') }}" class="w3-bar-item w3-button">Afgelopen kampen</a>
+                    </div>
+                </div>
                     {% if is_granted('ROLE_ADMIN') %}
                         <div class="w3-dropdown-hover">
                             <button class="w3-bar-item w3-button">Admin</button>
                             <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                                <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredienten</a>
                                 <a href="{{ path('add_single', {slug: 'herb'}) }}" class="w3-bar-item w3-button">Kruiden</a>
                                 <a href="{{ path('add_single', {slug: 'rayon'}) }}" class="w3-bar-item w3-button">Rayon</a>
                                 <a href="{{ path('add_single', {slug: 'recipeType'}) }}" class="w3-bar-item w3-button">Recept Type</a>
@@ -41,19 +49,13 @@
                         </div>
                     {%endif%}
                 <div class="w3-dropdown-hover">
-                    <button class="w3-bar-item w3-button">Nieuw toevoegen</button>
+                    <button class="w3-bar-item w3-button">Recepten</button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                        <a href="{{ path('add_camp') }}" class="w3-bar-item w3-button">Kamp</a>
-                        <a href="{{ path('add_recipe') }}" class="w3-bar-item w3-button">Recept</a>
-                    </div>
-                </div>
-                <div class="w3-dropdown-hover">
-                    <button class="w3-bar-item w3-button">Bekijk/pas aan</button>
-                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                        <a href="{{ path('show_camps') }}" class="w3-bar-item w3-button">Mijn kampen</a>
-                        <a href="{{ path('show_recipes') }}" class="w3-bar-item w3-button">Recepten</a>
+                        <a href="{{ path('add_recipe') }}" class="w3-bar-item w3-button">Recept toevoegen</a>
+                        <a href="{{ path('show_recipes') }}" class="w3-bar-item w3-button">Alle recepten</a>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Ingredienten</a>
+                            <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredient toevoegen</a>
+                            <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Alle ingredienten</a>
                         {%endif%}
                     </div>
                 </div>

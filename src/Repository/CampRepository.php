@@ -24,6 +24,50 @@ class CampRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('all_camps')
             ->andWhere('all_camps.user = :val')
             ->setParameter('val', $user)
+            ->orderBy('all_camps.startTime', 'DESC')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function findAllCampsByUserPresent($user)
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('all_camps')
+            ->andWhere('all_camps.user = :val')
+            ->setParameter('val', $user)
+            ->andWhere('all_camps.endTime > :time')
+            ->andWhere('all_camps.startTime < :time')
+            ->setParameter('time', $now)
+            ->orderBy('all_camps.startTime', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function findAllCampsByUserFromNow($user)
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('all_camps')
+            ->andWhere('all_camps.user = :val')
+            ->setParameter('val', $user)
+            ->andWhere('all_camps.endTime > :time')
+            ->setParameter('time', $now)
+            ->orderBy('all_camps.startTime', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function findAllCampsByUserPast($user)
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('all_camps')
+            ->andWhere('all_camps.user = :val')
+            ->setParameter('val', $user)
+            ->andWhere('all_camps.endTime < :time')
+            ->setParameter('time', $now)
+            ->orderBy('all_camps.startTime', 'DESC')
             ->getQuery()
             ->execute();
     }
@@ -34,26 +78,26 @@ class CampRepository extends ServiceEntityRepository
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    return $this->createQueryBuilder('c')
+    ->andWhere('c.exampleField = :val')
+    ->setParameter('val', $value)
+    ->orderBy('c.id', 'ASC')
+    ->setMaxResults(10)
+    ->getQuery()
+    ->getResult()
+    ;
     }
-    */
+     */
 
     /*
-    public function findOneBySomeField($value): ?Camp
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+public function findOneBySomeField($value): ?Camp
+{
+return $this->createQueryBuilder('c')
+->andWhere('c.exampleField = :val')
+->setParameter('val', $value)
+->getQuery()
+->getOneOrNullResult()
+;
+}
+ */
 }

@@ -181,4 +181,22 @@ class IngredientController extends AbstractController
             'values' => $allIngredients,
         ]);
     }
+
+    /**
+     * @Route("/show/ingredienten/{slug}", name="show_ingredients_camp")
+     */
+    public function showallforcamp($slug)
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $allIngredients = $entityManager->getRepository('App:Ingredient')
+            ->findArrayByCamp($slug);
+
+        return $this->render('ingredient/shoppinglist.html.twig', [
+            'ingredients' => $allIngredients,
+        ]);
+    }
+
 }

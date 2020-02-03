@@ -1,0 +1,33 @@
+{% extends 'boxes.html.twig' %}
+
+{% use 'blocks.html.twig'%}
+
+{% block body %}
+    <div class="contentwrapper">
+        <h1>ingredientenlijst voor een kamp</h1>
+        
+        <div class="cardwrapper">
+            <div class="w3-card step">
+                {% set rayon = "" %}
+                <ul>
+                {% for ingredient in ingredients %}
+                    {% if rayon != ingredient.r_name %}
+                        </ul>
+                        <p>{{ingredient.r_name}}</p>
+                        <ul>
+                        {% set rayon = ingredient.r_name %}
+                    {% endif %}
+                    <li>{{ ingredient.quantity*1 }} {{ingredient.u_name}} {{ingredient.name}}</li>
+                {% endfor %}
+                </ul>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/sorttable.js') }}"></script>
+{% endblock %} 
