@@ -30,9 +30,9 @@
                     <button class="w3-bar-item w3-button">Kampen</button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
                         <a href="{{ path('add_camp') }}" class="w3-bar-item w3-button">Kamp toevoegen</a>
-                        <a href="{{ path('show_camps_now') }}" class="w3-bar-item w3-button">Lopende kampen</a>
-                        <a href="{{ path('show_camps_future') }}" class="w3-bar-item w3-button">Geplande kampen</a>
-                        <a href="{{ path('show_camps_past') }}" class="w3-bar-item w3-button">Afgelopen kampen</a>
+                        <a href="{{ path('show_camps', {slug: 'now'}) }}" class="w3-bar-item w3-button">Lopende kampen</a>
+                        <a href="{{ path('show_camps', {slug: 'future'}) }}" class="w3-bar-item w3-button">Geplande kampen</a>
+                        <a href="{{ path('show_camps', {slug: 'past'}) }}" class="w3-bar-item w3-button">Afgelopen kampen</a>
                     </div>
                 </div>
                     {% if is_granted('ROLE_ADMIN') %}

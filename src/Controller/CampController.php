@@ -81,6 +81,41 @@ class CampController extends AbstractController
     }
 
     /**
+     * @Route("/show/camps/{slug}", name="show_camps")
+     */
+    public function showallfuture($slug)
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        switch ($slug) {
+            case "past":
+                $allCamps = $entityManager->getRepository('App:Camp')
+                    ->findAllCampsByUserPast($user);
+                $title = "bekijk al jouw afgelopen kampen";
+                break;
+            case "now":
+                $allCamps = $entityManager->getRepository('App:Camp')
+                    ->findAllCampsByUserPresent($user);
+                $title = "bekijk al jouw kampen die nu bezig zijn";
+                break;
+            case "future":
+            default:
+                $allCamps = $entityManager->getRepository('App:Camp')
+                    ->findAllCampsByUserFuture($user);
+                $title = "bekijk al jouw geplande kampen";
+        }
+
+        return $this->render('camp/all.html.twig', [
+            'values' => $allCamps,
+            'title' => $title,
+        ]);
+    }
+
+    /**
      * @Route("/show/camp/meals/{slug}", name="show_camp_meals")
      */
     public function showCampMeals($slug, ValidateRoute $validateRoute)
@@ -93,11 +128,11 @@ class CampController extends AbstractController
 
         if (!isset($camp)) {
             return $this->redirectToRoute('show_camps_future');
-        } else{
+        } else {
             $isCreatedByUser = $validateRoute->isCreatedByUser($this->getUser(), $camp->getUser());
             $hasMatchingSlug = $validateRoute->hasMatchingSlug($slug, $camp->getName());
             if (!$isCreatedByUser or !$hasMatchingSlug) {
-                return $this->redirectToRoute('show_camps_future');
+                return $this->redirectToRoute('show_camps', array('slug' => "future"));
             };
         }
 
@@ -141,83 +176,4 @@ class CampController extends AbstractController
         return $json;
     }
 
-    /**
-     * @Route("/show/camps", name="show_camps")
-     */
-    public function showall()
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $user = $this->getUser();
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $allCamps = $entityManager->getRepository('App:Camp')
-            ->findAllCampsByUser($user);
-
-        return $this->render('camp/all.html.twig', [
-            'values' => $allCamps,
-            'title' => "bekijk al jouw kampen",
-        ]);
-    }
-
-    /**
-     * @Route("/show/camps/future", name="show_camps_future")
-     */
-    public function showallfuture()
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $user = $this->getUser();
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $allCamps = $entityManager->getRepository('App:Camp')
-            ->findAllCampsByUserFuture($user);
-
-        return $this->render('camp/all.html.twig', [
-            'values' => $allCamps,
-            'title' => "bekijk al jouw geplande kampen",
-        ]);
-    }
-
-    /**
-     * @Route("/show/camps/past", name="show_camps_past")
-     */
-    public function showallpast()
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $user = $this->getUser();
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $allCamps = $entityManager->getRepository('App:Camp')
-            ->findAllCampsByUserPast($user);
-
-        return $this->render('camp/all.html.twig', [
-            'values' => $allCamps,
-            'title' => "bekijk al jouw afgelopen kampen",
-        ]);
-    }
-
-    /**
-     * @Route("/show/camps/now", name="show_camps_now")
-     */
-    public function showallnow()
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $user = $this->getUser();
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $allCamps = $entityManager->getRepository('App:Camp')
-            ->findAllCampsByUserPresent($user);
-
-        return $this->render('camp/all.html.twig', [
-            'values' => $allCamps,
-            'title' => "bekijk al jouw kampen die nu bezig zijn",
-        ]);
-    }
 }
