@@ -15,7 +15,7 @@ $(document).ready(function () {
 
         console.log(meal);
 
-        postdata(meal, errors, '/fetch/add/meal', 'toegevoegd', true);
+        postdata(meal, errors, '/fetch/add/meal', 'toegevoegd', true, redirect);
 
     });
 });

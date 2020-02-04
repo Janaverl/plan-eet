@@ -216,7 +216,7 @@ type route = string
 type slug = string
 type clearfields = boolean
 */
-function postdata(data, errors, route, slug, clearfields) {
+function postdata(data, errors, route, slug, clearfields, redirect = "") {
 
     if (errors.length == 0) {
         var myHeaders = new Headers();
@@ -236,15 +236,20 @@ function postdata(data, errors, route, slug, clearfields) {
             .then(response => response.json())
             .then(result => {
                 if (result.statuscode == 201) {
-                    $(".success").append(`<li>${data["name"]} werd succesvol ${slug}.</li>`);
-                    if (clearfields) {
-                        $('.w3-check').prop('checked', false);
-                        $('input').val('');
-                        $('textarea').val('');
-                        $('select').val("default");
-                        $('.unit').attr('disabled', true);
-                        $('.time').attr('disabled', true);
+                    if (redirect == "") {
+                        $(".success").append(`<li>${data["name"]} werd succesvol ${slug}.</li>`);
+                        if (clearfields) {
+                            $('.w3-check').prop('checked', false);
+                            $('input').val('');
+                            $('textarea').val('');
+                            $('select').val("default");
+                            $('.unit').attr('disabled', true);
+                            $('.time').attr('disabled', true);
+                        }
+                    } else {
+                        window.location.href = redirect;
                     }
+
                 } else if (result.statuscode == 422) {
                     $(".errors").append(`<li>${data["name"]} bestaat reeds.</li>`);
                 } else {
