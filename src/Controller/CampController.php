@@ -116,7 +116,7 @@ class CampController extends AbstractController
     }
 
     /**
-     * @Route("/show/camp/meals/{slug}", name="show_camp_meals")
+     * @Route("/show/camp/calendar/{slug}", name="show_camp_calendar")
      */
     public function showCampMeals($slug, ValidateRoute $validateRoute)
     {
