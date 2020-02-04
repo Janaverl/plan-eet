@@ -9,12 +9,11 @@
         <h1>Jouw maaltijd:</h1>
         {# all cards #}
         <div class="cardwrapper">
-            <div class="w3-card step">
+            <div class="w3-card step scrollbox">
                 <h4>Jouw recepten:</h4>
                 <ul>
                 {% for course in courses %}
-                    <p>{{ course.recipe.name }}  <a onclick="document.getElementById('details{{course.recipe.name}}').style.display='block'"><i class="fas fa-eye"></i></a>
-</p>
+                    <p>{{ course.recipe.name }}  <a onclick="document.getElementById('details{{course.recipe.name}}').style.display='block'"><i class="fas fa-eye"></i></a></p>
                     {% for ingr in course.recipe.ingredients %}
                         <li>{{ ingr.quantity*nrOfEaters }} {{ingr.ingredient.unit.name}} {{ingr.ingredient.name}}</li>
                     {% endfor %}
@@ -47,8 +46,8 @@
                 {% endfor %}
                 </ul>
             </div>
-            <div class="w3-card step">
-                <h4>Jouw boodschappen:</h4>
+            <div class="w3-card step scrollbox">
+                <h4>Benodigdheden voor deze maaltijd:</h4>
                 {% set rayon = "" %}
                 <ul>
                 {% for ingredient in ingredients %}
@@ -61,6 +60,15 @@
                     <li>{{ ingredient.quantity*1 }} {{ingredient.u_name}} {{ingredient.name}}</li>
                 {% endfor %}
                 </ul>
+                <p>kruiden</p>
+                <ul>
+                <li>TODO</li>
+                </ul>
+            </div>
+
+            <div class="w3-card step scrollbox">
+                <button disabled>TODO - Pas deze maaltijd aan</button>
+                <a href="{{ path('show_camp_calendar', {slug: camp.name, camp: camp.id}) }}"><button>Terug naar kamp-kalender</button></a>
             </div>
         </div>
     </div>

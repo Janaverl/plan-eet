@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class MealController extends AbstractController
 {
     /**
+     * This functions shows the recipes and ingredients that belongs to meals.
+     * TODO: button that redirects to a view to change a recipe
      * @Route("/show/meal/{slug}", name="show_meal")
      */
     public function show($slug)
@@ -65,6 +67,7 @@ class MealController extends AbstractController
             ->findArrayByCampmeal($_GET["camp"], $slug, $_GET["day"]);
 
         return $this->render('meal/show.html.twig', [
+            'camp' => $camp,
             'courses' => $mealcourses,
             'ingredients' => $ingredients,
             'nrOfEaters' => $camp->getNrOfParticipants(),
