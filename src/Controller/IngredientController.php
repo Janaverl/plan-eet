@@ -189,42 +189,38 @@ class IngredientController extends AbstractController
      */
     public function showallforcamp($slug, ValidateRoute $validateRoute)
     {
+        // validation
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $slug]);
 
-        $pageCanLoad = true;
-
         if (!isset($camp)) {
-            $pageCanLoad = false;
-        } else if (!$validateRoute->is_created_by_user($this->getUser(), $camp->getUser())) {
-            $pageCanLoad = false;
+            return $this->redirectToRoute('show_camps_future');
+        } else if (!$validateRoute->isCreatedByUser($this->getUser(), $camp->getUser())) {
+            return $this->redirectToRoute('show_camps_future');
         }
 
-        if ($pageCanLoad) {
-            $entityManager = $this->getDoctrine()->getManager();
+        // If passes validation:
+        $entityManager = $this->getDoctrine()->getManager();
 
-            $allIngredients = $entityManager->getRepository('App:Ingredient')
-                ->findArrayByCamp($slug);
+        $allIngredients = $entityManager->getRepository('App:Ingredient')
+            ->findArrayByCamp($slug);
 
-            dump($allIngredients);
+        dump($allIngredients);
 
-            if ($allIngredients == []) {
-                $message = "geen ingredienten toegevoegd voor dit kamp";
-            } else {
-                $message = "uw boodschappenlijstje:";
-            }
-
-            return $this->render('ingredient/shoppinglist.html.twig', [
-                'message' => $message,
-                'ingredients' => $allIngredients,
-                'camp' => $camp,
-            ]);
+        if ($allIngredients == []) {
+            $message = "geen ingredienten toegevoegd voor dit kamp";
         } else {
-            return $this->render('general/index.html.twig');
+            $message = "uw boodschappenlijstje:";
         }
+
+        return $this->render('ingredient/shoppinglist.html.twig', [
+            'message' => $message,
+            'ingredients' => $allIngredients,
+            'camp' => $camp,
+        ]);
     }
 
 }
