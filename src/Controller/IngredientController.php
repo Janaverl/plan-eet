@@ -95,32 +95,24 @@ class IngredientController extends AbstractController
             ->getRepository(Ingredient::class)
             ->findOneBy(['name' => $slug]);
 
-        if (isset($ingredient)) {
-            $pageCanLoad = true;
-        } else {
-            $pageCanLoad = false;
+        if (!isset($ingredient)) {
+            return $this->redirectToRoute('show_ingredients');
         };
 
-        if ($pageCanLoad) {
-            $allRayons = $this->getDoctrine()
-                ->getRepository(Rayon::class)
-                ->findAll();
+        $allRayons = $this->getDoctrine()
+            ->getRepository(Rayon::class)
+            ->findAll();
 
-            $allUnits = $this->getDoctrine()
-                ->getRepository(Unit::class)
-                ->findAll();
+        $allUnits = $this->getDoctrine()
+            ->getRepository(Unit::class)
+            ->findAll();
 
-            return $this->render('ingredient/individual.html.twig', [
-                'value' => $ingredient,
-                'rayons' => $allRayons,
-                'units' => $allUnits,
-                'mode' => "update",
-            ]);
-        } else {
-
-            return $this->render('general/index.html.twig');
-
-        }
+        return $this->render('ingredient/individual.html.twig', [
+            'value' => $ingredient,
+            'rayons' => $allRayons,
+            'units' => $allUnits,
+            'mode' => "update",
+        ]);
     }
 
     /**

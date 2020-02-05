@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
@@ -73,7 +72,7 @@ class Ingredient
         return $this->suggestion;
     }
 
-    public function setSuggestion(string $suggestion): self
+    public function setSuggestion(?string $suggestion): self
     {
         $this->suggestion = $suggestion;
 
