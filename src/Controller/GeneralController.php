@@ -25,4 +25,13 @@ class GeneralController extends AbstractController
             'error' => $error,
         ]);
     }
+
+    /**
+     * @Route("/admin", name="admin")
+     */
+    public function admin()
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        return $this->render('general/admin.html.twig');
+    }
 }
