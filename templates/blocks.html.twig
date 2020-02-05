@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block table_all_recipes %}
-    <table class="w3-table w3-striped w3-bordered" id="allRecipes" width="100%">
+    <table class="w3-table w3-striped w3-bordered table" id="tableToSort" width="100%">
         <thead>
         <tr class="sortTitles">
             {% if app.request.get('_route') == 'add_meal' %}

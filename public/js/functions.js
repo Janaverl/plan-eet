@@ -1,6 +1,8 @@
 function sortTable(n) {
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("allIngredients");
+    var table, rows, switching, i, x, y, shouldSwitch, dir; var switchcount = 0;
+    table = document.getElementById("tableToSort");
+    console.log(table);
+    console.log(table.rows);
     switching = true;
     // Set the sorting direction to ascending:
     dir = "asc";
@@ -9,6 +11,7 @@ function sortTable(n) {
         // Start by saying: no switching is done:
         switching = false;
         rows = table.rows;
+        console.log(rows);
         /* Loop through all table rows (except the first, which contains table headers): */
         for (i = 1; i < (rows.length - 1); i++) {
             // Start by saying there should be no switching:
