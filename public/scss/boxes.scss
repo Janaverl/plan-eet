@@ -25,7 +25,7 @@ h1{
   
   .cardwrapper{
     display: grid;
-    width: 70%;
+    width: 70vw;
     margin: auto;
     grid-gap: 40px;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -40,12 +40,22 @@ h1{
       min-height: 400px;
       /* width: 500px; */
     }
+    .step{
+      max-width: 70vw;
+    }
   .scrollbox{
     height: 200px;
     /* width: 500px; */
     overflow: auto;
     direction: ltr;
     /* background-color: lightgrey; */
+  }
+  .horScrollbox{
+    overflow: auto;
+    white-space: nowrap;
+    &.wrap{
+      white-space: unset;
+    }
   }
   
   input[type="number"]{
