@@ -102,6 +102,12 @@ class CampController extends AbstractController
                     ->findAllCampsByUserPresent($user);
                 $title = "bekijk al jouw kampen die nu bezig zijn";
                 break;
+            case "admin_all":
+                $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+                $allCamps = $entityManager->getRepository('App:Camp')
+                    ->findAll();
+                $title = "overzicht van alle kampen";
             case "future":
             default:
                 $allCamps = $entityManager->getRepository('App:Camp')
