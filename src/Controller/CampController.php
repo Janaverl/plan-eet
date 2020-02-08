@@ -108,6 +108,7 @@ class CampController extends AbstractController
                 $allCamps = $entityManager->getRepository('App:Camp')
                     ->findAll();
                 $title = "overzicht van alle kampen";
+                break;
             case "future":
             default:
                 $allCamps = $entityManager->getRepository('App:Camp')
@@ -181,5 +182,4 @@ class CampController extends AbstractController
         $json->setData(json_encode($dataWeWillSend));
         return $json;
     }
-
 }
