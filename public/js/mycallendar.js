@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(data);
             makecallendar(data);
             document.getElementById("loader").style.display = "none";
+            // $("#change").prop("disabled", false);
         })
         .catch(error => console.log("error", error));
 
@@ -30,17 +31,22 @@ document.addEventListener('DOMContentLoaded', function () {
         var calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
             header: {
-                right: 'prev,next today', //positions the the prev/next button on the right 
-                center: 'title', //sets the title of the month to center
-                left: 'dayGridMonth,timeGridWeek,timeGridDay'
+                left: '',
+                center: 'title',
+                right: ''
             },
-            height: 500,
+            footer: {
+                left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'today',
+                right: 'prev,next' //positions the the prev/next button on the right 
+            },
+            height: 600,
             validRange: {
                 start: start,
                 end: end
             },
             nowIndicator: true,
-            defaultView: 'timeGridWeek',
+            defaultView: 'dayGridMonth',
             // minTime: '06:00',
             // maxTime: '22:00',
             scrollTime: breakfastHour,
@@ -50,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
             slotDuration: '01:00',
             snapDuration: '00:30',
             eventDrop: function (info) {
-                info.event.setExtendedProp("changed", true)
+                info.event.setExtendedProp("changed", true);
+                $("#change").prop("disabled", false);
                 console.log(info.event);
             },
             eventOverlap: true, // makes it possible to overlap events during the planning process

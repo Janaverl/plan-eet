@@ -22,7 +22,7 @@
 
         <div id="loader">
             <?xml version="1.0" encoding="utf-8"?>
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: rgb(255, 255, 255) none repeat scroll 0% 0%; display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background:  display: block; shape-rendering: auto;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
             <g transform="translate(50 50)">
             <g transform="scale(0.8)">
                 <g transform="translate(-50 -50)">
@@ -39,10 +39,22 @@
 
         <div class="cardwrapper">
             <div class="w3-card step">
-                <button id="change">change!</button>
 
                 <div id='calendar'></div>
-
+            </div>
+            
+            <div class="w3-card step">
+                <h4>maaltijd toevoegen</h4>
+                <p>Klik in de kalender op een maaltijd waar nog geen menu aan is toegevoegd.</p>
+                <td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#1a252f;border-color:#1a252f;max-width: 100px"><div class="fc-content"> <span class="fc-title">middagmaal</span></div></a></td>
+                <h4>maaltijd bekijken</h4>
+                <p>Klik in de kalender op een maaltijd waar reeds een menu voor is gekozen.</p>
+                <td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:darkgrey;border-color:darkgrey;max-width: 100px"><div class="fc-content"> <span class="fc-title">naam menu</span></div></a></td>
+                <h4>maaltijd verplaatsen</h4>
+                <p>Versleep een maaltijd naar een ander moment. Als je tevreden bent met het nieuwe menu, sla dit menu dan op.</p>
+                <p>Er mogen geen meerdere maaltijden gepland worden op hetzelfde moment.</p>
+                <button id="change" disabled>sla wijzigingen op</button>
+                <p style="color:red">opm: deze functionaliteit staat nog niet op punt. Aanpassingen worden nog niet opgeslaan in de database.</p>
             </div>
         </div>
     </div>
