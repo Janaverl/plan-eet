@@ -27,6 +27,15 @@ class GeneralController extends AbstractController
     }
 
     /**
+     * @Route("/guide", name="guide")
+     */
+    public function guide()
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        return $this->render('general/guide.html.twig');
+    }
+
+    /**
      * @Route("/admin", name="admin")
      */
     public function admin()

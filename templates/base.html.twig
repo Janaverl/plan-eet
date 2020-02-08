@@ -48,7 +48,8 @@
                 </div>
                 {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('admin') }}" class="w3-bar-item w3-button">Admin</a>
-                {%endif%}
+                {% endif %}
+                <a href="{{ path('guide') }}" class="w3-bar-item w3-button">Over deze website</a>
                 {% endif %}
             </div>
         </div>
