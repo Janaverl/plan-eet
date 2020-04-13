@@ -57,6 +57,7 @@ class Fullcalendar
             $dateOfMeal = clone $camp->getStartTime();
             $dateOfMeal->modify('+' . $daycount . ' day');
             $dateOfMealInString = $dateOfMeal->format('Y-m-d');
+
             foreach ($camp->getCampMealmoments() as $mealmoment) {
                 $oneEventThatNeedsToBeCreated = [];
 
@@ -71,28 +72,35 @@ class Fullcalendar
                 if ($datetimeStartOfMeal < $firstcampMoment || $lastcampMoment < $datetimeStartOfMeal) {
                     $oneEventThatNeedsToBeCreated["rendering"] = 'background';
                     $oneEventThatNeedsToBeCreated["className"] = 'fc-nonbusiness';
-                } else {
-                    $campmeal = $entityManager->getRepository(Campmeal::class)
-                        ->findOneBy([
-                            'campday' => $campday,
-                            'campMealmoment' => $mealmoment,
-                        ]);
-                    if ($campmeal) {
-                        $mealmomentname = $mealmoment->getMealmoment()->getName();
-                        $oneEventThatNeedsToBeCreated["title"] = $campmeal->getName();
-                        $oneEventThatNeedsToBeCreated["color"] = 'darkgrey';
-                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldDaycount"] = $daycount;
-                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldMealmoment"] = $mealmomentname;
-                        $oneEventThatNeedsToBeCreated["url"] = '/show/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
-                    } else {
-                        $mealmomentname = $mealmoment->getMealmoment()->getName();
-                        $oneEventThatNeedsToBeCreated["title"] = $mealmomentname;
-                        $oneEventThatNeedsToBeCreated["color"] = '#1a252f';
-                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldDaycount"] = $daycount;
-                        $oneEventThatNeedsToBeCreated["extendedProps"]["oldMealmoment"] = $mealmomentname;
-                        $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
-                    }
+
+                    array_push($allTheEvents, $oneEventThatNeedsToBeCreated);
+                    continue;
                 }
+
+                $campmeal = $entityManager->getRepository(Campmeal::class)
+                    ->findOneBy([
+                        'campday' => $campday,
+                        'campMealmoment' => $mealmoment,
+                    ]);
+                
+                $mealmomentname = $mealmoment->getMealmoment()->getName();
+                $oneEventThatNeedsToBeCreated["extendedProps"]["oldDaycount"] = $daycount;
+                $oneEventThatNeedsToBeCreated["extendedProps"]["oldMealmoment"] = $mealmomentname;
+                
+                
+                if ($campmeal) {
+                    $oneEventThatNeedsToBeCreated["title"] = $campmeal->getName();
+                    $oneEventThatNeedsToBeCreated["color"] = 'darkgrey';
+                    $oneEventThatNeedsToBeCreated["url"] = '/show/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
+
+                    array_push($allTheEvents, $oneEventThatNeedsToBeCreated);
+                    continue;
+                }
+
+                $oneEventThatNeedsToBeCreated["title"] = $mealmomentname;
+                $oneEventThatNeedsToBeCreated["color"] = '#1a252f';
+                $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
+
                 array_push($allTheEvents, $oneEventThatNeedsToBeCreated);
             }
         }

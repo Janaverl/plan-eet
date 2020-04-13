@@ -6,14 +6,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class ValidateRoute
 {
-    private $router;
-
-    public function __construct(
-        RouterInterface $router
-    ) {
-        $this->router = $router;
-    }
-
     /**
      * @param string $slug
      * @param string $name
@@ -23,13 +15,13 @@ class ValidateRoute
     {
         if ($name === $slug) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
+        
     }
 
 /**
- * Undocumented function
  *
  * @param object $user
  * @param object $objectBelongsToUser
@@ -39,8 +31,9 @@ class ValidateRoute
     {
         if ($user == $objectBelongsToUser) {
             return true;
-        } else {
-            return false;
         }
+        
+        return false;
+
     }
 }

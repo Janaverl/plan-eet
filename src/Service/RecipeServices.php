@@ -68,9 +68,10 @@ class RecipeServices extends AbstractController
     {
         if ($newValue === $oldValue) {
             return false;
-        } else {
-            return true;
         }
+        
+        return true;
+        
     }
 
     /**
@@ -86,38 +87,35 @@ class RecipeServices extends AbstractController
 
         // first, let's compare the old herbs with the new herbs, and check wich one we need to DELETE
         foreach ($oldHerbs as $oldHerb) {
-            $todelete = true;
-            foreach ($newherbs as $herbNew) {
-                if ($herbNew == $oldHerb->getHerb()->getName()) {
-                    $todelete = false;
+            foreach ($newherbs as $newHerb) {
+                if ($newHerb == $oldHerb->getHerb()->getName()) {
+                    continue 2;
                 }
             }
-            if ($todelete === true) {
-                $entityManager->remove($oldHerb);
-            }
+            
+            $entityManager->remove($oldHerb);
         }
 
         // after that, let's compare the new herbs with the old herbs, and check wich one we need to ADD
         foreach ($newherbs as $herbNew) {
-            $toadd = true;
             foreach ($oldHerbs as $oldHerb) {
                 if ($herbNew == $oldHerb->getHerb()->getName()) {
-                    $toadd = false;
+                    continue 2;
                 }
             }
-            if ($toadd === true) {
-                // look for a single herb by name
-                $herb = $this->getDoctrine()
-                    ->getRepository(Herb::class)
-                    ->findOneBy(['name' => $herbNew]);
 
-                $recipeHerb = new RecipeHerb();
-                $recipeHerb->setHerb($herb)
-                    ->setRecipe($recipe);
+            // look for a single herb by name
+            $herb = $this->getDoctrine()
+                ->getRepository(Herb::class)
+                ->findOneBy(['name' => $herbNew]);
 
-                $entityManager->persist($recipeHerb);
-            }
-        };
+            $recipeHerb = new RecipeHerb();
+            $recipeHerb->setHerb($herb)
+                ->setRecipe($recipe);
+
+            $entityManager->persist($recipeHerb);
+        }
+
     }
 
     /**
@@ -134,40 +132,38 @@ class RecipeServices extends AbstractController
 
         // first, let's compare the old ingr with the new ingr, and check wich one we need to DELETE
         foreach ($oldIngredients as $oldIngredient) {
-            $todelete = true;
             foreach ($newIngredients as $newIngredient) {
                 if ($newIngredient["name"] == $oldIngredient->getIngredient()->getName()) {
-                    $todelete = false;
+                    continue 2;
                 }
             }
-            if ($todelete === true) {
-                $entityManager->remove($oldIngredient);
-            }
+
+            $entityManager->remove($oldIngredient);
         }
 
         // after that, let's compare the new ingr with the old ingr, and check wich one we need to ADD or CHANGE THE QUANTITY
         foreach ($newIngredients as $newIngredient) {
-            $toadd = true;
+
             $quantity = $newIngredient["quantity"] / $numberOfEaters;
+
             foreach ($oldIngredients as $oldIngredient) {
                 if ($newIngredient["name"] == $oldIngredient->getIngredient()->getName()) {
-                    $toadd = false;
                     if ($oldIngredient->getQuantity() != $quantity) {
                         $oldIngredient->setQuantity($quantity);
                     }
+                    continue 2;
                 }
             }
-            if ($toadd === true) {
-                $ingr = $this->getDoctrine()
-                    ->getRepository(Ingredient::class)
-                    ->findOneBy(['name' => $newIngredient]);
+            $ingr = $this->getDoctrine()
+                ->getRepository(Ingredient::class)
+                ->findOneBy(['name' => $newIngredient]);
 
-                $recipeIngredient = new RecipeIngredients();
-                $recipeIngredient->setIngredient($ingr)
-                    ->setRecipe($recipe)
-                    ->setQuantity($quantity);
-                $entityManager->persist($recipeIngredient);
-            }
+            $recipeIngredient = new RecipeIngredients();
+            $recipeIngredient->setIngredient($ingr)
+                ->setRecipe($recipe)
+                ->setQuantity($quantity);
+                
+            $entityManager->persist($recipeIngredient);
         }
     }
 }
