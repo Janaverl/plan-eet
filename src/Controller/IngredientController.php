@@ -71,7 +71,8 @@ class IngredientController extends AbstractController
         $ingredient->setName($data["name"])
             ->setRayon($rayon)
             ->setUnit($unit);
-        if (isset($data["suggestion"]) && $data["suggestion"] != "") {
+        
+        if (!empty($data["suggestion"])) {
             $ingredient->setSuggestion($data["suggestion"]);
         };
 
@@ -95,7 +96,7 @@ class IngredientController extends AbstractController
             ->getRepository(Ingredient::class)
             ->findOneBy(['name' => $slug]);
 
-        if (!isset($ingredient)) {
+        if (empty($ingredient)) {
             return $this->redirectToRoute('show_ingredients');
         };
 
@@ -125,7 +126,7 @@ class IngredientController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data["suggestion"])) {
+        if (empty($data["suggestion"])) {
             $data["suggestion"] = null;
         };
 
@@ -188,11 +189,15 @@ class IngredientController extends AbstractController
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $slug]);
 
-        if (!isset($camp)) {
-            return $this->redirectToRoute('show_camps_future');
-        } else if (!$validateRoute->isCreatedByUser($this->getUser(), $camp->getUser())) {
-            return $this->redirectToRoute('show_camps_future');
+        if (!empty($camp)) {        
+            $isCreatedByUser = $validateRoute->isCreatedByUser($this->getUser(), $camp->getUser());
         }
+
+        if (empty($camp) or !$isCreatedByUser) {
+            return $this->redirectToRoute('show_camps', [
+                'slug' => "future"
+            ]);
+        };
 
         // If passes validation:
         $entityManager = $this->getDoctrine()->getManager();

@@ -21,7 +21,7 @@ class MealController extends AbstractController
 {
     /**
      * This functions shows the recipes and ingredients that belongs to meals.
-     * TODO: button that redirects to a view to change a recipe
+     * //TODO: button that redirects to a view to change a recipe
      * @Route("/show/meal/{slug}", name="show_meal")
      */
     public function show($slug)
@@ -36,15 +36,16 @@ class MealController extends AbstractController
                 'id' => $_GET["camp"],
                 'user' => $this->getUser(),
             ]);
+        
+        $mealmoment = $entityManager->getRepository(Mealmoment::class)
+            ->findOneBy([
+                'name' => $slug
+            ]);
 
         $campmealmoment = $entityManager->getRepository(CampMealmoments::class)
             ->findOneBy([
                 'camp' => $camp,
-                'mealmoment' => $this->getDoctrine()
-                    ->getRepository(Mealmoment::class)
-                    ->findOneBy([
-                        'name' => $slug,
-                    ]),
+                'mealmoment' => $mealmoment,
             ]);
 
         $campday = $entityManager->getRepository(Campday::class)
@@ -121,14 +122,15 @@ class MealController extends AbstractController
                 'id' => $data["campid"],
             ]);
 
+        $mealmoment = $entityManager->getRepository(Mealmoment::class)
+            ->findOneBy([
+                'name' => $slug
+            ]);
+
         $campmealmoment = $entityManager->getRepository(CampMealmoments::class)
             ->findOneBy([
                 'camp' => $camp,
-                'mealmoment' => $this->getDoctrine()
-                    ->getRepository(Mealmoment::class)
-                    ->findOneBy([
-                        'name' => $data["mealmoment"],
-                    ]),
+                'mealmoment' => $mealmoment,
             ]);
 
         $campday = $entityManager->getRepository(Campday::class)

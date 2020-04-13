@@ -166,10 +166,11 @@ class RecipeController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data["suggestion"])) {
-            $data["suggestion"] = NULL;
-        };
-        if (!isset($data["herbs"])) {
+        if (empty($data["suggestion"])) {
+            $data["suggestion"] = null;
+        }
+
+        if (empty($data["herbs"])) {
             $data["herbs"] = [];
         }
 
@@ -232,27 +233,19 @@ class RecipeController extends AbstractController
             ->getRepository(Recipes::class)
             ->findOneBy(['name' => $slug]);
 
-        if (isset($recipe)) {
-            $pageCanLoad = true;
-        } else {
-            $pageCanLoad = false;
-        };
-
-        if ($pageCanLoad) {
-            $ingredients = $entityManager->getRepository('App:RecipeIngredients')
-                ->findIngredientsSortedByRayon($recipe);
-
-            return $this->render('recipe/individual.html.twig', [
-                'value' => $recipe,
-                'ingredients' => $ingredients,
-                'nrOfEaters' => 10,
-                'mode' => "show",
-            ]);
-        } else {
-
+        if (empty($recipe)) {
             return $this->render('general/index.html.twig');
-
         }
+
+        $ingredients = $entityManager->getRepository('App:RecipeIngredients')
+            ->findIngredientsSortedByRayon($recipe);
+
+        return $this->render('recipe/individual.html.twig', [
+            'value' => $recipe,
+            'ingredients' => $ingredients,
+            'nrOfEaters' => 10,
+            'mode' => "show",
+        ]);
     }
 
     /**

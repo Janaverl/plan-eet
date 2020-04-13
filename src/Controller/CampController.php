@@ -30,7 +30,7 @@ class CampController extends AbstractController
             ->findAll();
 
         return $this->render('camp/individual.html.twig', [
-            'mealmoments' => $allMealmoments,
+            'mealmoments' => $allMealmoments
         ]);
     }
 
@@ -68,7 +68,7 @@ class CampController extends AbstractController
         // tell Doctrine you want to (eventually) save the camp (no queries yet)
         $entityManager->persist($camp);
 
-        if (isset($data["mealmoments"])) {
+        if (!empty($data["mealmoments"])) {
             $campServices->create_mealmoments($camp, $data["mealmoments"], $entityManager);
         }
 
@@ -109,7 +109,6 @@ class CampController extends AbstractController
                     ->findAll();
                 $title = "overzicht van alle kampen";
                 break;
-            case "future":
             default:
                 $allCamps = $entityManager->getRepository('App:Camp')
                     ->findAllCampsByUserFuture($user);
@@ -133,18 +132,19 @@ class CampController extends AbstractController
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
 
-        if (!isset($camp)) {
-            return $this->redirectToRoute('show_camps_future');
-        } else {
+        if (!empty($camp)) {        
             $isCreatedByUser = $validateRoute->isCreatedByUser($this->getUser(), $camp->getUser());
             $hasMatchingSlug = $validateRoute->hasMatchingSlug($slug, $camp->getName());
-            if (!$isCreatedByUser or !$hasMatchingSlug) {
-                return $this->redirectToRoute('show_camps', array('slug' => "future"));
-            };
         }
 
+        if (empty($camp) or !$isCreatedByUser or !$hasMatchingSlug) {
+            return $this->redirectToRoute('show_camps', [
+                'slug' => "future"
+            ]);
+        };
+
         return $this->render('camp/callenderindividual.html.twig', [
-            'value' => $camp,
+            'value' => $camp
         ]);
     }
 
