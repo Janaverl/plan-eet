@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Campmeal;
 use App\Service\Converttime;
 
@@ -20,28 +21,32 @@ class Fullcalendar
     /**
      * @param object $moments
      * @param integer $durationInMinutes
-     * @return array
+     * @return object
      */
-    public function create_businesshours(object $moments, int $durationInMinutes): array
+    public function create_businesshours(object $moments, int $durationInMinutes): object
     {
-        $businesshours = [];
+        $businesshours = new ArrayCollection;
+
         foreach ($moments as $moment) {
             $timeStart = $moment->gettime();
-            $timeEnd = $timeStart + 60;
-            array_push($businesshours, [
+            $timeEnd = $timeStart + $durationInMinutes;
+            $timeBlockForMeal = [
                 "daysOfWeek" => "[0, 1, 2, 3, 4, 5, 6]",
                 "startTime" => $this->converttime->decimal_to_time($timeStart),
                 "endTime" => $this->converttime->decimal_to_time($timeEnd),
-            ]);
+            ];
+            $businesshours->add($timeBlockForMeal);
         }
+
         return $businesshours;
     }
 
     /**
      * @param object $camp
-     * @return array
+     * @param object $entityManager
+     * @return object
      */
-    public function create_events(object $camp, object $entityManager): array
+    public function create_events(object $camp, object $entityManager): object
     {
         $firstcampMoment = $camp->getStartTime();
         $lastcampMoment = $camp->getEndTime();
@@ -50,7 +55,7 @@ class Fullcalendar
 
         $dateOfMeal = clone $camp->getStartTime();
 
-        $allTheEvents = [];
+        $allTheEvents = new ArrayCollection;
 
         foreach ($camp->getCampdays() as $campday) {
             $daycount = $campday->getCampdaycount();
@@ -73,7 +78,7 @@ class Fullcalendar
                     $oneEventThatNeedsToBeCreated["rendering"] = 'background';
                     $oneEventThatNeedsToBeCreated["className"] = 'fc-nonbusiness';
 
-                    array_push($allTheEvents, $oneEventThatNeedsToBeCreated);
+                    $allTheEvents->add($oneEventThatNeedsToBeCreated);
                     continue;
                 }
 
@@ -93,7 +98,7 @@ class Fullcalendar
                     $oneEventThatNeedsToBeCreated["color"] = 'darkgrey';
                     $oneEventThatNeedsToBeCreated["url"] = '/show/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
 
-                    array_push($allTheEvents, $oneEventThatNeedsToBeCreated);
+                    $allTheEvents->add($oneEventThatNeedsToBeCreated);
                     continue;
                 }
 
@@ -101,9 +106,10 @@ class Fullcalendar
                 $oneEventThatNeedsToBeCreated["color"] = '#1a252f';
                 $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
 
-                array_push($allTheEvents, $oneEventThatNeedsToBeCreated);
+                $allTheEvents->add($oneEventThatNeedsToBeCreated);
             }
         }
+
         return $allTheEvents;
     }
 }

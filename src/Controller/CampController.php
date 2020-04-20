@@ -166,20 +166,19 @@ class CampController extends AbstractController
         $firstday = clone $camp->getStartTime();
         $lastday = clone $camp->getEndTime();
 
-        $dataWeWillSend = array(
-            "start" => "",
-            "end" => "",
-            "mealhours" => [],
-            "allthemeals" => []
-        );
+        $mealhours = $fullcalendar->create_businesshours($camp->getCampMealmoments(), 60);
+        $allEvents = $fullcalendar->create_events($camp, $entityManager);
 
-        $dataWeWillSend["start"] = $firstday->format('Y-m-d');
-        $dataWeWillSend["end"] = $lastday->modify('+1 day')->format('Y-m-d');
-        $dataWeWillSend["mealhours"] = $fullcalendar->create_businesshours($camp->getCampMealmoments(), 60);
-        $dataWeWillSend["allthemeals"] = $fullcalendar->create_events($camp, $entityManager);
+        $dataWeWillSend = array(
+            "start" => $firstday->format('Y-m-d'),
+            "end" => $lastday->modify('+1 day')->format('Y-m-d'),
+            "mealhours" => $mealhours->getValues(),
+            "allthemeals" => $allEvents->getValues()
+        );
 
         $json = new JsonResponse();
         $json->setData(json_encode($dataWeWillSend));
+
         return $json;
     }
 }
