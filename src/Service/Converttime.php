@@ -16,6 +16,13 @@ class Converttime
         return str_pad($hours, 2, "0", STR_PAD_LEFT) . ":" . str_pad($minutes, 2, "0", STR_PAD_LEFT);
     }
 
+    public function time_to_ISO8601(string $date,int $time): string
+    {
+        $time = $this->decimal_to_time($time);
+
+        return $date . 'T' . $time;
+    }
+
     /**
      * @param string $time
      * @return integer

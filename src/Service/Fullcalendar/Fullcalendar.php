@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Fullcalendar;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Campmeal;
 use App\Service\Converttime;
+use App\Service\Fullcalendar\MealEvent;
 
 /**
  * this class prepares the arrays with the fullcalendar.io-syntax,
@@ -53,34 +54,32 @@ class Fullcalendar
 
         $campid = $camp->getId();
 
-        $dateOfMeal = clone $camp->getStartTime();
-
         $allTheEvents = new ArrayCollection;
 
         foreach ($camp->getCampdays() as $campday) {
             $daycount = $campday->getCampdaycount();
-            $dateOfMeal = clone $camp->getStartTime();
-            $dateOfMeal->modify('+' . $daycount . ' day');
-            $dateOfMealInString = $dateOfMeal->format('Y-m-d');
+            $firstday = clone $camp->getStartTime();
+            $currentDay = $firstday->modify('+' . $daycount . ' day')->format('Y-m-d');
 
             foreach ($camp->getCampMealmoments() as $mealmoment) {
-                $oneEventThatNeedsToBeCreated = [];
+                $mealMomentTime = $mealmoment->gettime();
+                $mealMomentName = $mealmoment->getMealmoment()->getName();
 
-                $timeStartOfMeal = $mealmoment->gettime();
-                $timeEndOfMeal = $timeStartOfMeal + 60;
+                $startMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime);
+                $endMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime + 60);
 
-                $oneEventThatNeedsToBeCreated["start"] = $dateOfMealInString . 'T' . $this->converttime->decimal_to_time($timeStartOfMeal);
-                $oneEventThatNeedsToBeCreated["end"] = $dateOfMealInString . 'T' . $this->converttime->decimal_to_time($timeEndOfMeal);
+                $oneEventThatNeedsToBeCreated = new MealEvent($startMeal, $endMeal);
 
-                $datetimeStartOfMeal = new \Datetime($dateOfMealInString . 'T' . $this->converttime->decimal_to_time($timeStartOfMeal));
+                $startMeal = new \Datetime($startMeal);
 
-                if ($datetimeStartOfMeal < $firstcampMoment || $lastcampMoment < $datetimeStartOfMeal) {
-                    $oneEventThatNeedsToBeCreated["rendering"] = 'background';
-                    $oneEventThatNeedsToBeCreated["className"] = 'fc-nonbusiness';
+                if ($startMeal < $firstcampMoment || $lastcampMoment < $startMeal) {
+                    $oneEventThatNeedsToBeCreated->makePassive();
 
-                    $allTheEvents->add($oneEventThatNeedsToBeCreated);
+                    $allTheEvents->add($oneEventThatNeedsToBeCreated->getValues());
                     continue;
                 }
+
+                $oneEventThatNeedsToBeCreated->makeActive($daycount, $mealMomentName);
 
                 $campmeal = $entityManager->getRepository(Campmeal::class)
                     ->findOneBy([
@@ -88,26 +87,18 @@ class Fullcalendar
                         'campMealmoment' => $mealmoment,
                     ]);
                 
-                $mealmomentname = $mealmoment->getMealmoment()->getName();
-                $oneEventThatNeedsToBeCreated["extendedProps"]["oldDaycount"] = $daycount;
-                $oneEventThatNeedsToBeCreated["extendedProps"]["oldMealmoment"] = $mealmomentname;
-                
-                
                 if ($campmeal) {
-                    $oneEventThatNeedsToBeCreated["title"] = $campmeal->getName();
-                    $oneEventThatNeedsToBeCreated["color"] = 'darkgrey';
-                    $oneEventThatNeedsToBeCreated["url"] = '/show/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
+                    $oneEventThatNeedsToBeCreated->renderWithMeal($campmeal->getName(), $mealMomentName, $campid, $daycount);
 
-                    $allTheEvents->add($oneEventThatNeedsToBeCreated);
+                    $allTheEvents->add($oneEventThatNeedsToBeCreated->getValues());
                     continue;
                 }
 
-                $oneEventThatNeedsToBeCreated["title"] = $mealmomentname;
-                $oneEventThatNeedsToBeCreated["color"] = '#1a252f';
-                $oneEventThatNeedsToBeCreated["url"] = '/add/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
+                $oneEventThatNeedsToBeCreated->renderWithoutMeal($mealMomentName, $campid, $daycount);
 
-                $allTheEvents->add($oneEventThatNeedsToBeCreated);
+                $allTheEvents->add($oneEventThatNeedsToBeCreated->getValues());
             }
+
         }
 
         return $allTheEvents;
