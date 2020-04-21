@@ -56,26 +56,9 @@ class CampController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="camps_create")
-     */
-    public function create()
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        // get all mealmoments, so the user can select them and add them to the camp he is creating
-        $allMealmoments = $this->getDoctrine()
-            ->getRepository(Mealmoment::class)
-            ->findAll();
-
-        return $this->render('camp/individual.html.twig', [
-            'mealmoments' => $allMealmoments
-        ]);
-    }
-
-    /**
      * @Route("/show/{slug}", name="camps_show")
      */
-    public function showCampMeals($slug, ValidateRoute $validateRoute)
+    public function show($slug, ValidateRoute $validateRoute)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -98,4 +81,22 @@ class CampController extends AbstractController
             'value' => $camp
         ]);
     }
+
+    /**
+     * @Route("/create", name="camps_create")
+     */
+    public function create()
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // get all mealmoments, so the user can select them and add them to the camp he is creating
+        $allMealmoments = $this->getDoctrine()
+            ->getRepository(Mealmoment::class)
+            ->findAll();
+
+        return $this->render('camp/individual.html.twig', [
+            'mealmoments' => $allMealmoments
+        ]);
+    }
+
 }
