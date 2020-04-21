@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         redirect: "follow"
     };
 
-    fetch(`/fetch/update/camp/${slug}?camp=${camp}`, requestOptions)
+    fetch(`/api/camps/show/${slug}?camp=${camp}`, requestOptions)
         .then(response => response.json())
         .then(result => {
             makecallendar(result);

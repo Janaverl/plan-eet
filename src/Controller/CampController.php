@@ -4,86 +4,20 @@ namespace App\Controller;
 
 use App\Entity\Camp;
 use App\Entity\Mealmoment;
-use App\Service\Addvalue;
-use App\Service\CampServices;
 use App\Service\ValidateRoute;
-use App\Service\Fullcalendar\Fullcalendar;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\DateTime;
 
+
+/**
+ * @Route("/camps")
+ */
 class CampController extends AbstractController
 {
     /**
-     * @Route("/add/camp", name="add_camp")
+     * @Route("/index/{slug}", name="camps_index")
      */
-    public function add()
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        // get all mealmoments, so the user can select them and add them to the camp he is creating
-        $allMealmoments = $this->getDoctrine()
-            ->getRepository(Mealmoment::class)
-            ->findAll();
-
-        return $this->render('camp/individual.html.twig', [
-            'mealmoments' => $allMealmoments
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Addvalue $addvalue
-     * @param CampServices $campServices
-     * @return Response
-     * @Route("/fetch/add/camp", name="fetch_add_camp", methods={"POST"})
-     */
-    public function addAction(Request $request, Addvalue $addvalue, CampServices $campServices): Response
-    {
-        $data = json_decode($request->getContent(), true);
-
-        // define the entitymanager, because you will need to send data later in this API
-        $entityManager = $this->getDoctrine()->getManager();
-
-        // collect all the data needed and process it, so it can be send to the database
-        $user = $this->getUser();
-
-        $start = date_format(date_create($data["startdate"] . " " . $data["starttime"]), "Y/m/d H:i:s");
-        $end = date_format(date_create($data["enddate"] . " " . $data["endtime"]), "Y/m/d H:i:s");
-        $startTime = new \DateTime($start);
-        $endTime = new \DateTime($end);
-
-        // create the object for the new camp and set all his variables
-        $camp = new Camp();
-
-        $camp->setName($data["name"])
-            ->setStartTime($startTime)
-            ->setEndTime($endTime)
-            ->setNrOfParticipants($data["nrOfParticipants"])
-            ->setUser($user);
-
-        // tell Doctrine you want to (eventually) save the camp (no queries yet)
-        $entityManager->persist($camp);
-
-        if (!empty($data["mealmoments"])) {
-            $campServices->create_mealmoments($camp, $data["mealmoments"], $entityManager);
-        }
-
-        $campServices->create_campdays($camp, $data["startdate"], $data["enddate"], $entityManager);
-
-        $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
-
-        return $response;
-    }
-
-    /**
-     * @Route("/show/camps/{slug}", name="show_camps")
-     */
-    public function showallfuture($slug)
+    public function index($slug)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -122,7 +56,24 @@ class CampController extends AbstractController
     }
 
     /**
-     * @Route("/show/camp/calendar/{slug}", name="show_camp_calendar")
+     * @Route("/create", name="camps_create")
+     */
+    public function create()
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // get all mealmoments, so the user can select them and add them to the camp he is creating
+        $allMealmoments = $this->getDoctrine()
+            ->getRepository(Mealmoment::class)
+            ->findAll();
+
+        return $this->render('camp/individual.html.twig', [
+            'mealmoments' => $allMealmoments
+        ]);
+    }
+
+    /**
+     * @Route("/show/{slug}", name="camps_show")
      */
     public function showCampMeals($slug, ValidateRoute $validateRoute)
     {
@@ -138,7 +89,7 @@ class CampController extends AbstractController
         }
 
         if (empty($camp) or !$isCreatedByUser or !$hasMatchingSlug) {
-            return $this->redirectToRoute('show_camps', [
+            return $this->redirectToRoute('camps_index', [
                 'slug' => "future"
             ]);
         };
@@ -146,40 +97,5 @@ class CampController extends AbstractController
         return $this->render('camp/callenderindividual.html.twig', [
             'value' => $camp
         ]);
-    }
-
-    /**
-     * @param Response
-     * @return JsonResponse
-     * @Route("/fetch/update/camp/{slug}", name="fetch_update_camp", methods={"GET"})
-     */
-    public function fetchUpdateAction($slug, Request $request, Addvalue $addvalue, Fullcalendar $fullcalendar): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        
-        // TODO: validateroute for API
-        
-        $camp = $this->getDoctrine()
-            ->getRepository(Camp::class)
-            ->findOneBy(['id' => $_GET["camp"]]);
-
-        // define the entitymanager, because you will need to send data later in this API
-        $entityManager = $this->getDoctrine()->getManager();
-
-        // We need a clone of these Datetime-values, because we will modify this.
-        $firstday = clone $camp->getStartTime();
-        $lastday = clone $camp->getEndTime();
-
-        $mealhours = $fullcalendar->create_businesshours($camp->getCampMealmoments(), 60);
-        $dataWeWillSend = array(
-            "start" => $firstday->format('Y-m-d'),
-            "end" => $lastday->modify('+1 day')->format('Y-m-d'),
-            "mealhours" => $mealhours->getValues()
-        );
-
-        $json = new JsonResponse();
-        $json->setData($dataWeWillSend);
-
-        return $json;
     }
 }

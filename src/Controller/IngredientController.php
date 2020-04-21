@@ -194,7 +194,7 @@ class IngredientController extends AbstractController
         }
 
         if (empty($camp) or !$isCreatedByUser) {
-            return $this->redirectToRoute('show_camps', [
+            return $this->redirectToRoute('camps_index', [
                 'slug' => "future"
             ]);
         };
