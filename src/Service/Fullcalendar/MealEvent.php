@@ -27,13 +27,13 @@ class MealEvent
         );
         $this->eventInformation["title"] = $campmealName;
         $this->eventInformation["color"] = 'darkgrey';
-        $this->eventInformation["url"] = '/show/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
+        $this->eventInformation["url"] = '/campmeals/show/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
     }
 
     public function renderWithoutMeal($mealmomentname, $campid, $daycount){
         $this->eventInformation["title"] = $mealmomentname;
         $this->eventInformation["color"] = '#1a252f';
-        $this->eventInformation["url"] = '/add/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
+        $this->eventInformation["url"] = '/campmeals/create/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
 
     }
 

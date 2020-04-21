@@ -26,7 +26,7 @@
     <table class="w3-table w3-striped w3-bordered table" id="tableToSort" width="100%">
         <thead>
         <tr class="sortTitles">
-            {% if app.request.get('_route') == 'add_meal' %}
+            {% if app.request.get('_route') == 'campmeals_create' %}
                 <th width="10%"></th>
             {% endif %}
             <th class="sortable" width="30%">naam recept</th>
@@ -40,7 +40,7 @@
         <tbody class="searchable">
         {% for recipe in recipes %}
             <tr class="onerecipe recipe{{recipe.id}}">
-                {% if app.request.get('_route') == 'add_meal' %}
+                {% if app.request.get('_route') == 'campmeals_create' %}
                     <td>                        
                         <input class="w3-check recipe" type="checkbox" name="recipe" value="recipe{{recipe.id}}"/>
                     </td>
