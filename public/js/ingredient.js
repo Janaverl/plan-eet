@@ -18,9 +18,9 @@ $(document).ready(function () {
 
         // fetch the data or display errors
         if (mode == "add") {
-            postdata(ingredient, errors, '/fetch/add/ingredient', 'toegevoegd', true);
+            postdata(ingredient, errors, '/api/ingredients/store', 'toegevoegd', true);
         } else if (mode == "update") {
-            postdata(ingredient, errors, '/fetch/update/ingredient', 'aangepast', false);
+            postdata(ingredient, errors, '/api/ingredients/update', 'aangepast', false);
         } else {
             $(".errors").append(`<li>Er liep iets mis.</li>`);
         }

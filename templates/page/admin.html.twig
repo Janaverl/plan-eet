@@ -10,7 +10,7 @@
             <h3>voeg toe:</h3>
                 <a href="{{ path('camps_create') }}" class="w3-margin w3-button w3-border">Kamp</a>
                 <a href="{{ path('add_recipe') }}" class="w3-margin w3-button w3-border">Recept</a>
-                <a href="{{ path('add_ingredient') }}" class="w3-margin w3-button w3-border">Ingredient</a>
+                <a href="{{ path('ingredients_create') }}" class="w3-margin w3-button w3-border">Ingredient</a>
                 <a href="{{ path('add_single', {slug: 'herb'}) }}" class="w3-margin w3-button w3-border">Kruid</a>
                 <a href="{{ path('add_single', {slug: 'rayon'}) }}" class="w3-margin w3-button w3-border">Rayon</a>
                 <a href="{{ path('add_single', {slug: 'recipeType'}) }}" class="w3-margin w3-button w3-border">Recept Type</a>
@@ -20,7 +20,7 @@
             <h3>bekijk alle:</h3>
                 <a href="{{ path('users_index') }}" class="w3-margin w3-button w3-border">Gebruikers</a>
                 <a href="{{ path('show_recipes') }}" class="w3-margin w3-button w3-border">Recepten</a>
-                <a href="{{ path('show_ingredients') }}" class="w3-margin w3-button w3-border">Ingredienten</a>
+                <a href="{{ path('ingredients_index') }}" class="w3-margin w3-button w3-border">Ingredienten</a>
                 <a href="{{ path('camps_index', {slug: 'admin_all'}) }}" class="w3-margin w3-button w3-border">Kampen</a>
             <h3>jouw kampen:</h3>
                 <a href="{{ path('camps_index', {slug: 'past'}) }}" class="w3-margin w3-button w3-border">Afgelopen</a>

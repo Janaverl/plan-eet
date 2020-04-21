@@ -41,8 +41,8 @@
                         <a href="{{ path('add_recipe') }}" class="w3-bar-item w3-button">Recept toevoegen</a>
                         <a href="{{ path('show_recipes') }}" class="w3-bar-item w3-button">Alle recepten</a>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('add_ingredient') }}" class="w3-bar-item w3-button">Ingredient toevoegen</a>
-                            <a href="{{ path('show_ingredients') }}" class="w3-bar-item w3-button">Alle ingredienten</a>
+                            <a href="{{ path('ingredients_create') }}" class="w3-bar-item w3-button">Ingredient toevoegen</a>
+                            <a href="{{ path('ingredients_index') }}" class="w3-bar-item w3-button">Alle ingredienten</a>
                         {%endif%}
                     </div>
                 </div>
