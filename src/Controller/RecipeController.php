@@ -151,7 +151,7 @@ class RecipeController extends AbstractController
             ]);
         } else {
 
-            return $this->render('general/index.html.twig');
+            return $this->render('page/index.html.twig');
 
         }
     }
@@ -234,7 +234,7 @@ class RecipeController extends AbstractController
             ->findOneBy(['name' => $slug]);
 
         if (empty($recipe)) {
-            return $this->render('general/index.html.twig');
+            return $this->render('page/index.html.twig');
         }
 
         $ingredients = $entityManager->getRepository('App:RecipeIngredients')

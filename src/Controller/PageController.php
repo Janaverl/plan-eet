@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class GeneralController extends AbstractController
+class PageController extends AbstractController
 {
     /**
      * @Route("/", name="app_homepage")
@@ -20,7 +20,7 @@ class GeneralController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('general/index.html.twig', [
+        return $this->render('page/index.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
@@ -32,7 +32,7 @@ class GeneralController extends AbstractController
     public function guide()
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        return $this->render('general/guide.html.twig');
+        return $this->render('page/guide.html.twig');
     }
 
     /**
@@ -41,6 +41,6 @@ class GeneralController extends AbstractController
     public function admin()
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        return $this->render('general/admin.html.twig');
+        return $this->render('page/admin.html.twig');
     }
 }
