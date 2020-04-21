@@ -18,15 +18,13 @@ class MealEvent
         $this->eventInformation["className"] = 'fc-nonbusiness';
     }
 
-    public function makeActive($daycount, $mealmomentname)
-    {
-        $this->eventInformation["extendedProps"] = array(
-            "oldDaycount" => $daycount,
-            "oldMealmoment" => $mealmomentname
-        );
-    }
-
     public function renderWithMeal($campmealName, $mealmomentname, $campid, $daycount){
+        $this->eventInformation["extendedProps"] = array(
+            "currentDaycount" => $daycount,
+            "currentMealmoment" => $mealmomentname,
+            "currentEventStart" => $this->eventInformation["start"],
+            "hasMeal" => true
+        );
         $this->eventInformation["title"] = $campmealName;
         $this->eventInformation["color"] = 'darkgrey';
         $this->eventInformation["url"] = '/show/meal/' . $mealmomentname . '?camp=' . $campid . '&day=' . $daycount;
@@ -43,8 +41,5 @@ class MealEvent
         dump($this->eventInformation);
         return $this->eventInformation;
     }
-
-
-
 
 }

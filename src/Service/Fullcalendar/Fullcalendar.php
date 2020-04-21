@@ -42,6 +42,38 @@ class Fullcalendar
         return $businesshours;
     }
 
+    private function createOneMealEvent($entityManager, $campday, $mealmoment, $firstcampMoment, $lastcampMoment, $campid, $daycount, $currentDay)
+    {
+        $mealMomentTime = $mealmoment->gettime();
+        $mealMomentName = $mealmoment->getMealmoment()->getName();
+
+        $startMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime);
+        $endMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime + 60);
+
+        $oneEventThatNeedsToBeCreated = new MealEvent($startMeal, $endMeal);
+
+        $startMeal = new \Datetime($startMeal);
+
+        if ($startMeal < $firstcampMoment || $lastcampMoment < $startMeal) {
+            $oneEventThatNeedsToBeCreated->makePassive();
+            return $oneEventThatNeedsToBeCreated;
+        }
+
+        $campmeal = $entityManager->getRepository(Campmeal::class)
+            ->findOneBy([
+                'campday' => $campday,
+                'campMealmoment' => $mealmoment,
+            ]);
+        
+        if ($campmeal) {
+            $oneEventThatNeedsToBeCreated->renderWithMeal($campmeal->getName(), $mealMomentName, $campid, $daycount);
+            return $oneEventThatNeedsToBeCreated;
+        }
+
+        $oneEventThatNeedsToBeCreated->renderWithoutMeal($mealMomentName, $campid, $daycount);
+        return $oneEventThatNeedsToBeCreated;
+    }
+
     /**
      * @param object $camp
      * @param object $entityManager
@@ -62,41 +94,8 @@ class Fullcalendar
             $currentDay = $firstday->modify('+' . $daycount . ' day')->format('Y-m-d');
 
             foreach ($camp->getCampMealmoments() as $mealmoment) {
-                $mealMomentTime = $mealmoment->gettime();
-                $mealMomentName = $mealmoment->getMealmoment()->getName();
-
-                $startMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime);
-                $endMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime + 60);
-
-                $oneEventThatNeedsToBeCreated = new MealEvent($startMeal, $endMeal);
-
-                $startMeal = new \Datetime($startMeal);
-
-                if ($startMeal < $firstcampMoment || $lastcampMoment < $startMeal) {
-                    $oneEventThatNeedsToBeCreated->makePassive();
-
-                    $allTheEvents->add($oneEventThatNeedsToBeCreated->getValues());
-                    continue;
-                }
-
-                $oneEventThatNeedsToBeCreated->makeActive($daycount, $mealMomentName);
-
-                $campmeal = $entityManager->getRepository(Campmeal::class)
-                    ->findOneBy([
-                        'campday' => $campday,
-                        'campMealmoment' => $mealmoment,
-                    ]);
-                
-                if ($campmeal) {
-                    $oneEventThatNeedsToBeCreated->renderWithMeal($campmeal->getName(), $mealMomentName, $campid, $daycount);
-
-                    $allTheEvents->add($oneEventThatNeedsToBeCreated->getValues());
-                    continue;
-                }
-
-                $oneEventThatNeedsToBeCreated->renderWithoutMeal($mealMomentName, $campid, $daycount);
-
-                $allTheEvents->add($oneEventThatNeedsToBeCreated->getValues());
+                $oneMeal = $this->createOneMealEvent($entityManager, $campday, $mealmoment, $firstcampMoment, $lastcampMoment, $campid, $daycount, $currentDay);
+                $allTheEvents->add($oneMeal->getValues());
             }
 
         }

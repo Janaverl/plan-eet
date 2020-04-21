@@ -14,11 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`/fetch/update/camp/${slug}?camp=${camp}`, requestOptions)
         .then(response => response.json())
         .then(result => {
-            data = JSON.parse(result);
-            console.log(data);
-            makecallendar(data);
+            makecallendar(result);
             document.getElementById("loader").style.display = "none";
-            // $("#change").prop("disabled", false);
         })
         .catch(error => console.log("error", error));
 
@@ -26,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const mealHours = data.mealhours;
         const start = data.start;
         const end = data.end;
-        const allthemeals = data.allthemeals;
         const breakfastHour = '08:00'
         var calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
@@ -35,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 center: 'title',
                 right: ''
             },
+            events: `/fetch/show/meals/${slug}?camp=${camp}`,
+            // TODO: keep the loader untill all events are fetched
             footer: {
                 left: 'dayGridMonth,timeGridWeek,timeGridDay',
                 center: 'today',
@@ -55,31 +53,46 @@ document.addEventListener('DOMContentLoaded', function () {
             editable: true,
             slotDuration: '01:00',
             snapDuration: '00:30',
-            eventDrop: function (info) {
+            eventDrop: (info) => {
+                if(Date.parse(info.event.extendedProps.currentEventStart) == Date.parse(info.event.start)){
+                    info.event.setExtendedProp("changed", false);
+                    return;
+                }
+
                 info.event.setExtendedProp("changed", true);
-                $("#change").prop("disabled", false);
-                console.log(info.event);
+
+                if(info.event.extendedProps.hasMeal){
+                    $("#change").prop("disabled", false);
+                }
             },
             eventOverlap: true, // makes it possible to overlap events during the planning process
             businessHours: mealHours,
             eventConstraint: 'businessHours',
-            events: allthemeals,
             displayEventTime: false,
         });
 
         calendar.render();
 
-        $("#change").on("click", function (e) {
+        $("#change").on("click", (e) => {
             e.preventDefault();
-
-            var allEvents = calendar.getEvents().map(function (events) { console.log("start :::" + events.start); return events.start });
-
+    
+            var allEvents = calendar.getEvents().map((event) => {
+                console.log("start :::" + event.start);
+                return event.start;
+            });
+    
             if (hasDuplicates(allEvents)) {
-                window.alert("Helaas, er zijn dagen waarop meerdere maaltijden zijn gepland. Versleep dit best eerst vooraleer je de wijzigingen kan opslaan.");
-            } else {
-                window.alert("all set to change. TODO");
+                window.alert("Helaas, er zijn dagen waarop meerdere maaltijden zijn gepland. Pas dit eerst aan vooraleer je de wijzigingen kan opslaan.");
+                return;
+            }
+            window.alert("all set to change. TODO");
+            // var checkedEvents = calendar.getEvents().map((event) => {
+            //     if(event.extendedProps.changed){
+            //         console.log(event.url);
+            //     }
+            // });
+
                 // TODO: save the changes
-            };
         });
     }
 });

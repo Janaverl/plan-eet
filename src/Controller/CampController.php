@@ -155,6 +155,10 @@ class CampController extends AbstractController
      */
     public function fetchUpdateAction($slug, Request $request, Addvalue $addvalue, Fullcalendar $fullcalendar): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        
+        // TODO: validateroute for API
+        
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
@@ -167,17 +171,14 @@ class CampController extends AbstractController
         $lastday = clone $camp->getEndTime();
 
         $mealhours = $fullcalendar->create_businesshours($camp->getCampMealmoments(), 60);
-        $allEvents = $fullcalendar->create_events($camp, $entityManager);
-
         $dataWeWillSend = array(
             "start" => $firstday->format('Y-m-d'),
             "end" => $lastday->modify('+1 day')->format('Y-m-d'),
-            "mealhours" => $mealhours->getValues(),
-            "allthemeals" => $allEvents->getValues()
+            "mealhours" => $mealhours->getValues()
         );
 
         $json = new JsonResponse();
-        $json->setData(json_encode($dataWeWillSend));
+        $json->setData($dataWeWillSend);
 
         return $json;
     }

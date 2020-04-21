@@ -11,6 +11,8 @@ use App\Entity\Mealcourse;
 use App\Entity\Mealmoment;
 use App\Entity\Recipes;
 use App\Service\Addvalue;
+use App\Service\ValidateRoute;
+use App\Service\Fullcalendar\Fullcalendar;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -165,4 +167,45 @@ class MealController extends AbstractController
 
         return $response;
     }
+
+    
+    /**
+     * @param Response
+     * @return JsonResponse
+     * @Route("/fetch/show/meals/{slug}", name="fetch_show_meals", methods={"GET"})
+     */
+    public function fetchMeals($slug, Fullcalendar $fullcalendar, ValidateRoute $validateRoute): Response
+    {
+
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $camp = $this->getDoctrine()
+            ->getRepository(Camp::class)
+            ->findOneBy(['id' => $_GET["camp"]]);
+
+        if (empty($camp)) {
+            return new JsonResponse(['status'=>false, 'message' => 'not found'], 404);
+        }
+   
+        if (!$validateRoute->isCreatedByUser($this->getUser(), $camp->getUser())) {
+            return new JsonResponse(['status'=>false, 'message' => 'unauthorized'], 401);
+        }
+
+        if (!$validateRoute->hasMatchingSlug($slug, $camp->getName())) {
+            return new JsonResponse(['status'=>false, 'message' => 'bad request'], 409);
+        }
+
+        // define the entitymanager, because you will need to send data later in this API
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $allEvents = $fullcalendar->create_events($camp, $entityManager);
+
+        $dataWeWillSend = $allEvents->getValues();
+
+        $json = new JsonResponse();
+        $json->setData($dataWeWillSend);
+
+        return $json;
+    }
+
 }
