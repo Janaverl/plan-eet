@@ -79,7 +79,7 @@ shoppinglists_show:
    controller: App\Controller\ShoppinglistController::show
 
 singlevalue_create:
-   path: /value/create/{theme}
+   path: /value/create/{entityname}
    controller: App\Controller\SingleValueController::create
 
 api_camps_store:
@@ -123,7 +123,6 @@ api_recipes_update:
    methods: POST
 
 api_singlevalue_store:
-   # TODO: change this in database, so this path can follow the same logic as the other api-paths
-   path: /fetch/add/{slug}
+   path: /api/singlevalue/{entityname}/store
    controller: App\Controller\Api\SingleValueApiController::store
    methods: POST

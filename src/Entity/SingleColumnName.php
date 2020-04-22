@@ -29,11 +29,6 @@ class SingleColumnName
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $API;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $translation;
 
     public function getId(): ?int
@@ -61,18 +56,6 @@ class SingleColumnName
     public function setTablename(string $tablename): self
     {
         $this->tablename = $tablename;
-
-        return $this;
-    }
-
-    public function getAPI(): ?string
-    {
-        return $this->API;
-    }
-
-    public function setAPI(string $API): self
-    {
-        $this->API = $API;
 
         return $this;
     }

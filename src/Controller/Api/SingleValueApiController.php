@@ -15,14 +15,14 @@ class SingleValueApiController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function store($slug, Request $request, Addvalue $addvalue): Response
+    public function store($entityname, Request $request, Addvalue $addvalue): Response
     {
         $data = json_decode($request->getContent(), true);
 
         // check if the slug is in the SingleColumnName-table
         $entity = $this->getDoctrine()
             ->getRepository(SingleColumnName::class)
-            ->findOneBy(['name' => $slug]);
+            ->findOneBy(['name' => $entityname]);
 
         // prepare the response
         $response = new JsonResponse();

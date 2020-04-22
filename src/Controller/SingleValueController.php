@@ -7,14 +7,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SingleValueController extends AbstractController
 {
-    public function create($theme)
+    public function create($entityname)
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         // check if the theme is in the SingleColumnName-table
         $entity = $this->getDoctrine()
             ->getRepository(SingleColumnName::class)
-            ->findOneBy(['name' => $theme]);
+            ->findOneBy(['name' => $entityname]);
 
         if (empty($entity)) {
             return $this->render('general/index.html.twig');
@@ -28,9 +28,8 @@ class SingleValueController extends AbstractController
 
         return $this->render('single_column/add.html.twig', [
             'name' => $entity->getTranslation(),
-            'slug' => $theme,
+            'entityname' => $entityname,
             'values' => $result,
-            'API' => $entity->getAPI(),
         ]);
     }
 }
