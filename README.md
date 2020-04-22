@@ -60,17 +60,3 @@ as a user, I want to see a shopping-list sorted by the shopping shelves, so it i
 **060 - guide the user during the camp**
 
 as a user, I want to see the daily menu, so it can guide me during the cooking-process of that day
-
-## routing
-what? | route_name | route_path
---- | --- | ---
-add (view) | add_entityname | /add/entityname (or /add/entityname/{slug} if a name is allready defined
-add (API) | fetch_add_entityname | /fetch/add/entityname
-update (view) | update_entityname | /update/entityname/{slug}
-update (API) | fetch_add_entityname | /fetch/update/entityname
-show all | show_entityname (plural) | /show/entityname
-show one | show_entityname (single) | /show/entityname/{slug}
-home | app_home | /
-register | app_register | /register
-login | app_login | /login
-logout | app_logout | /logout
