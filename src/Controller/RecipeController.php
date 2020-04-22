@@ -8,16 +8,9 @@ use App\Entity\RecipeCategory;
 use App\Entity\Recipes;
 use App\Entity\RecipeType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/recipes")
- */
 class RecipeController extends AbstractController
 {
-    /**
-     * @Route("/index", name="recipes_index")
-     */
     public function index()
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -32,9 +25,6 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/create", name="recipes_create")
-     */
     public function create()
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -71,16 +61,13 @@ class RecipeController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/show/{slug}", name="recipes_show")
-     */
-    public function show($slug)
+    public function show($recipename)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $recipe = $this->getDoctrine()
             ->getRepository(Recipes::class)
-            ->findOneBy(['name' => $slug]);
+            ->findOneBy(['name' => $recipename]);
 
         if (empty($recipe)) {
             return $this->render('page/index.html.twig');
@@ -98,16 +85,13 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/edit/{slug}", name="recipes_edit")
-     */
-    public function edit($slug)
+    public function edit($recipename)
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $recipe = $this->getDoctrine()
             ->getRepository(Recipes::class)
-            ->findOneBy(['name' => $slug]);
+            ->findOneBy(['name' => $recipename]);
 
         if (isset($recipe)) {
             $pageCanLoad = true;

@@ -10,11 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api/ingredients")
- */
 class IngredientApiController extends AbstractController
 {
 
@@ -22,7 +18,6 @@ class IngredientApiController extends AbstractController
      * @param Request $request
      * @param Addvalue $addvalue
      * @return Response
-     * @Route("/store", name="ingredients_api_store", methods={"POST"})
      */
     public function store(Request $request, Addvalue $addvalue): Response
     {
@@ -63,7 +58,6 @@ class IngredientApiController extends AbstractController
      * @param Request $request
      * @param Addvalue $addvalue
      * @return Response
-     * @Route("/update", name="ingredients_api_update", methods={"POST"})
      */
     public function update(Request $request, Addvalue $addvalue): Response
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\SingleColumnName;
 use App\Service\Addvalue;
@@ -8,46 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-class SingleColumnController extends AbstractController
+class SingleValueApiController extends AbstractController
 {
-    /**
-     * @Route("/add/{slug}", name="add_single")
-     */
-    public function add($slug)
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-        // check if the slug is in the SingleColumnName-table
-        $entity = $this->getDoctrine()
-            ->getRepository(SingleColumnName::class)
-            ->findOneBy(['name' => $slug]);
-
-        if (empty($entity)) {
-            return $this->render('general/index.html.twig');
-        }
-
-        $repositoryPathForClass = "App\\Entity\\" . $entity->getTablename();
-
-        $result = $this->getDoctrine()
-            ->getRepository($repositoryPathForClass)
-            ->findAll();
-
-        return $this->render('single_column/add.html.twig', [
-            'name' => $entity->getTranslation(),
-            'slug' => $slug,
-            'values' => $result,
-            'API' => $entity->getAPI(),
-        ]);
-    }
-
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/fetch/add/{slug}", name="fetch_add_{slug}", methods={"POST"})
      */
-    public function fetch(Request $request, $slug, Addvalue $addvalue): Response
+    public function store($slug, Request $request, Addvalue $addvalue): Response
     {
         $data = json_decode($request->getContent(), true);
 

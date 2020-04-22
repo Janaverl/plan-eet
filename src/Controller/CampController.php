@@ -6,18 +6,10 @@ use App\Entity\Camp;
 use App\Entity\Mealmoment;
 use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
-
-/**
- * @Route("/camps")
- */
 class CampController extends AbstractController
 {
-    /**
-     * @Route("/index/{slug}", name="camps_index")
-     */
-    public function index($slug)
+    public function index($time)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -25,7 +17,7 @@ class CampController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        switch ($slug) {
+        switch ($time) {
             case "past":
                 $allCamps = $entityManager->getRepository('App:Camp')
                     ->findAllCampsByUserPast($user);
@@ -55,10 +47,7 @@ class CampController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/show/{slug}", name="camps_show")
-     */
-    public function show($slug, ValidateRoute $validateRoute)
+    public function show($campname, ValidateRoute $validateRoute)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -68,12 +57,12 @@ class CampController extends AbstractController
 
         if (!empty($camp)) {        
             $isCreatedByUser = $validateRoute->isCreatedByUser($this->getUser(), $camp->getUser());
-            $hasMatchingSlug = $validateRoute->hasMatchingSlug($slug, $camp->getName());
+            $hasMatchingSlug = $validateRoute->hasMatchingSlug($campname, $camp->getName());
         }
 
         if (empty($camp) or !$isCreatedByUser or !$hasMatchingSlug) {
             return $this->redirectToRoute('camps_index', [
-                'slug' => "future"
+                'time' => "future"
             ]);
         };
 
@@ -82,9 +71,6 @@ class CampController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/create", name="camps_create")
-     */
     public function create()
     {
         $this->denyAccessUnlessGranted('ROLE_USER');

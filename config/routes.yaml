@@ -1,3 +1,129 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+app_homepage:
+   path: /
+   controller: App\Controller\PageController::index
+
+app_guide:
+   path: /guide
+   controller: App\Controller\PageController::guide
+
+app_admin:
+   path: /admin
+   controller: App\Controller\PageController::admin
+
+app_register:
+   path: /register
+   controller: App\Controller\UserController::register
+
+app_login:
+   path: /login
+   controller: App\Controller\UserController::login
+
+app_logout:
+   path: /logout
+   controller: App\Controller\UserController::logout
+
+users_index:
+   path: /users/index
+   controller: App\Controller\UserController::index
+
+camps_index:
+   path: /camps/index/{time}
+   controller: App\Controller\CampController::index
+
+camps_show:
+   path: /camps/show/{campname}
+   controller: App\Controller\CampController::show
+
+camps_create:
+   path: /camps/create
+   controller: App\Controller\CampController::create
+
+campmeals_show:
+   path: /campmeals/show/{mealmoment}
+   controller: App\Controller\CampmealController::show
+
+campmeals_create:
+   path: /campmeals/create/{mealmoment}
+   controller: App\Controller\CampmealController::create
+
+ingredients_index:
+   path: /ingredients/index
+   controller: App\Controller\IngredientController::index
+
+ingredients_create:
+   path: /ingredients/create
+   controller: App\Controller\IngredientController::create
+
+ingredients_edit:
+   path: /ingredients/edit/{ingredientname}
+   controller: App\Controller\IngredientController::edit
+
+recipes_index:
+   path: /recipes/index
+   controller: App\Controller\RecipeController::index
+
+recipes_create:
+   path: /recipes/create
+   controller: App\Controller\RecipeController::create
+
+recipes_show:
+   path: /recipes/show/{recipename}
+   controller: App\Controller\RecipeController::show
+
+recipes_edit:
+   path: /recipes/edit/{recipename}
+   controller: App\Controller\RecipeController::edit
+
+shoppinglists_show:
+   path: /shoppinglists/show/{campid}
+   controller: App\Controller\ShoppinglistController::show
+
+singlevalue_create:
+   path: /value/create/{theme}
+   controller: App\Controller\SingleValueController::create
+
+api_camps_store:
+   path: /api/camps/store
+   controller: App\Controller\Api\CampApiController::store
+   methods: POST
+
+api_camps_show:
+   path: /api/camps/show/{campname}
+   controller: App\Controller\Api\CampApiController::show
+   methods: GET
+
+api_campmeals_index:
+   path: /api/campmeals/index/{campname}
+   controller: App\Controller\Api\CampmealApiController::index
+   methods: GET
+
+api_campmeals_store:
+   path: /api/campmeals/store
+   controller: App\Controller\Api\CampmealApiController::store
+   methods: POST
+
+api_ingredients_store:
+   path: /api/ingredients/store
+   controller: App\Controller\Api\IngredientApiController::store
+   methods: POST
+
+api_ingredients_update:
+   path: /api/ingredients/update
+   controller: App\Controller\Api\IngredientApiController::update
+   methods: POST
+
+api_recipes_store:
+   path: /api/recipes/store
+   controller: App\Controller\Api\RecipeApiController::store
+   methods: POST
+
+api_recipes_update:
+   path: /api/recipes/update
+   controller: App\Controller\Api\RecipeApiController::update
+   methods: POST
+
+api_singlevalue_store:
+   # TODO: change this in database, so this path can follow the same logic as the other api-paths
+   path: /fetch/add/{slug}
+   controller: App\Controller\Api\SingleValueApiController::store
+   methods: POST

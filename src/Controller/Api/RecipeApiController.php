@@ -11,18 +11,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api/recipes")
- */
 class RecipeApiController extends AbstractController
 {
     /**
      * @param Request $request
      * @param Addvalue $addvalue
      * @return Response
-     * @Route("/store", name="camps_api_store", methods={"POST"})
      */
     public function store(Request $request, Addvalue $addvalue, RecipeServices $recipeServices): Response
     {
@@ -71,7 +66,6 @@ class RecipeApiController extends AbstractController
      * @param Request $request
      * @param Addvalue $addvalue
      * @return Response
-     * @Route("/update", name="fetch_update_recipe", methods={"POST"})
      */
     public function update(Request $request, Addvalue $addvalue, RecipeServices $recipeServices): Response
     {

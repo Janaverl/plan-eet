@@ -30,9 +30,9 @@
                     <button class="w3-bar-item w3-button">Kampen</button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
                         <a href="{{ path('camps_create') }}" class="w3-bar-item w3-button">Kamp toevoegen</a>
-                        <a href="{{ path('camps_index', {slug: 'now'}) }}" class="w3-bar-item w3-button">Lopende kampen</a>
-                        <a href="{{ path('camps_index', {slug: 'future'}) }}" class="w3-bar-item w3-button">Geplande kampen</a>
-                        <a href="{{ path('camps_index', {slug: 'past'}) }}" class="w3-bar-item w3-button">Afgelopen kampen</a>
+                        <a href="{{ path('camps_index', {time: 'now'}) }}" class="w3-bar-item w3-button">Lopende kampen</a>
+                        <a href="{{ path('camps_index', {time: 'future'}) }}" class="w3-bar-item w3-button">Geplande kampen</a>
+                        <a href="{{ path('camps_index', {time: 'past'}) }}" class="w3-bar-item w3-button">Afgelopen kampen</a>
                     </div>
                 </div>
                 <div class="w3-dropdown-hover">
@@ -47,9 +47,9 @@
                     </div>
                 </div>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('admin') }}" class="w3-bar-item w3-button">Admin</a>
+                    <a href="{{ path('app_admin') }}" class="w3-bar-item w3-button">Admin</a>
                 {% endif %}
-                <a href="{{ path('guide') }}" class="w3-bar-item w3-button">Over deze website</a>
+                <a href="{{ path('app_guide') }}" class="w3-bar-item w3-button">Over deze website</a>
                 {% endif %}
             </div>
         </div>

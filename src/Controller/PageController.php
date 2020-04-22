@@ -4,14 +4,10 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class PageController extends AbstractController
 {
-    /**
-     * @Route("/", name="app_homepage")
-     */
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
 
@@ -26,18 +22,12 @@ class PageController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/guide", name="guide")
-     */
     public function guide()
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('page/guide.html.twig');
     }
 
-    /**
-     * @Route("/admin", name="admin")
-     */
     public function admin()
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');

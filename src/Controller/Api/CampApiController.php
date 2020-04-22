@@ -10,11 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api/camps")
- */
 class CampApiController extends AbstractController
 {
     /**
@@ -22,7 +18,6 @@ class CampApiController extends AbstractController
      * @param Addvalue $addvalue
      * @param CampServices $campServices
      * @return Response
-     * @Route("/store", name="camps_api_store", methods={"POST"})
      */
     public function store(Request $request, Addvalue $addvalue, CampServices $campServices): Response
     {
@@ -64,11 +59,13 @@ class CampApiController extends AbstractController
     }
 
     /**
-     * @param Response
-     * @return JsonResponse
-     * @Route("/show/{slug}", name="camps_api_show", methods={"GET"})
+     * @param string $campname
+     * @param Request $request
+     * @param Addvalue $addvalue
+     * @param Fullcalendar $fullcalendar
+     * @return Response
      */
-    public function show($slug, Request $request, Addvalue $addvalue, Fullcalendar $fullcalendar): Response
+    public function show($campname, Request $request, Addvalue $addvalue, Fullcalendar $fullcalendar): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         

@@ -6,17 +6,9 @@ use App\Entity\Ingredient;
 use App\Entity\Rayon;
 use App\Entity\Unit;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/ingredients")
- */
 class IngredientController extends AbstractController
 {
-    
-    /**
-     * @Route("/index", name="ingredients_index")
-     */
     public function index()
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -30,9 +22,6 @@ class IngredientController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/create", name="ingredients_create")
-     */
     public function create()
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -57,16 +46,13 @@ class IngredientController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/edit/{slug}", name="ingredients_edit")
-     */
-    public function edit($slug)
+    public function edit($ingredientname)
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $ingredient = $this->getDoctrine()
             ->getRepository(Ingredient::class)
-            ->findOneBy(['name' => $slug]);
+            ->findOneBy(['name' => $ingredientname]);
 
         if (empty($ingredient)) {
             return $this->redirectToRoute('ingredients_index');

@@ -5,24 +5,17 @@ namespace App\Controller;
 use App\Entity\Camp;
 use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/shoppinglists")
- */
 class ShoppinglistController extends AbstractController
 {
-     /**
-     * @Route("/show/{slug}", name="shoppinglists_show")
-     */
-    public function show($slug, ValidateRoute $validateRoute)
+    public function show($campid, ValidateRoute $validateRoute)
     {
         // validation
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
-            ->findOneBy(['id' => $slug]);
+            ->findOneBy(['id' => $campid]);
 
         if (!empty($camp)) {        
             $isCreatedByUser = $validateRoute->isCreatedByUser($this->getUser(), $camp->getUser());
@@ -30,7 +23,7 @@ class ShoppinglistController extends AbstractController
 
         if (empty($camp) or !$isCreatedByUser) {
             return $this->redirectToRoute('camps_index', [
-                'slug' => "future"
+                'time' => "future"
             ]);
         };
 
@@ -38,7 +31,7 @@ class ShoppinglistController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $allIngredients = $entityManager->getRepository('App:Ingredient')
-            ->findArrayByCamp($slug);
+            ->findArrayByCamp($campid);
 
         dump($allIngredients);
 

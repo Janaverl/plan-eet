@@ -11,19 +11,10 @@ use App\Entity\Mealcourse;
 use App\Entity\Mealmoment;
 use App\Entity\Recipes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/campmeals")
- */
 class CampmealController extends AbstractController
 {
-     /**
-     * This functions shows the recipes and ingredients that belongs to meals.
-     * //TODO: button that redirects to a view to change a recipe
-     * @Route("/show/{slug}", name="campmeals_show")
-     */
-    public function show($slug)
+    public function show($mealmoment)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -38,7 +29,7 @@ class CampmealController extends AbstractController
         
         $mealmoment = $entityManager->getRepository(Mealmoment::class)
             ->findOneBy([
-                'name' => $slug
+                'name' => $mealmoment
             ]);
 
         $campmealmoment = $entityManager->getRepository(CampMealmoments::class)
@@ -64,7 +55,7 @@ class CampmealController extends AbstractController
 
         $ingredients = $this->getDoctrine()
             ->getRepository(Ingredient::class)
-            ->findArrayByCampmeal($_GET["camp"], $slug, $_GET["day"]);
+            ->findArrayByCampmeal($_GET["camp"], $mealmoment, $_GET["day"]);
 
         return $this->render('meal/show.html.twig', [
             'camp' => $camp,
@@ -74,11 +65,8 @@ class CampmealController extends AbstractController
         ]);
 
     }
-    
-    /**
-     * @Route("/create/{slug}", name="campmeals_create")
-     */
-    public function create($slug)
+
+    public function create($mealmoment)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -98,7 +86,7 @@ class CampmealController extends AbstractController
             'recipes' => $allRecipes,
             'camp' => $camp,
             'mealday' => $campday,
-            'meal' => $slug,
+            'meal' => $mealmoment,
             'campday' => $_GET["day"],
         ]);
     }

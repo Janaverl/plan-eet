@@ -16,19 +16,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api/campmeals")
- */
 class CampmealApiController extends AbstractController
 {
     /**
      * @param Response
      * @return JsonResponse
-     * @Route("/index/{slug}", name="campmeals_api_index", methods={"GET"})
      */
-    public function index($slug, Fullcalendar $fullcalendar, ValidateRoute $validateRoute): Response
+    public function index($campname, Fullcalendar $fullcalendar, ValidateRoute $validateRoute): Response
     {
 
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -45,7 +40,7 @@ class CampmealApiController extends AbstractController
             return new JsonResponse(['status'=>false, 'message' => 'unauthorized'], 401);
         }
 
-        if (!$validateRoute->hasMatchingSlug($slug, $camp->getName())) {
+        if (!$validateRoute->hasMatchingSlug($campname, $camp->getName())) {
             return new JsonResponse(['status'=>false, 'message' => 'bad request'], 409);
         }
 
@@ -65,7 +60,6 @@ class CampmealApiController extends AbstractController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/store", name="campmeals_api_store", methods={"POST"})
      */
     public function store(Request $request, Addvalue $addvalue): Response
     {
@@ -82,7 +76,7 @@ class CampmealApiController extends AbstractController
 
         $mealmoment = $entityManager->getRepository(Mealmoment::class)
             ->findOneBy([
-                'name' => $slug
+                'name' => $data["mealmoment"],
             ]);
 
         $campmealmoment = $entityManager->getRepository(CampMealmoments::class)
@@ -96,6 +90,7 @@ class CampmealApiController extends AbstractController
                 'camp' => $camp,
                 'campdaycount' => $data["mealday"],
             ]);
+            
 
         $campmeal = new Campmeal();
         $campmeal->setCampMealmoment($campmealmoment)
