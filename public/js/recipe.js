@@ -45,9 +45,9 @@ $(document).ready(function () {
         confirmationRequiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
 
         if (mode == "add") {
-            postdata(recipe, errors, '/fetch/add/recipe', 'toegevoegd', true);
+            postdata(recipe, errors, '/api/repices/store', 'toegevoegd', true);
         } else if (mode == "update") {
-            postdata(recipe, errors, '/fetch/update/recipe', 'aangepast', false);
+            postdata(recipe, errors, '/api/recipes/update', 'aangepast', false);
         } else {
             $(".errors").append(`<li>Er liep iets mis.</li>`);
         }
