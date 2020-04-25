@@ -41,6 +41,6 @@ $(document).ready(function () {
             }
         });
 
-        postdata(camp, errors, '/api/camps/store', 'toegevoegd', true);
+        postdata(camp, errors, '/api/camps', 'toegevoegd', true);
     });
 });

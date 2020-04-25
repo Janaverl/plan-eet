@@ -83,12 +83,12 @@ singlevalue_create:
    controller: App\Controller\SingleValueController::create
 
 api_camps_store:
-   path: /api/camps/store
+   path: /api/camps
    controller: App\Controller\Api\CampApiController::store
    methods: POST
 
 api_camps_show:
-   path: /api/camps/show/{campname}
+   path: /api/camps/{campid}
    controller: App\Controller\Api\CampApiController::show
    methods: GET
 

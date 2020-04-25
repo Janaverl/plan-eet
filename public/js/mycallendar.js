@@ -11,13 +11,27 @@ document.addEventListener('DOMContentLoaded', function () {
         redirect: "follow"
     };
 
-    fetch(`/api/camps/show/${slug}?camp=${camp}`, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            makecallendar(result);
-            document.getElementById("loader").style.display = "none";
+    let hasExceptions = false;
+
+    fetch(`/api/camps/${camp}`, requestOptions)
+        .then(response => {
+            if(!response.ok){
+                hasExceptions = true;
+            }
+            return response.json()
         })
-        .catch(error => console.log("error", error));
+        .then(result => {
+            console.log(result);
+            if(hasExceptions){
+                return Promise.reject({
+                    status: result.status,
+                    title: result.title
+                  })
+            }
+            makecallendar(result);
+        })
+        .catch(error => window.alert(`error ${error.status} ::: ${error.title}`))
+        .finally(() => document.getElementById("loader").style.display = "none" );
 
     function makecallendar(data) {
         const mealHours = data.mealhours;

@@ -9,10 +9,14 @@ class ApiProblem
 
     const TYPE_VALIDATION_ERROR = "validation_error";
     const TYPE_INVALID_REQUEST_BODY_FORMAT = "invalid_body_format";
+    const TYPE_NOT_FOUND = "type_not_found";
+    const TYPE_MUST_BE_UNIQUE_VALUE = "type_must_be_unique_value";
 
     private static $titles = [
         self::TYPE_VALIDATION_ERROR => "There was a validation error",
         self::TYPE_INVALID_REQUEST_BODY_FORMAT => "Invalid JSON format send",
+        self::TYPE_MUST_BE_UNIQUE_VALUE => "Value must be unique",
+
     ];
     
     private $statusCode;
@@ -33,21 +37,16 @@ class ApiProblem
     {
         $this->statusCode = $statusCode;
         $this->type = $type;
-
+        
         if ($type === null) {
             $this->type = 'about:blank';
-            $this->title = isset(Response::$statusTexts[$statusCode])
-                ? Response::$statusTexts[$statusCode]
-                : 'Unknown status code :(';
-        } else {
-            if (!isset(self::$titles[$type])) {
-                throw new \Exception(sprintf(
-                    'No title for type "%s".',
-                    $type
-                ));
-            }
-            $this->title = self::$titles[$type];
         }
+
+        $this->title = isset(self::$titles[$type])
+            ? self::$titles[$type]
+            : (isset(Response::$statusTexts[$statusCode])
+                ? Response::$statusTexts[$statusCode]
+                : 'Unknown status code');
     }
 
     public function toArray()

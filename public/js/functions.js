@@ -235,33 +235,45 @@ function postdata(data, errors, route, slug, clearfields, redirect = "") {
         };
         console.log(raw);
 
+        let hasExceptions = false;
+
         fetch(route, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                if (result.statuscode == 201) {
-                    if (redirect == "") {
-                        $(".success").append(`<li>${data["name"]} werd succesvol ${slug}.</li>`);
-                        if (clearfields) {
-                            $('.w3-check').prop('checked', false);
-                            $('input').val('');
-                            $('textarea').val('');
-                            $('select').val("default");
-                            $('.unit').attr('disabled', true);
-                            $('.time').attr('disabled', true);
-                        }
-                    } else {
-                        window.location.href = redirect;
-                    }
-
-                } else if (result.statuscode == 422) {
-                    $(".errors").append(`<li>${data["name"]} bestaat reeds.</li>`);
-                } else {
-                    $(".errors").append(`<li>Er liep iets mis..</li>`);
-                };
-
-                return result;
-            })
-            .catch(error => console.log('error :::', error));
+        .then(response => {
+            if(!response.ok){
+                hasExceptions = true;
+            }
+            return response.json()
+        })
+        .then(result => {
+            if(hasExceptions){
+                return Promise.reject({
+                    status: result.status,
+                    type: result.type,
+                    title: result.title
+                    })
+            }
+            if (redirect == "") {
+                $(".success").append(`<li>${data["name"]} werd succesvol ${slug}.</li>`);
+                if (clearfields) {
+                    $('.w3-check').prop('checked', false);
+                    $('input').val('');
+                    $('textarea').val('');
+                    $('select').val("default");
+                    $('.unit').attr('disabled', true);
+                    $('.time').attr('disabled', true);
+                }
+            } else {
+                window.location.href = redirect;
+            }
+            return result;
+        })
+        .catch(error => {
+            if (error.type == "type_must_be_unique_value") {
+                $(".errors").append(`<li>error ${error.status} ::: ${error.title} --- ${data["name"]} bestaat reeds.</li>`);
+            } else {
+                $(".errors").append(`<li>error ${error.status} ::: ${error.title}</li>`);
+            }
+        });
     } else {
         errors.forEach(error =>
             $(".errors").append(`<li>${error}</li>`)
