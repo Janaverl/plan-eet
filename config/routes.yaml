@@ -92,15 +92,15 @@ api_camps_show:
    controller: App\Controller\Api\CampApiController::show
    methods: GET
 
-api_campmeals_index:
-   path: /api/campmeals/index/{campname}
-   controller: App\Controller\Api\CampmealApiController::index
-   methods: GET
-
 api_campmeals_store:
-   path: /api/campmeals/store
+   path: /api/campmeals
    controller: App\Controller\Api\CampmealApiController::store
    methods: POST
+
+api_campmeals_index:
+   path: /api/campmeals
+   controller: App\Controller\Api\CampmealApiController::index
+   methods: GET
 
 api_ingredients_store:
    path: /api/ingredients/store

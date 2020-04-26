@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 center: 'title',
                 right: ''
             },
-            events: `/api/campmeals/index/${slug}?camp=${camp}`,
+            events: `/api/campmeals?camp=${camp}`,
             // TODO: keep the loader untill all events are fetched
             footer: {
                 left: 'dayGridMonth,timeGridWeek,timeGridDay',
