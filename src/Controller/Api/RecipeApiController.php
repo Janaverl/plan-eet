@@ -2,127 +2,243 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Herb;
+use App\Entity\Ingredient;
 use App\Entity\RecipeCategory;
+use App\Entity\RecipeHerb;
+use App\Entity\RecipeIngredients;
 use App\Entity\Recipes;
 use App\Entity\RecipeType;
 use App\Service\Addvalue;
-use App\Service\RecipeServices;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RecipeApiController extends AbstractController
+class RecipeApiController extends ApiController
 {
     /**
-     * @param Request $request
-     * @param Addvalue $addvalue
-     * @return Response
+     * @param array $data
+     * @param object $recipe
+     * @param object $entityManager
+     * @return void
      */
-    public function store(Request $request, Addvalue $addvalue, RecipeServices $recipeServices): Response
+    protected function process_recipe_data(array $data, object $recipe, object $entityManager) : void
     {
-        $data = json_decode($request->getContent(), true);
-
-        // define the entitymanager, because you will need to send data later in this API
-        $entityManager = $this->getDoctrine()->getManager();
-
-        // collect all the data needed and process it, so it can be send to the database
-        $category = $this->getDoctrine()
-            ->getRepository(RecipeCategory::class)
+        $category = $entityManager->getRepository(RecipeCategory::class)
             ->findOneBy(['name' => $data["category"]]);
 
-        $type = $this->getDoctrine()
-            ->getRepository(RecipeType::class)
+        $type = $entityManager->getRepository(RecipeType::class)
             ->findOneBy(['name' => $data["type"]]);
 
-        // create the object for the new recipe
-        $recipe = new Recipes();
-        $recipe->setName($data["name"])
-            ->setInstructions($data["instructions"])
+        $suggestion = (empty($data["suggestion"])) ? null : $data["suggestion"];
+
+        $recipe->setInstructions($data["instructions"])
             ->setCategory($category)
-            ->setType($type);
-        if (isset($data["suggestion"]) && $data["suggestion"] != "") {
-            $recipe->setSuggestion($data["suggestion"]);
-        };
+            ->setType($type)
+            ->setSuggestion($suggestion);
 
-        // tell Doctrine you want to (eventually) save the recipe (no queries yet)
         $entityManager->persist($recipe);
+    }
 
-        // create the object(s) for the herbs of the recipe
-        if (isset($data["herbs"])) {
-            $recipeServices->create_herbs($data["herbs"], $recipe, $entityManager);
+    /**
+     * @param object $recipe
+     * @param object $entityManager
+     * @param array $herbs
+     * @return void
+     */
+    protected function create_herbs(object $recipe, object $entityManager, array $herbs = []): void
+    {
+        foreach ($herbs as $herb) {
+            $herb = $this->getDoctrine()
+                ->getRepository(Herb::class)
+                ->findOneBy(['name' => $herb]);
+
+            $recipeHerb = new RecipeHerb();
+            $recipeHerb->setHerb($herb);
+            $recipeHerb->setRecipe($recipe);
+            $entityManager->persist($recipeHerb);
+        }
+    }
+
+    /**
+     * @param integer $numberOfEaters
+     * @param object $recipe
+     * @param object $entityManager
+     * @param array $ingredients
+     * @return void
+     */
+    protected function create_ingredients(int $numberOfEaters, object $recipe, object $entityManager, array $ingredients = []): void
+    {
+        foreach ($ingredients as $ingredient) {
+            $quantity = $ingredient["quantity"] / $numberOfEaters;
+
+            $ingr = $this->getDoctrine()
+                ->getRepository(Ingredient::class)
+                ->findOneBy(['name' => $ingredient["name"]]);
+
+            $recipeIngredient = new RecipeIngredients();
+            $recipeIngredient->setIngredient($ingr)
+                ->setRecipe($recipe)
+                ->setQuantity($quantity);
+
+            $entityManager->persist($recipeIngredient);
+        }
+    }
+
+    /**
+     * @param object $recipe
+     * @param array $newherbs
+     * @param object $entityManager
+     * @return void
+     */
+    protected function check_and_update_herbs(object $recipe, array $newherbs, object $entityManager): void
+    {
+        // search for all the herbs that are in the database for this recipe
+        $oldHerbs = $recipe->getRecipeHerb();
+
+        // first, let's compare the old herbs with the new herbs, and check wich one we need to DELETE
+        foreach ($oldHerbs as $oldHerb) {
+            foreach ($newherbs as $newHerb) {
+                if ($newHerb == $oldHerb->getHerb()->getName()) {
+                    continue 2;
+                }
+            }
+            
+            $entityManager->remove($oldHerb);
+        }
+
+        // after that, let's compare the new herbs with the old herbs, and check wich one we need to ADD
+        foreach ($newherbs as $herbNew) {
+            foreach ($oldHerbs as $oldHerb) {
+                if ($herbNew == $oldHerb->getHerb()->getName()) {
+                    continue 2;
+                }
+            }
+
+            // look for a single herb by name
+            $herb = $this->getDoctrine()
+                ->getRepository(Herb::class)
+                ->findOneBy(['name' => $herbNew]);
+
+            $recipeHerb = new RecipeHerb();
+            $recipeHerb->setHerb($herb)
+                ->setRecipe($recipe);
+
+            $entityManager->persist($recipeHerb);
+        }
+
+    }
+
+    /**
+     * @param object $recipe
+     * @param array $newIngredients
+     * @param integer $numberOfEaters
+     * @param object $entityManager
+     * @return void
+     */
+    protected function check_and_update_ingredients(object $recipe, array $newIngredients, int $numberOfEaters, object $entityManager): void
+    {
+        // search for all the ingredients that are in the database for this recipe
+        $oldIngredients = $recipe->getIngredients();
+
+        // first, let's compare the old ingr with the new ingr, and check wich one we need to DELETE
+        foreach ($oldIngredients as $oldIngredient) {
+            foreach ($newIngredients as $newIngredient) {
+                if ($newIngredient["name"] == $oldIngredient->getIngredient()->getName()) {
+                    continue 2;
+                }
+            }
+
+            $entityManager->remove($oldIngredient);
+        }
+
+        // after that, let's compare the new ingr with the old ingr, and check wich one we need to ADD or CHANGE THE QUANTITY
+        foreach ($newIngredients as $newIngredient) {
+
+            $quantity = $newIngredient["quantity"] / $numberOfEaters;
+
+            foreach ($oldIngredients as $oldIngredient) {
+                if ($newIngredient["name"] == $oldIngredient->getIngredient()->getName()) {
+                    if ($oldIngredient->getQuantity() != $quantity) {
+                        $oldIngredient->setQuantity($quantity);
+                    }
+                    continue 2;
+                }
+            }
+            $ingr = $this->getDoctrine()
+                ->getRepository(Ingredient::class)
+                ->findOneBy(['name' => $newIngredient]);
+
+            $recipeIngredient = new RecipeIngredients();
+            $recipeIngredient->setIngredient($ingr)
+                ->setRecipe($recipe)
+                ->setQuantity($quantity);
+                
+            $entityManager->persist($recipeIngredient);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function store(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $data = json_decode($request->getContent(), true);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // BASICS RECIPE
+        $recipe = new Recipes();
+        $recipe->setName($data["name"]); 
+        $this->process_recipe_data($data, $recipe, $entityManager);
+
+        // HERBS THAT BELONG TO THE RECIPE
+        if (!empty($data["herbs"])) {
+            $this->create_herbs($recipe, $entityManager, $data["herbs"]);
         };
 
-        // create the object(s) for the ingredients of the recipe
-        $recipeServices->create_ingredients($data["ingredients"], $data["numberOfEaters"], $recipe, $entityManager);
+        // INGREDIENTS THAT BELONG TO THE RECIPE
+        $this->create_ingredients($data["numberOfEaters"], $recipe, $entityManager, $data["ingredients"]);
 
-        $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
+        // FINISH THE REQUEST
+        $this->flushOrThrowException($entityManager);
+
+        $response = new JsonResponse("success");
 
         return $response;
     }
 
     /**
      * @param Request $request
-     * @param Addvalue $addvalue
      * @return Response
      */
-    public function update(Request $request, Addvalue $addvalue, RecipeServices $recipeServices): Response
+    public function update(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $data = json_decode($request->getContent(), true);
+        $entityManager = $this->getDoctrine()->getManager();
 
-        if (empty($data["suggestion"])) {
-            $data["suggestion"] = null;
-        }
+        // BASICS RECIPE
+        $recipe = $entityManager->getRepository(Recipes::class)
+            ->findOneBy(['name' => $data["name"]]);
+        $this->process_recipe_data($data, $recipe, $entityManager);
 
+        // HERBS THAT BELONG TO THE RECIPE
         if (empty($data["herbs"])) {
             $data["herbs"] = [];
         }
+        $this->check_and_update_herbs($recipe, $data["herbs"], $entityManager);
 
-        // define the entitymanager, because you will need to send data later in this API
-        $entityManager = $this->getDoctrine()->getManager();
+        // INGREDIENTS THAT BELONG TO THE RECIPE
+        $this->check_and_update_ingredients($recipe, $data["ingredients"], $data["numberOfEaters"], $entityManager);
 
-        // look for the recipe by name
-        $recipe = $this->getDoctrine()
-            ->getRepository(Recipes::class)
-            ->findOneBy(['name' => $data["name"]]);
+        // FINISH THE REQUEST
+        $this->flushOrThrowException($entityManager);
 
-        // check if the strings are changed
-        $categoryChanged = $recipeServices->is_this_string_changed($data["category"], $recipe->getCategory()->getName());
-        $typeChanged = $recipeServices->is_this_string_changed($data["type"], $recipe->getType()->getName());
-        $instructionChanged = $recipeServices->is_this_string_changed($data["instructions"], $recipe->getInstructions());
-        $suggestionChanged = $recipeServices->is_this_string_changed($data["suggestion"], $recipe->getSuggestion());
-
-        // change the old values if needed
-        if ($categoryChanged) {
-            $category = $this->getDoctrine()
-                ->getRepository(RecipeCategory::class)
-                ->findOneBy(['name' => $data["category"]]);
-
-            $recipe->setCategory($category);
-        };
-
-        if ($typeChanged) {
-            $type = $this->getDoctrine()
-                ->getRepository(RecipeType::class)
-                ->findOneBy(['name' => $data["type"]]);
-
-            $recipe->setType($type);
-        };
-
-        if ($instructionChanged) {
-            $recipe->setInstructions($data["instructions"]);
-        }
-
-        if ($suggestionChanged) {
-            $recipe->setSuggestion($data["suggestion"]);
-        }
-
-        $recipeServices->check_and_update_herbs($recipe, $data["herbs"], $entityManager);
-        $recipeServices->check_and_update_ingredients($recipe, $data["ingredients"], $data["numberOfEaters"], $entityManager);
-
-        $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
+        $response = new JsonResponse("success");
 
         return $response;
     }

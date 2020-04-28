@@ -6,94 +6,79 @@ use App\Entity\Ingredient;
 use App\Entity\Rayon;
 use App\Entity\Unit;
 use App\Service\Addvalue;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IngredientApiController extends AbstractController
+class IngredientApiController extends ApiController
 {
+    /**
+     * @param array $data
+     * @param object $ingredient
+     * @param object $entityManager
+     * @return void
+     */
+    protected function process_ingredient_data(array $data, object $ingredient, object $entityManager) : void
+    {
+        $rayon = $entityManager->getRepository(Rayon::class)
+            ->findOneBy(['name' => $data["rayon"]]);
+
+        $unit = $entityManager->getRepository(Unit::class)
+            ->findOneBy(['name' => $data["unit"]]);
+        
+        $suggestion = (empty($data["suggestion"])) ? null : $data["suggestion"];
+
+        $ingredient->setRayon($rayon)
+            ->setUnit($unit)
+            ->setSuggestion($suggestion);
+
+        $entityManager->persist($ingredient);
+    }
 
     /**
      * @param Request $request
-     * @param Addvalue $addvalue
      * @return Response
      */
-    public function store(Request $request, Addvalue $addvalue): Response
+    public function store(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $data = json_decode($request->getContent(), true);
 
-        // define the entitymanager, because you will need to send data later in this API
         $entityManager = $this->getDoctrine()->getManager();
 
-        // collect all the data needed and process it, so it can be send to the database
-        $rayon = $this->getDoctrine()
-            ->getRepository(Rayon::class)
-            ->findOneBy(['name' => $data["rayon"]]);
-
-        $unit = $this->getDoctrine()
-            ->getRepository(Unit::class)
-            ->findOneBy(['name' => $data["unit"]]);
-
-        // create the object for the new ingredient
         $ingredient = new Ingredient();
-        $ingredient->setName($data["name"])
-            ->setRayon($rayon)
-            ->setUnit($unit);
-        
-        if (!empty($data["suggestion"])) {
-            $ingredient->setSuggestion($data["suggestion"]);
-        };
+        $ingredient->setName($data["name"]);
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($ingredient);
+        $this->process_ingredient_data($data, $ingredient, $entityManager);
 
-        $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
+        $this->flushOrThrowException($entityManager);
+
+        $response = new JsonResponse("success");
 
         return $response;
     }
 
     /**
      * @param Request $request
-     * @param Addvalue $addvalue
      * @return Response
      */
-    public function update(Request $request, Addvalue $addvalue): Response
+    public function update(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data["suggestion"])) {
-            $data["suggestion"] = null;
-        };
-
-        // define the entitymanager, because you will need to send data later in this API
         $entityManager = $this->getDoctrine()->getManager();
 
-        // look for the ingredient by name
-        $ingredient = $this->getDoctrine()
-            ->getRepository(Ingredient::class)
+        $ingredient = $entityManager->getRepository(Ingredient::class)
             ->findOneBy(['name' => $data["name"]]);
 
-        // look for a single Rayon by name
-        $rayon = $this->getDoctrine()
-            ->getRepository(Rayon::class)
-            ->findOneBy(['name' => $data["rayon"]]);
+        $this->process_ingredient_data($data, $ingredient, $entityManager);
 
-        // look for a single Unit by name
-        $unit = $this->getDoctrine()
-            ->getRepository(Unit::class)
-            ->findOneBy(['name' => $data["unit"]]);
+        $this->flushOrThrowException($entityManager);
 
-        $ingredient->setRayon($rayon)
-            ->setUnit($unit)
-            ->setSuggestion($data["suggestion"]);
-
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($ingredient);
-
-        $response = new JsonResponse();
-        $response->setData(['statuscode' => $addvalue->tryCatch($entityManager)]);
+        $response = new JsonResponse("success");
 
         return $response;
     }

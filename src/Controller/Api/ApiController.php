@@ -18,21 +18,32 @@ class ApiController extends AbstractController
     //     throw new ApiProblemException(new ApiProblem(422,  ApiProblem::TYPE_MUST_BE_UNIQUE_VALUE));
     // }
 
-    protected function throwExceptionIfNotExcists($object) : void
+    /**
+     * @param object $object
+     * @return void
+     */
+    protected function throwExceptionIfNotExcists(object $object) : void
     {
         if (!$object) {
             throw new ApiProblemException(new ApiProblem(404));
         }
     }
-
-    protected function throwExceptionIfUnauthorizedUser($object) : void
+    /**
+     * @param object $object
+     * @return void
+     */
+    protected function throwExceptionIfUnauthorizedUser(object $object) : void
     {
         if (!$this->isGranted('ROLE_ADMIN') && !ValidateRoute::isCreatedByUser($this->getUser(), $object->getUser())) {
             throw new ApiProblemException(new ApiProblem(401));
         }
     }
     
-    protected function flushOrThrowException($entityManager) : void
+    /**
+     * @param object $entityManager
+     * @return void
+     */
+    protected function flushOrThrowException(object $entityManager) : void
     {
         try {
             $entityManager->flush();

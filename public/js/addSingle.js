@@ -11,7 +11,7 @@ $(document).ready(function () {
         confirmationRequiredInputField(value, errors, "name", "geen naam ingevuld");
         value["type"] = slug;
 
-        postdata(value, errors, route, 'toegevoegd', true);
+        postdata(value, errors, route, 'toegevoegd', 'POST', true);
 
     });
 });

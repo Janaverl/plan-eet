@@ -219,7 +219,7 @@ type route = string
 type slug = string
 type clearfields = boolean
 */
-function postdata(data, errors, route, slug, clearfields, redirect = "") {
+function postdata(data, errors, route, slug, method, clearfields, redirect = "") {
 
     if (errors.length == 0) {
         var myHeaders = new Headers();
@@ -228,7 +228,7 @@ function postdata(data, errors, route, slug, clearfields, redirect = "") {
         var raw = JSON.stringify(data);
 
         var requestOptions = {
-            method: 'POST',
+            method: method,
             headers: myHeaders,
             body: raw,
             redirect: 'follow'

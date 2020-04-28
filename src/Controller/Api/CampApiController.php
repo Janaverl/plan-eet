@@ -18,11 +18,12 @@ class CampApiController extends ApiController
 {
     /**
      * @param object $camp
-     * @param string $mealmoments
+     * @param array $mealmoments
      * @param object $entityManager
+     * @param Converttime $converttime
      * @return void
      */
-    protected function create_mealmoments(object $camp, array $mealmoments = [], object $entityManager, $converttime): void
+    protected function create_mealmoments(object $camp, array $mealmoments = [], object $entityManager, Converttime $converttime): void
     {
         foreach ($mealmoments as $mealmoment) {
             $time = $converttime->time_to_decimal($mealmoment['time']);
@@ -42,7 +43,7 @@ class CampApiController extends ApiController
         }
     }
 
-        /**
+    /**
      * @param object $camp
      * @param string $firstday
      * @param string $lastday
@@ -72,7 +73,6 @@ class CampApiController extends ApiController
     /**
      * @param Request $request
      * @param Addvalue $addvalue
-     * @param CampServices $campServices
      * @return Response
      */
     public function store(Request $request, Converttime $converttime): Response
@@ -118,20 +118,17 @@ class CampApiController extends ApiController
     }
 
     /**
-     * @param string $campname
-     * @param Request $request
-     * @param Addvalue $addvalue
+     * @param int $campid
      * @param Fullcalendar $fullcalendar
      * @return Response
      */
-    public function show($campid, Fullcalendar $fullcalendar): Response
+    public function show(int $campid, Fullcalendar $fullcalendar): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $camp = $this->getDoctrine()
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $campid]);
-
+            
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $this->throwExceptionIfNotExcists($camp);
         $this->throwExceptionIfUnauthorizedUser($camp);
 

@@ -103,26 +103,26 @@ api_campmeals_index:
    methods: GET
 
 api_ingredients_store:
-   path: /api/ingredients/store
+   path: /api/ingredients
    controller: App\Controller\Api\IngredientApiController::store
    methods: POST
 
 api_ingredients_update:
-   path: /api/ingredients/update
+   path: /api/ingredients
    controller: App\Controller\Api\IngredientApiController::update
-   methods: POST
+   methods: PUT
 
 api_recipes_store:
-   path: /api/recipes/store
+   path: /api/recipes
    controller: App\Controller\Api\RecipeApiController::store
    methods: POST
 
 api_recipes_update:
-   path: /api/recipes/update
+   path: /api/recipes
    controller: App\Controller\Api\RecipeApiController::update
-   methods: POST
+   methods: PUT
 
 api_singlevalue_store:
-   path: /api/singlevalue/{entityname}/store
+   path: /api/singlevalue/{entityname}
    controller: App\Controller\Api\SingleValueApiController::store
    methods: POST
