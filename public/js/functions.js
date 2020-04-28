@@ -275,11 +275,21 @@ function show_error_or_fetch_data(data, errors, route, slug, method, clearfields
         return result;
     })
     .catch(error => {
-        if (error.type == "type_must_be_unique_value") {
-            $(".errors").append(`<li>error ${error.status} ::: ${error.title} --- ${data["name"]} bestaat reeds.</li>`);
-        } else {
-            $(".errors").append(`<li>error ${error.status} ::: ${error.title}</li>`);
-        }
+        let errormsg;
+        switch(error.type) {
+            case "must_be_unique_value":
+                errormsg = `${data["name"]} bestaat reeds.`
+                break;
+            case "cannot_be_null":
+                errormsg = 'Vul alle verplichte velden in.'
+                break;
+            case "unauthorized_user":
+                errormsg = 'Je hebt niet de rechten om deze actie te doen.'
+                break;
+            default:
+                errormsg = `Er liep iets mis. error ${error.status} ::: ${error.title}`
+          }
+          $(".errors").append(`<li>${errormsg}</li>`);
     });
 }
 

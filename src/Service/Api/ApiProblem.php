@@ -7,16 +7,18 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiProblem
 {
 
-    const TYPE_VALIDATION_ERROR = "validation_error";
+    const TYPE_CANNOT_BE_NULL = "cannot_be_null";
     const TYPE_INVALID_REQUEST_BODY_FORMAT = "invalid_body_format";
-    const TYPE_NOT_FOUND = "type_not_found";
-    const TYPE_MUST_BE_UNIQUE_VALUE = "type_must_be_unique_value";
+    const TYPE_MUST_BE_UNIQUE_VALUE = "must_be_unique_value";
+    const TYPE_NOT_FOUND = "not_found";
+    const TYPE_UNAUTHORIZED_USER = "unauthorized_user";
+    const TYPE_VALIDATION_ERROR = "validation_error";
 
     private static $titles = [
-        self::TYPE_VALIDATION_ERROR => "There was a validation error",
         self::TYPE_INVALID_REQUEST_BODY_FORMAT => "Invalid JSON format send",
         self::TYPE_MUST_BE_UNIQUE_VALUE => "Value must be unique",
-
+        self::TYPE_UNAUTHORIZED_USER => "Unauthorized user",
+        self::TYPE_VALIDATION_ERROR => "There was a validation error",
     ];
     
     private $statusCode;

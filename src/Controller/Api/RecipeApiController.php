@@ -24,6 +24,10 @@ class RecipeApiController extends ApiController
      */
     protected function process_recipe_data(array $data, object $recipe, object $entityManager) : void
     {
+        if (empty($data["category"]) || empty($data["type"])) {
+            $this->throwExceptionBecauseIsEmpty();
+        }
+
         $category = $entityManager->getRepository(RecipeCategory::class)
             ->findOneBy(['name' => $data["category"]]);
 

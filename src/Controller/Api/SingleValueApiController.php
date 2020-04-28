@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 class SingleValueApiController extends ApiController
 {
     /**
-     * @param object $entityname
+     * @param string $entityname
      * @param Request $request
      * @return Response
      */
-    public function store(pbject $entityname, Request $request): Response
+    public function store(string $entityname, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         
@@ -29,6 +29,10 @@ class SingleValueApiController extends ApiController
         $this->throwExceptionIfNotExcists($entity);
 
         $entityTableName = "App\\Entity\\" . $entity->getTablename();
+
+        if (empty($data["name"])) {
+            $this->throwExceptionBecauseIsEmpty();
+        }
 
         $newValue = new $entityTableName;
         $newValue->setName($data["name"]);

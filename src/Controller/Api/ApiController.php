@@ -28,6 +28,12 @@ class ApiController extends AbstractController
             throw new ApiProblemException(new ApiProblem(404));
         }
     }
+
+    protected function throwExceptionBecauseIsEmpty() : void
+    {
+        throw new ApiProblemException(new ApiProblem(422, ApiProblem::TYPE_CANNOT_BE_NULL));
+    }
+
     /**
      * @param object $object
      * @return void
@@ -35,7 +41,7 @@ class ApiController extends AbstractController
     protected function throwExceptionIfUnauthorizedUser(object $object) : void
     {
         if (!$this->isGranted('ROLE_ADMIN') && !ValidateRoute::isCreatedByUser($this->getUser(), $object->getUser())) {
-            throw new ApiProblemException(new ApiProblem(401));
+            throw new ApiProblemException(new ApiProblem(401, ApiProblem::TYPE_UNAUTHORIZED_USER));
         }
     }
     
@@ -50,7 +56,7 @@ class ApiController extends AbstractController
         } catch (UniqueConstraintViolationException $e) {
             throw new ApiProblemException(new ApiProblem(422, ApiProblem::TYPE_MUST_BE_UNIQUE_VALUE));
         } catch (NotNullConstraintViolationException $e){
-            throw new ApiProblemException(new ApiProblem(422));
+            throw new ApiProblemException(new ApiProblem(422, ApiProblem::TYPE_CANNOT_BE_NULL));
         } catch (Exception $e) {
             throw new ApiProblemException(new ApiProblem(500));
         }

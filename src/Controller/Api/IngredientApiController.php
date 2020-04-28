@@ -20,6 +20,10 @@ class IngredientApiController extends ApiController
      */
     protected function process_ingredient_data(array $data, object $ingredient, object $entityManager) : void
     {
+        if (empty($data["rayon"]) || empty($data["unit"])) {
+            $this->throwExceptionBecauseIsEmpty();
+        }
+
         $rayon = $entityManager->getRepository(Rayon::class)
             ->findOneBy(['name' => $data["rayon"]]);
 
