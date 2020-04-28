@@ -15,7 +15,7 @@ $(document).ready(function () {
 
         console.log(meal);
 
-        postdata(meal, errors, '/api/campmeals', 'toegevoegd', 'POST', true, redirect);
+        show_error_or_fetch_data(meal, errors, '/api/campmeals', 'toegevoegd', 'POST', true, redirect);
 
     });
 });

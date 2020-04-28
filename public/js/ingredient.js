@@ -18,9 +18,9 @@ $(document).ready(function () {
 
         // fetch the data or display errors
         if (mode == "add") {
-            postdata(ingredient, errors, '/api/ingredients', 'toegevoegd', 'POST', true);
+            show_error_or_fetch_data(ingredient, errors, '/api/ingredients', 'toegevoegd', 'POST', true);
         } else if (mode == "update") {
-            postdata(ingredient, errors, '/api/ingredients', 'aangepast', 'PUT', false);
+            show_error_or_fetch_data(ingredient, errors, '/api/ingredients', 'aangepast', 'PUT', false);
         } else {
             $(".errors").append(`<li>Er liep iets mis.</li>`);
         }

@@ -210,75 +210,77 @@ function confirmationOptionalCheckboxesWithChildinput(array, errors, classname, 
     };
 }
 
+/**
+ * 
+ * @param {array} data 
+ * @param {array} errors 
+ * @param {string} route 
+ * @param {string} slug 
+ * @param {string} method 
+ * @param {boolean} clearfields 
+ * @param {string} redirect 
+ */
+function show_error_or_fetch_data(data, errors, route, slug, method, clearfields, redirect = "") {
 
-/*
-fetch or display errors
-type data = assoc. array
-type errors = array
-type route = string
-type slug = string
-type clearfields = boolean
-*/
-function postdata(data, errors, route, slug, method, clearfields, redirect = "") {
-
-    if (errors.length == 0) {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify(data);
-
-        var requestOptions = {
-            method: method,
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-        console.log(raw);
-
-        let hasExceptions = false;
-
-        fetch(route, requestOptions)
-        .then(response => {
-            if(!response.ok){
-                hasExceptions = true;
-            }
-            return response.json()
-        })
-        .then(result => {
-            if(hasExceptions){
-                return Promise.reject({
-                    status: result.status,
-                    type: result.type,
-                    title: result.title
-                    })
-            }
-            if (redirect == "") {
-                $(".success").append(`<li>${data["name"]} werd succesvol ${slug}.</li>`);
-                if (clearfields) {
-                    $('.w3-check').prop('checked', false);
-                    $('input').val('');
-                    $('textarea').val('');
-                    $('select').val("default");
-                    $('.unit').attr('disabled', true);
-                    $('.time').attr('disabled', true);
-                }
-            } else {
-                window.location.href = redirect;
-            }
-            return result;
-        })
-        .catch(error => {
-            if (error.type == "type_must_be_unique_value") {
-                $(".errors").append(`<li>error ${error.status} ::: ${error.title} --- ${data["name"]} bestaat reeds.</li>`);
-            } else {
-                $(".errors").append(`<li>error ${error.status} ::: ${error.title}</li>`);
-            }
-        });
-    } else {
+    if (errors.length > 0) {
         errors.forEach(error =>
             $(".errors").append(`<li>${error}</li>`)
         );
+        return;
     }
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify(data);
+
+    var requestOptions = {
+        method: method,
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+    console.log(raw);
+
+    let hasExceptions = false;
+
+    fetch(route, requestOptions)
+    .then(response => {
+        if(!response.ok){
+            hasExceptions = true;
+        }
+        return response.json()
+    })
+    .then(result => {
+        if(hasExceptions){
+            return Promise.reject({
+                status: result.status,
+                type: result.type,
+                title: result.title
+                })
+        }
+        if (redirect == "") {
+            $(".success").append(`<li>${data["name"]} werd succesvol ${slug}.</li>`);
+            if (clearfields) {
+                $('.w3-check').prop('checked', false);
+                $('input').val('');
+                $('textarea').val('');
+                $('select').val("default");
+                $('.unit').attr('disabled', true);
+                $('.time').attr('disabled', true);
+            }
+        } else {
+            window.location.href = redirect;
+        }
+        return result;
+    })
+    .catch(error => {
+        if (error.type == "type_must_be_unique_value") {
+            $(".errors").append(`<li>error ${error.status} ::: ${error.title} --- ${data["name"]} bestaat reeds.</li>`);
+        } else {
+            $(".errors").append(`<li>error ${error.status} ::: ${error.title}</li>`);
+        }
+    });
 }
 
 /**
