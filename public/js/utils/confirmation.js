@@ -1,3 +1,22 @@
+function checkChildInput(errors, classname, name, nameChild, errormsgChild) {
+    let errorArray = {};
+    let i = 0;
+    $(`.${classname} input:checkbox:checked`).each(function () {
+        const value = $(this).val();
+        if (!$(`input[name="${nameChild}-${value}"]`).val()) {
+            errors.push(`${errormsgChild} voor ${$(`label[for="${value}"]`).text()}`);
+        } else {
+            const oneValue = {};
+            oneValue[name] = $(`label[for="${value}"]`).text();
+            oneValue[nameChild] = $(`input[name="${nameChild}-${value}"]`).val();
+            errorArray[i] = oneValue;
+            i++;
+        }
+    });
+
+    return errorArray;
+}
+
 export default {
 
     requiredInputField(array, errors, id, errormsg) {
@@ -58,45 +77,17 @@ export default {
         };
     },
 
-    oneIngredient(array, errors) {
-        if ($(".oneIngredient input:checkbox:checked").length == 0) {
-            errors.push("geen ingredient geselecteerd");
+    requiredCheckboxesWithChildinput(array, errors, classname, groupname, name, nameChild, errormsg, errormsgChild) {
+        if ($(`.${classname} input:checkbox:checked`).length == 0) {
+            errors.push(errormsg);
         } else {
-            let ingr = {};
-            let i = 0;
-            $(".oneIngredient input:checkbox:checked").each(function () {
-                if (!$(this).siblings().children('input').val()) {
-                    errors.push(`geen hoeveelheid ingevuld voor ${$(this).siblings().eq(1).text()}`);
-                } else {
-                    const oneIngredient = {};
-                    oneIngredient["quantity"] = $(this).siblings().children('input').val();
-
-                    oneIngredient["name"] = $(this).siblings().eq(1).text();
-                    ingr[i] = oneIngredient;
-                    i++;
-                }
-            });
-            array["ingredients"] = ingr
+            array[groupname] = checkChildInput(errors, classname, name, nameChild, errormsgChild);
         };
     },
 
     optionalCheckboxesWithChildinput(array, errors, classname, groupname, name, nameChild, errormsgChild) {
         if ($(`.${classname} input:checkbox:checked`).length != 0) {
-            let subArray = {};
-            let i = 0;
-            $(`.${classname} input:checkbox:checked`).each(function () {
-                const value = $(this).val();
-                if (!$(`input[name="${nameChild}-${value}"]`).val()) {
-                    errors.push(`${errormsgChild} voor ${$(`label[for="${value}"]`).text()}`);
-                } else {
-                    const oneValue = {};
-                    oneValue[name] = $(`label[for="${value}"]`).text();
-                    oneValue[nameChild] = $(`input[name="${nameChild}-${value}"]`).val();
-                    subArray[i] = oneValue;
-                    i++;
-                }
-            });
-            array[groupname] = subArray
+            array[groupname] = checkChildInput(errors, classname, name, nameChild, errormsgChild);
         };
     },
 };
