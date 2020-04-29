@@ -1,0 +1,22 @@
+{
+  "name": "kampmenu",
+  "version": "1.0.0",
+  "description": "A tool for planning meals and shopping for youth camps.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Janaverl/kampmenu.git"
+  },
+  "author": "Jana Verlinde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Janaverl/kampmenu/issues"
+  },
+  "homepage": "https://github.com/Janaverl/kampmenu#readme"
+}
