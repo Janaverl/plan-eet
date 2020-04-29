@@ -28,7 +28,7 @@ export default {
     },
 
     requiredSelect(array, errors, name, nameInString, errormsg) {
-        if (name.value == "default") {
+        if (name.value === "default") {
             errors.push(errormsg);
         } else {
             array[nameInString] = name.value;
@@ -63,7 +63,7 @@ export default {
     },
 
     requiredCheckboxes(array, errors, className, name) {
-        if ($(`.${className} input:checkbox:checked`).length == 0) {
+        if ($(`.${className} input:checkbox:checked`).length === 0) {
             errors.push(`geen ${name} geselecteerd`);
         } else {
             let subArray = {};
@@ -78,7 +78,7 @@ export default {
     },
 
     requiredCheckboxesWithChildinput(array, errors, classname, groupname, name, nameChild, errormsg, errormsgChild) {
-        if ($(`.${classname} input:checkbox:checked`).length == 0) {
+        if ($(`.${classname} input:checkbox:checked`).length === 0) {
             errors.push(errormsg);
         } else {
             array[groupname] = checkChildInput(errors, classname, name, nameChild, errormsgChild);

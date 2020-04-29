@@ -78,7 +78,7 @@ export default {
         
         fetchDataToJson(requestOptions, route)
         .then( () => {
-            if (redirect == "") {
+            if (redirect === "") {
                 appendSuccess(data["name"], slug);
                 if (clearfields) {
                     clearFormFields()

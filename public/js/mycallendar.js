@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
             slotDuration: '01:00',
             snapDuration: '00:30',
             eventDrop: (info) => {
-                if(Date.parse(info.event.extendedProps.currentEventStart) == Date.parse(info.event.start)){
+                if(Date.parse(info.event.extendedProps.currentEventStart) === Date.parse(info.event.start)){
                     info.event.setExtendedProp("changed", false);
                     return;
                 }

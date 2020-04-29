@@ -10,7 +10,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         // confirmation and saving te values
-        if (mode == "update") {
+        if (mode === "update") {
             ingredient["name"] = slug;
         } else {
             confirmation.requiredInputField(ingredient, errors, "name", "geen naam ingevuld");
@@ -20,9 +20,9 @@ $(document).ready(function () {
         confirmation.requiredSelect(ingredient, errors, rayon, "rayon", "geen rayon geselecteerd");
 
         // fetch the data or display errors
-        if (mode == "add") {
+        if (mode === "add") {
             datafetch.handleRequest(ingredient, errors, '/api/ingredients', 'toegevoegd', 'POST', true);
-        } else if (mode == "update") {
+        } else if (mode === "update") {
             datafetch.handleRequest(ingredient, errors, '/api/ingredients', 'aangepast', 'PUT', false);
         } else {
             $(".errors").append(`<li>Er liep iets mis.</li>`);

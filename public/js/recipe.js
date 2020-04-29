@@ -34,7 +34,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         // confirmation and saving te values
-        if (mode == "update") {
+        if (mode === "update") {
             recipe["name"] = slug;
         } else {
             confirmation.requiredInputField(recipe, errors, "name", "geen naam ingevuld");
@@ -48,9 +48,9 @@ $(document).ready(function () {
         confirmation.optionalCheckboxes(recipe, "herbs", "oneHerb");
         confirmation.requiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
 
-        if (mode == "add") {
+        if (mode === "add") {
             datafetch.handleRequest(recipe, errors, '/api/recipes', 'toegevoegd', 'POST', true);
-        } else if (mode == "update") {
+        } else if (mode === "update") {
             datafetch.handleRequest(recipe, errors, '/api/recipes', 'aangepast', 'PUT', false);
         } else {
             $(".errors").append(`<li>Er liep iets mis.</li>`);
