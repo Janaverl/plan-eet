@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Camp;
+use App\Entity\Ingredient;
 use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -30,7 +31,7 @@ class ShoppinglistController extends AbstractController
         // If passes validation:
         $entityManager = $this->getDoctrine()->getManager();
 
-        $allIngredients = $entityManager->getRepository('App:Ingredient')
+        $allIngredients = $entityManager->getRepository(Ingredient::class)
             ->findArrayByCamp($campid);
 
         dump($allIngredients);

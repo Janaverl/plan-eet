@@ -19,24 +19,24 @@ class CampController extends AbstractController
 
         switch ($time) {
             case "past":
-                $allCamps = $entityManager->getRepository('App:Camp')
+                $allCamps = $entityManager->getRepository(Camp::class)
                     ->findAllCampsByUserPast($user);
                 $title = "bekijk al jouw afgelopen kampen";
                 break;
             case "now":
-                $allCamps = $entityManager->getRepository('App:Camp')
+                $allCamps = $entityManager->getRepository(Camp::class)
                     ->findAllCampsByUserPresent($user);
                 $title = "bekijk al jouw kampen die nu bezig zijn";
                 break;
             case "admin_all":
                 $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-                $allCamps = $entityManager->getRepository('App:Camp')
+                $allCamps = $entityManager->getRepository(Camp::class)
                     ->findAll();
                 $title = "overzicht van alle kampen";
                 break;
             default:
-                $allCamps = $entityManager->getRepository('App:Camp')
+                $allCamps = $entityManager->getRepository(Camp::class)
                     ->findAllCampsByUserFuture($user);
                 $title = "bekijk al jouw geplande kampen";
         }

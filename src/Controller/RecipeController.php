@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Herb;
 use App\Entity\Ingredient;
 use App\Entity\RecipeCategory;
+use App\Entity\RecipeIngredients;
 use App\Entity\Recipes;
 use App\Entity\RecipeType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,7 +75,7 @@ class RecipeController extends AbstractController
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $ingredients = $entityManager->getRepository('App:RecipeIngredients')
+        $ingredients = $entityManager->getRepository(RecipeIngredients::class)
             ->findIngredientsSortedByRayon($recipe);
 
         return $this->render('recipe/individual.html.twig', [
