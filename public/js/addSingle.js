@@ -1,3 +1,6 @@
+import datafetch from "./utils/datafetch.js";
+import confirmation from "./utils/confirmation.js";
+
 $(document).ready(function () {
     // --------------------------------------------
     // when the user clicks on confirmation
@@ -8,10 +11,10 @@ $(document).ready(function () {
         e.preventDefault();
 
         // confirmation and saving te values
-        confirmationRequiredInputField(value, errors, "name", "geen naam ingevuld");
+        confirmation.requiredInputField(value, errors, "name", "geen naam ingevuld");
         value["type"] = slug;
 
-        show_error_or_fetch_data(value, errors, route, 'toegevoegd', 'POST', true);
+        datafetch.handleRequest(value, errors, route, 'toegevoegd', 'POST', true);
 
     });
 });

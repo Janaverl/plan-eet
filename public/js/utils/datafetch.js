@@ -10,16 +10,8 @@ function setRequestOptions(data, method) {
         body: raw,
         redirect: 'follow'
     };
-    console.log(raw);
 
     return requestOptions;
-}
-
-function isResponseOk(responseOk) {
-    if(!responseOk){
-        return false;
-    }
-    return true;
 }
 
 function appendErrormessage(errormessage) {
@@ -56,54 +48,48 @@ function createErrorMessage(error, name) {
         default:
             return `Er liep iets mis. error ${error.status} ::: ${error.title}`
       }
-}
+};
 
-/**
- * 
- * @param {array} data 
- * @param {array} errors 
- * @param {string} route 
- * @param {string} slug 
- * @param {string} method 
- * @param {boolean} clearfields 
- * @param {string} redirect 
- */
-function show_error_or_fetch_data(data, errors, route, slug, method, clearfields, redirect = "") {
+async function fetchDataToJson(requestOptions, route) {
 
-    if (errors.length > 0) {
-        appendErrors(errors);
-        return;
+    let response = await fetch(route, requestOptions);
+    let result = await response.json();
+
+    if (!response.ok) {
+        return Promise.reject({
+            status: result.status,
+            type: result.type,
+            title: result.title
+        })
     }
-
-    const requestOptions = setRequestOptions(data, method);
-
-    let hasExceptions;
-
-    fetch(route, requestOptions)
-    .then(response => {
-        hasExceptions = !isResponseOk(response.ok);
-        return response.json()
-    })
-    .then(result => {
-        if(hasExceptions){
-            return Promise.reject({
-                status: result.status,
-                type: result.type,
-                title: result.title
-                })
-        }
-        if (redirect == "") {
-            appendSuccess(data["name"], slug);
-            if (clearfields) {
-                clearFormFields()
-            }
-        } else {
-            window.location.href = redirect;
-        }
-        return result;
-    })
-    .catch(error => {
-        const errormsg = createErrorMessage(error, data["name"]);
-        appendErrormessage(errormsg);
-    });
+    
+    return result;
 }
+
+export default {
+    handleRequest(data, errors, route, slug, method, clearfields, redirect = "") {
+
+        if (errors.length > 0) {
+            appendErrors(errors);
+            return;
+        }
+
+        const requestOptions = setRequestOptions(data, method);
+        
+        fetchDataToJson(requestOptions, route)
+        .then( () => {
+            if (redirect == "") {
+                appendSuccess(data["name"], slug);
+                if (clearfields) {
+                    clearFormFields()
+                }
+            } else {
+                window.location.href = redirect;
+            }
+        })
+        .catch(err => {
+            const errormsg = createErrorMessage(err, data["name"]);
+            appendErrormessage(errormsg);
+        })
+    }
+};

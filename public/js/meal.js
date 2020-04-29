@@ -1,3 +1,6 @@
+import datafetch from "./utils/datafetch.js";
+import confirmation from "./utils/confirmation.js";
+
 $(document).ready(function () {
     $(".switch.recipes input").change(function (e) {
         console.log("check");
@@ -10,12 +13,12 @@ $(document).ready(function () {
         // let meal = {};
         e.preventDefault();
 
-        confirmationRequiredInputField(meal, errors, "name", "geen naam ingevuld");
-        confirmationRequiredCheckboxes(meal, errors, "onerecipe", "recept");
+        confirmation.requiredInputField(meal, errors, "name", "geen naam ingevuld");
+        confirmation.requiredCheckboxes(meal, errors, "onerecipe", "recept");
 
         console.log(meal);
 
-        show_error_or_fetch_data(meal, errors, '/api/campmeals', 'toegevoegd', 'POST', true, redirect);
+        datafetch.handleRequest(meal, errors, '/api/campmeals', 'toegevoegd', 'POST', true, redirect);
 
     });
 });

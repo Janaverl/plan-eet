@@ -1,3 +1,7 @@
+import datafetch from "./utils/datafetch.js";
+import confirmation from "./utils/confirmation.js";
+
+
 $(document).ready(function () {
 
     $("#startdate").on("change", function (e) {
@@ -19,13 +23,13 @@ $(document).ready(function () {
         e.preventDefault();
 
         // confirmation and saving te values
-        confirmationRequiredInputField(camp, errors, "name", "geen naam ingevuld");
-        confirmationRequiredInputField(camp, errors, "nrOfParticipants", "geen aantal deelnemers ingevuld");
-        confirmationRequiredInputField(camp, errors, "startdate", "geen begindatum ingevuld");
-        confirmationRequiredInputField(camp, errors, "starttime", "geen beginuur ingevuld");
-        confirmationRequiredInputField(camp, errors, "enddate", "geen einddatum ingevuld");
-        confirmationRequiredInputField(camp, errors, "endtime", "geen einduur ingevuld");
-        confirmationOptionalCheckboxesWithChildinput(camp, errors, "onemealmoment", "mealmoments", "mealmoment", "time", "geen tijdstip ingevuld")
+        confirmation.requiredInputField(camp, errors, "name", "geen naam ingevuld");
+        confirmation.requiredInputField(camp, errors, "nrOfParticipants", "geen aantal deelnemers ingevuld");
+        confirmation.requiredInputField(camp, errors, "startdate", "geen begindatum ingevuld");
+        confirmation.requiredInputField(camp, errors, "starttime", "geen beginuur ingevuld");
+        confirmation.requiredInputField(camp, errors, "enddate", "geen einddatum ingevuld");
+        confirmation.requiredInputField(camp, errors, "endtime", "geen einduur ingevuld");
+        confirmation.optionalCheckboxesWithChildinput(camp, errors, "onemealmoment", "mealmoments", "mealmoment", "time", "geen tijdstip ingevuld")
 
         if ($("input#startdate").val() > $("input#enddate").val()) {
             errors.push("de einddatum moet na de begindatum komen.")
@@ -41,6 +45,6 @@ $(document).ready(function () {
             }
         });
 
-        show_error_or_fetch_data(camp, errors, '/api/camps', 'toegevoegd', 'POST', true);
+        datafetch.handleRequest(camp, errors, '/api/camps', 'toegevoegd', 'POST', true);
     });
 });

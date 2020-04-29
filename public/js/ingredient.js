@@ -1,3 +1,6 @@
+import datafetch from "./utils/datafetch.js";
+import confirmation from "./utils/confirmation.js";
+
 $(document).ready(function () {
 
     $(".confirm").on("click", function (e) {
@@ -10,17 +13,17 @@ $(document).ready(function () {
         if (mode == "update") {
             ingredient["name"] = slug;
         } else {
-            confirmationRequiredInputField(ingredient, errors, "name", "geen naam ingevuld");
+            confirmation.requiredInputField(ingredient, errors, "name", "geen naam ingevuld");
         };
-        confirmationOptionalInputField(ingredient, "suggestion");
-        confirmationRequiredSelect(ingredient, errors, unit, "unit", "geen maateenheid geselecteerd");
-        confirmationRequiredSelect(ingredient, errors, rayon, "rayon", "geen rayon geselecteerd");
+        confirmation.optionalInputField(ingredient, "suggestion");
+        confirmation.requiredSelect(ingredient, errors, unit, "unit", "geen maateenheid geselecteerd");
+        confirmation.requiredSelect(ingredient, errors, rayon, "rayon", "geen rayon geselecteerd");
 
         // fetch the data or display errors
         if (mode == "add") {
-            show_error_or_fetch_data(ingredient, errors, '/api/ingredients', 'toegevoegd', 'POST', true);
+            datafetch.handleRequest(ingredient, errors, '/api/ingredients', 'toegevoegd', 'POST', true);
         } else if (mode == "update") {
-            show_error_or_fetch_data(ingredient, errors, '/api/ingredients', 'aangepast', 'PUT', false);
+            datafetch.handleRequest(ingredient, errors, '/api/ingredients', 'aangepast', 'PUT', false);
         } else {
             $(".errors").append(`<li>Er liep iets mis.</li>`);
         }

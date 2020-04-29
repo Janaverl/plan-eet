@@ -17,7 +17,7 @@ class SingleValueController extends AbstractController
             ->findOneBy(['name' => $entityname]);
 
         if (empty($entity)) {
-            return $this->render('general/index.html.twig');
+            return $this->render('page/index.html.twig');
         }
 
         $repositoryPathForClass = "App\\Entity\\" . $entity->getTablename();

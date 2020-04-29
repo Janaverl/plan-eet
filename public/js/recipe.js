@@ -1,3 +1,6 @@
+import datafetch from "./utils/datafetch.js";
+import confirmation from "./utils/confirmation.js";
+
 $(document).ready(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -34,20 +37,20 @@ $(document).ready(function () {
         if (mode == "update") {
             recipe["name"] = slug;
         } else {
-            confirmationRequiredInputField(recipe, errors, "name", "geen naam ingevuld");
+            confirmation.requiredInputField(recipe, errors, "name", "geen naam ingevuld");
         }
-        confirmationOptionalInputField(recipe, "suggestion");
-        confirmationRequiredSelect(recipe, errors, category, "category", "geen categorie geselecteerd");
-        confirmationRequiredSelect(recipe, errors, type, "type", "geen type geselecteerd");
-        confirmationRequiredInputField(recipe, errors, "numberOfEaters", "geen aantal eters ingevuld");
-        confirmationOneIngredient(recipe, errors);
-        confirmationOptionalCheckboxes(recipe, "herbs", "oneHerb");
-        confirmationRequiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
+        confirmation.optionalInputField(recipe, "suggestion");
+        confirmation.requiredSelect(recipe, errors, category, "category", "geen categorie geselecteerd");
+        confirmation.requiredSelect(recipe, errors, type, "type", "geen type geselecteerd");
+        confirmation.requiredInputField(recipe, errors, "numberOfEaters", "geen aantal eters ingevuld");
+        confirmation.oneIngredient(recipe, errors);
+        confirmation.optionalCheckboxes(recipe, "herbs", "oneHerb");
+        confirmation.requiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
 
         if (mode == "add") {
-            show_error_or_fetch_data(recipe, errors, '/api/recipes', 'toegevoegd', 'POST', true);
+            datafetch.handleRequest(recipe, errors, '/api/recipes', 'toegevoegd', 'POST', true);
         } else if (mode == "update") {
-            show_error_or_fetch_data(recipe, errors, '/api/recipes', 'aangepast', 'PUT', false);
+            datafetch.handleRequest(recipe, errors, '/api/recipes', 'aangepast', 'PUT', false);
         } else {
             $(".errors").append(`<li>Er liep iets mis.</li>`);
         }
