@@ -247,4 +247,28 @@ class RecipeApiController extends ApiController
         return $response;
     }
 
+     /**
+     * @param Request $request
+     * @return Response
+     */
+    public function delete(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $data = json_decode($request->getContent(), true);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $recipe = $entityManager->getRepository(Recipes::class)
+            ->findOneBy(['name' => $data["name"]]);
+
+        $entityManager->remove($recipe);
+
+        $this->flushOrThrowException($entityManager);
+
+        $response = new JsonResponse("success");
+
+        return $response;
+    }
+
 }

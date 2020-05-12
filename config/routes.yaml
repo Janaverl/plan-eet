@@ -122,6 +122,11 @@ api_recipes_update:
    controller: App\Controller\Api\RecipeApiController::update
    methods: PUT
 
+api_recipes_delete:
+   path: /api/recipes
+   controller: App\Controller\Api\RecipeApiController::delete
+   methods: DELETE
+
 api_singlevalue_store:
    path: /api/singlevalue/{entityname}
    controller: App\Controller\Api\SingleValueApiController::store

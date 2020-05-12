@@ -46,12 +46,12 @@ class Recipes
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipe")
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredients", mappedBy="recipe", orphanRemoval=true)
      */
     private $ingredients;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RecipeHerb", mappedBy="recipe")
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeHerb", mappedBy="recipe", orphanRemoval=true)
      */
     private $RecipeHerb;
 

@@ -6,6 +6,7 @@ use Exception;
 use App\Service\ValidateRoute;
 use App\Service\Api\ApiProblem;
 use App\Service\Api\ApiProblemException;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,7 +58,9 @@ class ApiController extends AbstractController
             throw new ApiProblemException(new ApiProblem(422, ApiProblem::TYPE_MUST_BE_UNIQUE_VALUE));
         } catch (NotNullConstraintViolationException $e){
             throw new ApiProblemException(new ApiProblem(422, ApiProblem::TYPE_CANNOT_BE_NULL));
-        } catch (Exception $e) {
+        } catch (ForeignKeyConstraintViolationException $e){
+            throw new ApiProblemException(new ApiProblem(422, ApiProblem::TYPE_HAS_CONNECTED_VALUES));
+        }catch (Exception $e) {
             throw new ApiProblemException(new ApiProblem(500));
         }
     }
