@@ -91,5 +91,18 @@ export default {
             const errormsg = createErrorMessage(err, data["name"]);
             appendErrormessage(errormsg);
         })
+    },
+
+    handleDeleteRequest(data, route) {
+        const requestOptions = setRequestOptions(data, "DELETE");
+        
+        fetchDataToJson(requestOptions, route)
+        .then( () => {
+            appendSuccess(data["name"], "verwijderd");
+        })
+        .catch(err => {
+            const errormsg = createErrorMessage(err, data["name"]);
+            appendErrormessage(errormsg);
+        })
     }
 };
