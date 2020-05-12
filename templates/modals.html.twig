@@ -1,16 +1,13 @@
 {% block modal_for_remove %}
-    <div id="remove-{{value.name}}" class="w3-modal">
+    <div id="remove-{{value.name}}" class="w3-modal remove">
         <div class="w3-modal-content">
-            <span
-                onclick="document.getElementById('remove-{{value.name}}').style.display='none'"
-                class="w3-button w3-display-topright"
-            >&times;</span>
+            <span class="close-modal w3-button w3-display-topright">&times;</span>
             <div class="w3-card">
                 <p>Ben je zeker dat je dit {{transName}}  wil verwijderen: {{value.name}}?</p>
                 <button class="remove-{{class}}" id="remove-{{class}}-{{value.name}}">
                         verwijder dit {{transName}}
                 </button>
-                <button onclick="document.getElementById('remove-{{value.name}}').style.display='none'">
+                <button class="close-modal">
                         Annuleren
                 </button>
                 <ul class="errors"></ul>
@@ -21,13 +18,10 @@
 {% endblock %}
 
 {% block modal_for_details %}
-    <div id="details-{{value.name}}" class="w3-modal">
+    <div id="details-{{value.name}}" class="w3-modal details">
         <div class="w3-modal-content">
             <div class="w3-card">
-                <span
-                    onclick="document.getElementById('details-{{value.name}}').style.display='none'"
-                    class="w3-button w3-display-topright"
-                >&times;</span>
+                <span class="close-modal w3-button w3-display-topright">&times;</span>
                 <h5>{{value.name}}</h5>
                 <span><i>{{value.suggestion}}</i></span>
                 <h6>ingredienten(voor {{nrOfEaters}} personen)</h6>

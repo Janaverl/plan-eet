@@ -1,5 +1,6 @@
 import string from "./utils/string.js";
 import datafetch from "./utils/datafetch.js";
+import modals from "./utils/modals.js";
 
 
 $(document).ready(function () {
@@ -8,7 +9,9 @@ $(document).ready(function () {
 
     $("."+classname).on("click", function (e) {
         recipe["name"] = string.stripIdWithClassname(this, classname);
-        // datafetch.handleRequest(recipe, [], '/api/recipes', 'verwijderd', 'DELETE', true);
         datafetch.handleDeleteRequest(recipe, '/api/recipes');
     });
+
+    modals.closeOnClick("remove");
+    modals.closeOnClick("details");
 })
