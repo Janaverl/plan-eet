@@ -6,9 +6,10 @@ function checkChildInput(errors, classname, name, nameChild, errormsgChild) {
         if (!$(`input[name="${nameChild}-${value}"]`).val()) {
             errors.push(`${errormsgChild} voor ${$(`label[for="${value}"]`).text()}`);
         } else {
+            console.log(name);
             const oneValue = {};
-            oneValue[name] = $(`label[for="${value}"]`).text();
-            oneValue[nameChild] = $(`input[name="${nameChild}-${value}"]`).val();
+            oneValue["name"] = $(`label[for="${value}"]`).text();
+            oneValue["quantity"] = $(`input[name="${nameChild}-${value}"]`).val();
             errorArray[i] = oneValue;
             i++;
         }
