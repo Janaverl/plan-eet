@@ -31,7 +31,7 @@
                         <td>{{value.startTime|date("d/m/Y - H:i")}}</td>
                         <td>{{value.endTime|date("d/m/Y - H:i")}}</td>
                         <td>{{value.nrOfParticipants}}</td>
-                        <td class="change"><a href="{{ path('camps_show', {campname: value.name, camp: value.id}) }}"><i class="fas fa-pencil-alt"></i> <br> </a><a href="{{ path('shoppinglists_show', {campid: value.id}) }}"><i class="fas fa-list"></i></a></td>
+                        <td class="icons"><a href="{{ path('camps_show', {campname: value.name, camp: value.id}) }}"><i class="fas fa-pencil-alt"></i> <br> </a><a href="{{ path('shoppinglists_show', {campid: value.id}) }}"><i class="fas fa-list"></i></a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

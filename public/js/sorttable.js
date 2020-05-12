@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(".change").hover(function () {
+    $(".icons").hover(function () {
         console.log($(this).parent());
         $(this).parent().toggleClass("hovered")
     });
