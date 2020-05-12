@@ -43,7 +43,7 @@ $(document).ready(function () {
         confirmation.requiredSelect(recipe, errors, category, "category", "geen categorie geselecteerd");
         confirmation.requiredSelect(recipe, errors, type, "type", "geen type geselecteerd");
         confirmation.requiredInputField(recipe, errors, "numberOfEaters", "geen aantal eters ingevuld");
-        confirmation.requiredCheckboxesWithChildinput(recipe, errors, "oneIngredient", "ingredients", "ingredient", "hoeveelheid", "geen ingredient geselecteerd", "geen hoeveelheid ingevuld")
+        confirmation.requiredCheckboxesWithChildinput(recipe, errors, "oneIngredient", "ingredients", "ingredient", "unit", "geen ingredient geselecteerd", "geen hoeveelheid ingevuld")
         // confirmation.oneIngredient(recipe, errors);
         confirmation.optionalCheckboxes(recipe, "herbs", "oneHerb");
         confirmation.requiredTextarea(recipe, errors, "instructions", "geen bereidingswijze ingevuld");
