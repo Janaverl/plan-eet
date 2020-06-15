@@ -29,20 +29,19 @@ class UserApiController extends ApiController
         $usersJSON = [];
 
         foreach ($users as $user) {
-
-            $role = "user";
             
             if ($this->_isAdmin($user->getRoles())) {
                 $role = "admin";
+            } else {
+                $role = "user";
             }
-
-            dump($role);
 
             $userInfo = [
                 "name" => $user->getUsername(),
                 "roles" => $role,
                 "campsCount" => $user->getCampsCount(),
             ];
+
             array_push($usersJSON, $userInfo);
         };
 
