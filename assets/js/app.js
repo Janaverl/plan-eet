@@ -20,6 +20,5 @@ import Example from './components/Example'
 * Create a fresh Vue Application instance
 */
 new Vue({
-    el: '#app',
-    components: {Example}
-});
+    render: h => h(Example),
+  }).$mount('#app')
