@@ -16,9 +16,15 @@ console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 // assets/js/app.js
 import Vue from 'vue';
 import Example from './components/Example'
+import Users from './components/user/Users'
 /**
 * Create a fresh Vue Application instance
 */
 new Vue({
-    render: h => h(Example),
-  }).$mount('#app')
+  
+  render: h => h(Example),
+}).$mount('#app')
+
+new Vue({
+  render: h => h(Users),
+}).$mount('#users')

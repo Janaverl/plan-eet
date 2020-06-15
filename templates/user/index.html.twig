@@ -10,31 +10,7 @@
                 {% block filtertable %}
                     {{ parent() }}
                 {% endblock %}
-            <table class="w3-table w3-striped w3-bordered" id="tableToSort">
-                <thead>
-                    <tr class="sortTitles">
-                        <th class="sortable">naam</th>
-                        <th class="sortable">rol</th>
-                        <th class="sortable">aantal kampen aangemaakt</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for value in values %}
-                    <tr>
-                    <td>{{value.email}}</td> 
-                    <td>
-                    {% if "ROLE_ADMIN" in value.roles %}
-                        admin
-                    {% else %}
-                        user
-                    {% endif %}
-                    </td> 
-                        <td>{{ value.camps|length }}</td> 
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-                {# {{dump(values)}} #}
+                <div id="users"></div>
             </div>
         </div>
     </div>
