@@ -6,9 +6,6 @@
   "directories": {
     "test": "tests"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Janaverl/kampmenu.git"
@@ -18,5 +15,20 @@
   "bugs": {
     "url": "https://github.com/Janaverl/kampmenu/issues"
   },
-  "homepage": "https://github.com/Janaverl/kampmenu#readme"
+  "homepage": "https://github.com/Janaverl/kampmenu#readme",
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.28.0",
+    "core-js": "^3.0.0",
+    "regenerator-runtime": "^0.13.2",
+    "vue": "^2.6.11",
+    "vue-loader": "15.0.11",
+    "vue-template-compiler": "^2.6.11",
+    "webpack-notifier": "^1.6.0"
+  },
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  }
 }
