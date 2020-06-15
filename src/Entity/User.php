@@ -133,6 +133,14 @@ class User implements UserInterface
         return $this->camps;
     }
 
+     /**
+     * @return int
+     */
+    public function getCampsCount(): int
+    {
+        return count($this->camps);
+    }
+
     public function addCamp(Camp $camp): self
     {
         if (!$this->camps->contains($camp)) {
