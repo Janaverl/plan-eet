@@ -6,24 +6,10 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import '../css/app.css';
-
-// Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
-// import $ from 'jquery';
-
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
-
-// assets/js/app.js
 import Vue from 'vue';
-import Example from './components/Example'
 import Users from './components/user/Users'
-/**
-* Create a fresh Vue Application instance
-*/
-new Vue({
-  
-  render: h => h(Example),
-}).$mount('#app')
+
+import '../css/app.css';
 
 new Vue({
   render: h => h(Users),
