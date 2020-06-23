@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import {ApiEventBus} from '../../app';
+    import {ApiEventBus} from '../../users';
 
     export default {
         name: "apiWrapper",

@@ -19,5 +19,6 @@
 
 {% block javascripts %}
     {{ parent() }}
+    {{ encore_entry_script_tags('users') }}
     <script src="{{ asset('js/sorttable.js') }}"></script>
 {% endblock %} 
