@@ -1,21 +1,24 @@
 function checkChildInput(errors, classname, name, nameChild, errormsgChild) {
-    let errorArray = {};
+    let values = {};
     let i = 0;
     $(`.${classname} input:checkbox:checked`).each(function () {
         const value = $(this).val();
         if (!$(`input[name="${nameChild}-${value}"]`).val()) {
+            console.log("yep!");
             errors.push(`${errormsgChild} voor ${$(`label[for="${value}"]`).text()}`);
-        } else {
-            console.log(name);
-            const oneValue = {};
-            oneValue["name"] = $(`label[for="${value}"]`).text();
-            oneValue["quantity"] = $(`input[name="${nameChild}-${value}"]`).val();
-            errorArray[i] = oneValue;
-            i++;
+            return;
         }
+
+        const thisValue = {};
+        thisValue[name] = $(`label[for="${value}"]`).text();
+        thisValue[nameChild] = $(`input[name="${nameChild}-${value}"]`).val();
+        
+        values[i] = thisValue;
+        
+        i++;
     });
 
-    return errorArray;
+    return values;
 }
 
 export default {
