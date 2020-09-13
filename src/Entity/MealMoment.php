@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\MealMomentRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MealmomentRepository")
  */
 class Mealmoment
 {

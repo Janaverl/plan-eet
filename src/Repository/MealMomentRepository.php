@@ -12,7 +12,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Mealmoment[]    findAll()
  * @method Mealmoment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MealMomentRepository extends ServiceEntityRepository
+class MealmomentRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
