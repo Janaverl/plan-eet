@@ -45,7 +45,7 @@ class Camp
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CampMealMoments", mappedBy="camp")
+     * @ORM\OneToMany(targetEntity="App\Entity\CampMealmoments", mappedBy="camp")
      */
     private $campMealmoments;
 
@@ -126,14 +126,14 @@ class Camp
     }
 
     /**
-     * @return Collection|CampMealMoments[]
+     * @return Collection|CampMealmoments[]
      */
     public function getCampMealmoments(): Collection
     {
         return $this->campMealmoments;
     }
 
-    public function addCampMealmoment(CampMealMoments $campMealmoment): self
+    public function addCampMealmoment(CampMealmoments $campMealmoment): self
     {
         if (!$this->campMealmoments->contains($campMealmoment)) {
             $this->campMealmoments[] = $campMealmoment;
@@ -143,7 +143,7 @@ class Camp
         return $this;
     }
 
-    public function removeCampMealmoment(CampMealMoments $campMealmoment): self
+    public function removeCampMealmoment(CampMealmoments $campMealmoment): self
     {
         if ($this->campMealmoments->contains($campMealmoment)) {
             $this->campMealmoments->removeElement($campMealmoment);

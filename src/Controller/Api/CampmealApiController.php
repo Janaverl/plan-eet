@@ -5,9 +5,9 @@ namespace App\Controller\Api;
 use App\Entity\Camp;
 use App\Entity\Campday;
 use App\Entity\Campmeal;
-use App\Entity\CampMealMoments;
+use App\Entity\CampMealmoments;
 use App\Entity\Mealcourse;
-use App\Entity\MealMoment;
+use App\Entity\Mealmoment;
 use App\Entity\Recipes;
 use App\Service\Addvalue;
 use App\Service\Fullcalendar\Fullcalendar;
@@ -91,10 +91,10 @@ class CampmealApiController extends ApiController
         
         $this->throwExceptionIfUnauthorizedUser($camp);
 
-        $mealmoment = $entityManager->getRepository(MealMoment::class)
+        $mealmoment = $entityManager->getRepository(Mealmoment::class)
             ->findOneBy(['name' => $data["mealmoment"]]);
 
-        $campmealmoment = $entityManager->getRepository(CampMealMoments::class)
+        $campmealmoment = $entityManager->getRepository(CampMealmoments::class)
             ->findOneBy(
                 ['camp' => $camp,
                 'mealmoment' => $mealmoment]

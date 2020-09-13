@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Camp;
-use App\Entity\MealMoment;
+use App\Entity\Mealmoment;
 use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -77,7 +77,7 @@ class CampController extends AbstractController
 
         // get all mealmoments, so the user can select them and add them to the camp he is creating
         $allMealmoments = $this->getDoctrine()
-            ->getRepository(MealMoment::class)
+            ->getRepository(Mealmoment::class)
             ->findAll();
 
         return $this->render('camp/individual.html.twig', [

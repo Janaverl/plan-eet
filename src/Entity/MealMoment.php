@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MealMomentRepository")
  */
-class MealMoment
+class Mealmoment
 {
     /**
      * @ORM\Id()
@@ -24,7 +24,7 @@ class MealMoment
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CampMealMoments", mappedBy="mealmoment")
+     * @ORM\OneToMany(targetEntity="App\Entity\CampMealmoments", mappedBy="mealmoment")
      */
     private $campMealmoments;
 
@@ -51,14 +51,14 @@ class MealMoment
     }
 
     /**
-     * @return Collection|CampMealMoments[]
+     * @return Collection|CampMealmoments[]
      */
     public function getCampMealmoments(): Collection
     {
         return $this->campMealmoments;
     }
 
-    public function addCampMealmoment(CampMealMoments $campMealmoment): self
+    public function addCampMealmoment(CampMealmoments $campMealmoment): self
     {
         if (!$this->campMealmoments->contains($campMealmoment)) {
             $this->campMealmoments[] = $campMealmoment;
@@ -68,7 +68,7 @@ class MealMoment
         return $this;
     }
 
-    public function removeCampMealmoment(CampMealMoments $campMealmoment): self
+    public function removeCampMealmoment(CampMealmoments $campMealmoment): self
     {
         if ($this->campMealmoments->contains($campMealmoment)) {
             $this->campMealmoments->removeElement($campMealmoment);
