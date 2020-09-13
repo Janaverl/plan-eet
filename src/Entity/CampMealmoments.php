@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CampMealmomentsRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CampMealMomentsRepository")
  */
-class CampMealmoments
+class CampMealMoments
 {
     /**
      * @ORM\Id()
@@ -24,19 +24,19 @@ class CampMealmoments
     private $Time;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Camp", inversedBy="campMealmoments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Camp", inversedBy="campMealMoments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $camp;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Mealmoment", inversedBy="campMealmoments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MealMoment", inversedBy="campMealMoments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $mealmoment;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Campmeal", mappedBy="campMealmoment")
+     * @ORM\OneToMany(targetEntity="App\Entity\Campmeal", mappedBy="campMealMoment")
      */
     private $campmeals;
 
@@ -74,12 +74,12 @@ class CampMealmoments
         return $this;
     }
 
-    public function getMealmoment(): ?Mealmoment
+    public function getMealmoment(): ?MealMoment
     {
         return $this->mealmoment;
     }
 
-    public function setMealmoment(?Mealmoment $mealmoment): self
+    public function setMealmoment(?MealMoment $mealmoment): self
     {
         $this->mealmoment = $mealmoment;
 

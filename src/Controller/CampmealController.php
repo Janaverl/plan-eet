@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Camp;
 use App\Entity\Campday;
 use App\Entity\Campmeal;
-use App\Entity\CampMealmoments;
+use App\Entity\CampMealMoments;
 use App\Entity\Ingredient;
 use App\Entity\Mealcourse;
-use App\Entity\Mealmoment;
+use App\Entity\MealMoment;
 use App\Entity\Recipes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -27,12 +27,12 @@ class CampmealController extends AbstractController
                 'user' => $this->getUser(),
             ]);
         
-        $mealmoment = $entityManager->getRepository(Mealmoment::class)
+        $mealmoment = $entityManager->getRepository(MealMoment::class)
             ->findOneBy([
                 'name' => $mealmoment
             ]);
 
-        $campmealmoment = $entityManager->getRepository(CampMealmoments::class)
+        $campmealmoment = $entityManager->getRepository(CampMealMoments::class)
             ->findOneBy([
                 'camp' => $camp,
                 'mealmoment' => $mealmoment,
