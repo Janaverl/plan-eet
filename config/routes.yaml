@@ -31,7 +31,7 @@ camps_index:
    controller: App\Controller\CampController::index
 
 camps_show:
-   path: /camps/show/{campname}
+   path: /camps/show/{camp}
    controller: App\Controller\CampController::show
 
 camps_create:
@@ -75,7 +75,7 @@ recipes_edit:
    controller: App\Controller\RecipeController::edit
 
 shoppinglists_show:
-   path: /shoppinglists/show/{campid}
+   path: /shoppinglists/show/{camp}
    controller: App\Controller\ShoppinglistController::show
 
 singlevalue_create:

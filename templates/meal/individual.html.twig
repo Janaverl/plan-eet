@@ -45,7 +45,7 @@
         meal["mealmoment"] = "{{meal}}"
         meal["mealday"] = "{{mealday}}"
         meal["campid"] = "{{camp.id}}"
-        const redirect = "{{ path('camps_show', {campname: camp.name, camp: camp.id}) }}";
+        const redirect = "{{ path('camps_show', {camp: camp.id}) }}";
     </script>
     <script src="{{ asset('js/sorttable.js') }}"></script>
     <script  type="module" src="{{ asset('js/meal.js') }}"></script>

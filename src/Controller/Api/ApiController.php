@@ -3,7 +3,6 @@
 namespace App\Controller\Api;
 
 use Exception;
-use App\Service\ValidateRoute;
 use App\Service\Api\ApiProblem;
 use App\Service\Api\ApiProblemException;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -35,17 +34,6 @@ class ApiController extends AbstractController
         throw new ApiProblemException(new ApiProblem(422, ApiProblem::TYPE_CANNOT_BE_NULL));
     }
 
-    /**
-     * @param object $object
-     * @return void
-     */
-    protected function throwExceptionIfUnauthorizedUser(object $object) : void
-    {
-        if (!$this->isGranted('ROLE_ADMIN') && !ValidateRoute::isCreatedByUser($this->getUser(), $object->getUser())) {
-            throw new ApiProblemException(new ApiProblem(401, ApiProblem::TYPE_UNAUTHORIZED_USER));
-        }
-    }
-    
     /**
      * @param object $entityManager
      * @return void

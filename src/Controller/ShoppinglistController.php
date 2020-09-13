@@ -4,35 +4,25 @@ namespace App\Controller;
 
 use App\Entity\Camp;
 use App\Entity\Ingredient;
-use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShoppinglistController extends AbstractController
 {
-    public function show($campid, ValidateRoute $validateRoute)
+    public function show(Camp $camp)
     {
-        // validation
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $camp = $this->getDoctrine()
-            ->getRepository(Camp::class)
-            ->findOneBy(['id' => $campid]);
-
-        if (!empty($camp)) {        
-            $isCreatedByUser = $validateRoute->isCreatedByUser($this->getUser(), $camp->getUser());
-        }
-
-        if (empty($camp) or !$isCreatedByUser) {
-            return $this->redirectToRoute('camps_index', [
-                'time' => "future"
-            ]);
+        if (empty($camp)) {
+            return $this->redirectToRoute('camps_index',
+                ['time' => "future"]
+            );
         };
+
+        $this->denyAccessUnlessGranted('view', $camp);
 
         // If passes validation:
         $entityManager = $this->getDoctrine()->getManager();
 
         $allIngredients = $entityManager->getRepository(Ingredient::class)
-            ->findArrayByCamp($campid);
+            ->findArrayByCamp($camp);
 
         dump($allIngredients);
 
@@ -42,10 +32,13 @@ class ShoppinglistController extends AbstractController
             $message = "uw boodschappenlijstje:";
         }
 
-        return $this->render('shoppinglist/individual.html.twig', [
-            'message' => $message,
-            'ingredients' => $allIngredients,
-            'camp' => $camp,
-        ]);
+        return $this->render(
+            'shoppinglist/individual.html.twig',
+            [
+                'message' => $message,
+                'ingredients' => $allIngredients,
+                'camp' => $camp,
+            ]
+        );
     }
 }

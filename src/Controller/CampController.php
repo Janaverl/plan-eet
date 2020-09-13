@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Camp;
 use App\Entity\Mealmoment;
-use App\Service\ValidateRoute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CampController extends AbstractController
@@ -47,28 +46,23 @@ class CampController extends AbstractController
         ]);
     }
 
-    public function show($campname, ValidateRoute $validateRoute)
+    public function show(Camp $camp)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $camp = $this->getDoctrine()
-            ->getRepository(Camp::class)
-            ->findOneBy(['id' => $_GET["camp"]]);
-
-        if (!empty($camp)) {        
-            $isCreatedByUser = $validateRoute->isCreatedByUser($this->getUser(), $camp->getUser());
-            $hasMatchingSlug = $validateRoute->hasMatchingSlug($campname, $camp->getName());
-        }
-
-        if (empty($camp) or !$isCreatedByUser or !$hasMatchingSlug) {
-            return $this->redirectToRoute('camps_index', [
-                'time' => "future"
-            ]);
+        if (empty($camp)) {
+            return $this->redirectToRoute(
+                'camps_index',
+                ['time' => "future"]
+            );
         };
 
-        return $this->render('camp/callenderindividual.html.twig', [
-            'value' => $camp
-        ]);
+        $this->denyAccessUnlessGranted('view', $camp);
+
+        return $this->render(
+            'camp/callenderindividual.html.twig',
+            [
+                'value' => $camp
+            ]
+        );
     }
 
     public function create()
@@ -80,9 +74,10 @@ class CampController extends AbstractController
             ->getRepository(Mealmoment::class)
             ->findAll();
 
-        return $this->render('camp/individual.html.twig', [
-            'mealmoments' => $allMealmoments
-        ]);
+        return $this->render(
+            'camp/individual.html.twig',
+            ['mealmoments' => $allMealmoments]
+        );
     }
 
 }

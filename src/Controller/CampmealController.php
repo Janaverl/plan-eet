@@ -55,7 +55,7 @@ class CampmealController extends AbstractController
 
         $ingredients = $this->getDoctrine()
             ->getRepository(Ingredient::class)
-            ->findArrayByCampmeal($_GET["camp"], $mealmoment, $_GET["day"]);
+            ->findArrayByCampmeal($camp, $mealmoment, $_GET["day"]);
 
         return $this->render('meal/show.html.twig', [
             'camp' => $camp,

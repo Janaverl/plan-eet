@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Camp;
 use App\Entity\Ingredient;
+use App\Entity\Mealmoment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -24,7 +26,7 @@ class IngredientRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('name' => 'ASC'));
     }
 
-    public function findArrayByCampmeal($campid, $mealmomentname, $campdaycount)
+    public function findArrayByCampmeal(Camp $camp, Mealmoment $mealmoment, int $campdaycount)
     {
         $entityManager = $this->getEntityManager();
 
@@ -69,15 +71,15 @@ class IngredientRepository extends ServiceEntityRepository
         $query = $entityManager->createNativeQuery($sql, $rsm);
 
         $query
-            ->setParameter('id', $campid)
-            ->setParameter('name', $mealmomentname)
+            ->setParameter('id', $camp)
+            ->setParameter('name', $mealmoment)
             ->setParameter('count', $campdaycount);
 
         return $query->getResult();
 
     }
 
-    public function findArrayByCamp($campid)
+    public function findArrayByCamp(Camp $camp)
     {
         $entityManager = $this->getEntityManager();
 
@@ -118,63 +120,9 @@ class IngredientRepository extends ServiceEntityRepository
         $query = $entityManager->createNativeQuery($sql, $rsm);
 
         $query
-            ->setParameter('id', $campid);
+            ->setParameter('id', $camp);
 
         return $query->getResult();
 
     }
-
-    // public function findByCampmealSec($recipe)
-    // {
-    //     $entityManager = $this->getEntityManager();
-
-    //     $query = $entityManager->createQuery(
-    //         'SELECT
-    //             ingr_recipe.quantity as quantity,
-    //             unit.name as unit_name,
-    //             ingredient.name as ingrendient_name,
-    //             rayon.name as rayon_name,
-    //             recipes.name as recipe_name
-    //         FROM App\Entity\Recipes recipes,
-
-    //         INNER JOIN ingredient.recipe ingr_recipe
-    //         INNER JOIN ingr_recipe.recipe recipes
-    //         INNER JOIN ingredient.unit unit
-    //         INNER JOIN ingredient.rayon rayon
-    //         WHERE recipes.name = :id
-    //         ORDER BY rayon.name'
-    //     )
-    //         ->setParameter('id', $recipe);
-
-    //     return $query->getResult();
-    // }
-
-    // /**
-    //  * @return Ingredient[] Returns an array of Ingredient objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-    return $this->createQueryBuilder('i')
-    ->andWhere('i.exampleField = :val')
-    ->setParameter('val', $value)
-    ->orderBy('i.id', 'ASC')
-    ->setMaxResults(10)
-    ->getQuery()
-    ->getResult()
-    ;
-    }
-     */
-
-    /*
-public function findOneBySomeField($value): ?Ingredient
-{
-return $this->createQueryBuilder('i')
-->andWhere('i.exampleField = :val')
-->setParameter('val', $value)
-->getQuery()
-->getOneOrNullResult()
-;
-}
- */
 }

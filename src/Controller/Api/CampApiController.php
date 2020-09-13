@@ -128,9 +128,8 @@ class CampApiController extends ApiController
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $campid]);
             
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('view', $camp);
         $this->throwExceptionIfNotExcists($camp);
-        $this->throwExceptionIfUnauthorizedUser($camp);
 
         // We need a clone of these Datetime-values, because we will modify this.
         $firstday = clone $camp->getStartTime();

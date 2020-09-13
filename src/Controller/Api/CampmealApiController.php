@@ -58,9 +58,8 @@ class CampmealApiController extends ApiController
             ->getRepository(Camp::class)
             ->findOneBy(['id' => $_GET["camp"]]);
         
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('view', $camp);
         $this->throwExceptionIfNotExcists($camp);
-        $this->throwExceptionIfUnauthorizedUser($camp);
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -80,8 +79,6 @@ class CampmealApiController extends ApiController
      */
     public function store(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $data = json_decode($request->getContent(), true);
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -89,7 +86,7 @@ class CampmealApiController extends ApiController
         $camp = $entityManager->getRepository(Camp::class)
             ->findOneBy(['id' => $data["campid"],]);
         
-        $this->throwExceptionIfUnauthorizedUser($camp);
+        $this->denyAccessUnlessGranted('view', $camp);
 
         $mealmoment = $entityManager->getRepository(Mealmoment::class)
             ->findOneBy(['name' => $data["mealmoment"]]);
