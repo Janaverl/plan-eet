@@ -74,12 +74,12 @@ class CampMealMoments
         return $this;
     }
 
-    public function getMealMoment(): ?MealMoment
+    public function getMealmoment(): ?MealMoment
     {
         return $this->mealmoment;
     }
 
-    public function setMealMoment(?MealMoment $mealmoment): self
+    public function setMealmoment(?MealMoment $mealmoment): self
     {
         $this->mealmoment = $mealmoment;
 
@@ -98,7 +98,7 @@ class CampMealMoments
     {
         if (!$this->campmeals->contains($campmeal)) {
             $this->campmeals[] = $campmeal;
-            $campmeal->setCampMealMoment($this);
+            $campmeal->setCampMealmoment($this);
         }
 
         return $this;
@@ -109,8 +109,8 @@ class CampMealMoments
         if ($this->campmeals->contains($campmeal)) {
             $this->campmeals->removeElement($campmeal);
             // set the owning side to null (unless already changed)
-            if ($campmeal->getCampMealMoment() === $this) {
-                $campmeal->setCampMealMoment(null);
+            if ($campmeal->getCampMealmoment() === $this) {
+                $campmeal->setCampMealmoment(null);
             }
         }
 

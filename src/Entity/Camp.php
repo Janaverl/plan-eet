@@ -47,7 +47,7 @@ class Camp
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CampMealMoments", mappedBy="camp")
      */
-    private $campMealMoments;
+    private $campMealmoments;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Campday", mappedBy="camp")
@@ -56,7 +56,7 @@ class Camp
 
     public function __construct()
     {
-        $this->campMealMoments = new ArrayCollection();
+        $this->campMealmoments = new ArrayCollection();
         $this->campdays = new ArrayCollection();
     }
 
@@ -128,28 +128,28 @@ class Camp
     /**
      * @return Collection|CampMealMoments[]
      */
-    public function getCampMealMoments(): Collection
+    public function getCampMealmoments(): Collection
     {
-        return $this->campMealMoments;
+        return $this->campMealmoments;
     }
 
-    public function addCampMealMoment(CampMealMoments $campMealMoment): self
+    public function addCampMealmoment(CampMealMoments $campMealmoment): self
     {
-        if (!$this->campMealMoments->contains($campMealMoment)) {
-            $this->campMealMoments[] = $campMealMoment;
-            $campMealMoment->setCamp($this);
+        if (!$this->campMealmoments->contains($campMealmoment)) {
+            $this->campMealmoments[] = $campMealmoment;
+            $campMealmoment->setCamp($this);
         }
 
         return $this;
     }
 
-    public function removeCampMealMoment(CampMealMoments $campMealMoment): self
+    public function removeCampMealmoment(CampMealMoments $campMealmoment): self
     {
-        if ($this->campMealMoments->contains($campMealMoment)) {
-            $this->campMealMoments->removeElement($campMealMoment);
+        if ($this->campMealmoments->contains($campMealmoment)) {
+            $this->campMealmoments->removeElement($campMealmoment);
             // set the owning side to null (unless already changed)
-            if ($campMealMoment->getCamp() === $this) {
-                $campMealMoment->setCamp(null);
+            if ($campMealmoment->getCamp() === $this) {
+                $campMealmoment->setCamp(null);
             }
         }
 
