@@ -131,3 +131,8 @@ api_singlevalue_store:
    path: /api/singlevalue/{entityname}
    controller: App\Controller\Api\SingleValueApiController::store
    methods: POST
+
+api_users_index:
+   path: /api/users
+   controller: App\Controller\Api\UserApiController::index
+   methods: GET

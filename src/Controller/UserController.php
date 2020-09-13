@@ -72,13 +72,7 @@ class UserController extends AbstractController
     public function index()
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-        $allUsers = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->findAll();
-
-        return $this->render('user/index.html.twig', [
-            'values' => $allUsers,
-        ]);
+        
+        return $this->render('user/index.html.twig');
     }
 }

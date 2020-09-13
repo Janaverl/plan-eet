@@ -8,11 +8,6 @@
             "type": "shell",
             "command": "symfony server:start"
         },
-        // {
-        //     "label": "symfony new entity",
-        //     "type": "shell",
-        //     "command": "php bin/console make:entity"
-        // },
         {
             "label": "symfony make migration",
             "type": "shell",
@@ -22,6 +17,11 @@
             "label": "symfony migrate",
             "type": "shell",
             "command": "php bin/console doctrine:migrations:migrate"
-        }
+        },
+        {
+            "label": "yarn build and watch",
+            "type": "shell",
+            "command": "yarn encore dev --watch"
+        },
     ]
 }
