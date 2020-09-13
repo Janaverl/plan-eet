@@ -76,12 +76,12 @@ class CampController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         // get all mealmoments, so the user can select them and add them to the camp he is creating
-        $allMealmoments = $this->getDoctrine()
+        $allMealMoments = $this->getDoctrine()
             ->getRepository(MealMoment::class)
             ->findAll();
 
         return $this->render('camp/individual.html.twig', [
-            'mealmoments' => $allMealmoments
+            'mealmoments' => $allMealMoments
         ]);
     }
 

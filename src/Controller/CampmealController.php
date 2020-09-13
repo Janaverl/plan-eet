@@ -46,7 +46,7 @@ class CampmealController extends AbstractController
 
         $campmeal = $entityManager->getRepository(Campmeal::class)
             ->findOneBy([
-                'campMealmoment' => $campmealmoment,
+                'campMealMoment' => $campmealmoment,
                 'campday' => $campday,
             ]);
 

@@ -26,11 +26,11 @@ class MealMoment
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CampMealMoments", mappedBy="mealmoment")
      */
-    private $campMealmoments;
+    private $campMealMoments;
 
     public function __construct()
     {
-        $this->campMealmoments = new ArrayCollection();
+        $this->campMealMoments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,28 +53,28 @@ class MealMoment
     /**
      * @return Collection|CampMealMoments[]
      */
-    public function getCampMealmoments(): Collection
+    public function getCampMealMoments(): Collection
     {
-        return $this->campMealmoments;
+        return $this->campMealMoments;
     }
 
-    public function addCampMealmoment(CampMealMoments $campMealmoment): self
+    public function addCampMealMoment(CampMealMoments $campMealMoment): self
     {
-        if (!$this->campMealmoments->contains($campMealmoment)) {
-            $this->campMealmoments[] = $campMealmoment;
-            $campMealmoment->setMealmoment($this);
+        if (!$this->campMealMoments->contains($campMealMoment)) {
+            $this->campMealMoments[] = $campMealMoment;
+            $campMealMoment->setMealMoment($this);
         }
 
         return $this;
     }
 
-    public function removeCampMealmoment(CampMealMoments $campMealmoment): self
+    public function removeCampMealMoment(CampMealMoments $campMealMoment): self
     {
-        if ($this->campMealmoments->contains($campMealmoment)) {
-            $this->campMealmoments->removeElement($campMealmoment);
+        if ($this->campMealMoments->contains($campMealMoment)) {
+            $this->campMealMoments->removeElement($campMealMoment);
             // set the owning side to null (unless already changed)
-            if ($campMealmoment->getMealmoment() === $this) {
-                $campMealmoment->setMealmoment(null);
+            if ($campMealMoment->getMealMoment() === $this) {
+                $campMealMoment->setMealMoment(null);
             }
         }
 
