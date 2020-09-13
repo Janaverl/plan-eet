@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\CampMealmoments;
+use App\Entity\CampMealMoments;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method CampMealmoments|null find($id, $lockMode = null, $lockVersion = null)
- * @method CampMealmoments|null findOneBy(array $criteria, array $orderBy = null)
- * @method CampMealmoments[]    findAll()
- * @method CampMealmoments[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CampMealMoments|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CampMealMoments|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CampMealMoments[]    findAll()
+ * @method CampMealMoments[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CampMealmomentsRepository extends ServiceEntityRepository
+class CampMealMomentsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CampMealmoments::class);
+        parent::__construct($registry, CampMealMoments::class);
     }
 
     // /**
@@ -27,9 +27,9 @@ class CampMealmomentsRepository extends ServiceEntityRepository
     //  * @param string $mealmomentname
     //  * @return array
     //  */
-    // public function findOneByCampAndMealmomentname(object $entityManager, object $camp, string $mealmomentname): array
+    // public function findOneByCampAndMealMomentname(object $entityManager, object $camp, string $mealmomentname): array
     // {
-    //     $mealmoment = $entityManager->getRepository('App:Mealmoment')
+    //     $mealmoment = $entityManager->getRepository('App:MealMoment')
     //         ->findOneBy(['name' => $mealmomentname]);
 
     //     return $this->createQueryBuilder('this_campmealmoment')
@@ -42,7 +42,7 @@ class CampMealmomentsRepository extends ServiceEntityRepository
     // }
 
     // /**
-    //  * @return CampMealmoments[] Returns an array of CampMealmoments objects
+    //  * @return CampMealMoments[] Returns an array of CampMealMoments objects
     //  */
     /*
     public function findByExampleField($value)
@@ -59,7 +59,7 @@ class CampMealmomentsRepository extends ServiceEntityRepository
      */
 
     /*
-public function findOneBySomeField($value): ?CampMealmoments
+public function findOneBySomeField($value): ?CampMealMoments
 {
 return $this->createQueryBuilder('c')
 ->andWhere('c.exampleField = :val')

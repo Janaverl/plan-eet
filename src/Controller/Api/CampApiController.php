@@ -33,13 +33,13 @@ class CampApiController extends ApiController
                 ->getRepository(MealMoment::class)
                 ->findOneBy(['name' => $mealmoment["mealmoment"]]);
 
-            $campMealmoment = new CampMealMoments();
-            $campMealmoment->setCamp($camp)
+            $campMealMoment = new CampMealMoments();
+            $campMealMoment->setCamp($camp)
                 ->setMealMoment($mealmoment)
                 ->setTime($time);
 
             // tell Doctrine you want to (eventually) save the campmealmoment (no queries yet)
-            $entityManager->persist($campMealmoment);
+            $entityManager->persist($campMealMoment);
         }
     }
 
@@ -136,7 +136,7 @@ class CampApiController extends ApiController
         $firstday = clone $camp->getStartTime();
         $lastday = clone $camp->getEndTime();
 
-        $mealhours = $fullcalendar->create_businesshours($camp->getCampMealmoments(), 60);
+        $mealhours = $fullcalendar->create_businesshours($camp->getCampMealMoments(), 60);
         $dataWeWillSend = array(
             "start" => $firstday->format('Y-m-d'),
             "end" => $lastday->modify('+1 day')->format('Y-m-d'),
