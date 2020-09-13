@@ -45,7 +45,7 @@ class Fullcalendar
     private function createOneMealEvent($entityManager, $campday, $mealmoment, $firstcampMoment, $lastcampMoment, $campid, $daycount, $currentDay)
     {
         $mealMomentTime = $mealmoment->gettime();
-        $mealMomentName = $mealmoment->getMealMoment()->getName();
+        $mealMomentName = $mealmoment->getMealmoment()->getName();
 
         $startMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime);
         $endMeal = $this->converttime->time_to_ISO8601($currentDay, $mealMomentTime + 60);
@@ -62,7 +62,7 @@ class Fullcalendar
         $campmeal = $entityManager->getRepository(Campmeal::class)
             ->findOneBy([
                 'campday' => $campday,
-                'campMealMoment' => $mealmoment,
+                'campMealmoment' => $mealmoment,
             ]);
         
         if ($campmeal) {
@@ -93,7 +93,7 @@ class Fullcalendar
             $firstday = clone $camp->getStartTime();
             $currentDay = $firstday->modify('+' . $daycount . ' day')->format('Y-m-d');
 
-            foreach ($camp->getCampMealMoments() as $mealmoment) {
+            foreach ($camp->getCampMealmoments() as $mealmoment) {
                 $oneMeal = $this->createOneMealEvent($entityManager, $campday, $mealmoment, $firstcampMoment, $lastcampMoment, $campid, $daycount, $currentDay);
                 $allTheEvents->add($oneMeal->getValues());
             }

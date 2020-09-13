@@ -21,7 +21,7 @@ class MealEvent
     public function renderWithMeal($campmealName, $mealmomentname, $campid, $daycount){
         $this->eventInformation["extendedProps"] = array(
             "currentDaycount" => $daycount,
-            "currentMealMoment" => $mealmomentname,
+            "currentMealmoment" => $mealmomentname,
             "currentEventStart" => $this->eventInformation["start"],
             "hasMeal" => true
         );

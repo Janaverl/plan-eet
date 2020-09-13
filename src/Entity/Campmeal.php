@@ -22,7 +22,7 @@ class Campmeal
      * @ORM\ManyToOne(targetEntity="App\Entity\CampMealMoments", inversedBy="campmeals")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $campMealMoment;
+    private $campMealmoment;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Campday", inversedBy="campmeals")
@@ -50,14 +50,14 @@ class Campmeal
         return $this->id;
     }
 
-    public function getCampMealMoment(): ?CampMealMoments
+    public function getCampMealmoment(): ?CampMealMoments
     {
-        return $this->campMealMoment;
+        return $this->campMealmoment;
     }
 
-    public function setCampMealMoment(?CampMealMoments $campMealMoment): self
+    public function setCampMealmoment(?CampMealMoments $campMealmoment): self
     {
-        $this->campMealMoment = $campMealMoment;
+        $this->campMealmoment = $campMealmoment;
 
         return $this;
     }

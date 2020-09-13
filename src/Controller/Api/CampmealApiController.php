@@ -28,7 +28,7 @@ class CampmealApiController extends ApiController
     protected function create_campmeal(object $campmealmoment, object $campday, string $mealname, array $recipes, object $entityManager): void
     {
         $campmeal = new Campmeal();
-        $campmeal->setCampMealMoment($campmealmoment)
+        $campmeal->setCampMealmoment($campmealmoment)
             ->setCampday($campday)
             ->setName($mealname);
 
