@@ -28,7 +28,7 @@
 
     import axios from 'axios';
     import ApiWrapper from '../Reusable/ApiWrapper';
-    import {ApiEventBus} from '../../users';
+    import {ApiEventBus} from '../../api';
 
     export default {
         name: "users",
