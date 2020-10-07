@@ -143,6 +143,15 @@ api_singlevalue_store:
    methods: POST
 
 api_supplies_camp_index:
+   path: /api/camp/supplies/{camp}
+   controller: App\Controller\Api\SuppliesApiController::show_for_camp
+   methods: GET
+
+api_supplies_camp_mealdetails_index:
+   path: /api/camp/suppliesdetail/{camp}
+   controller: App\Controller\Api\SuppliesApiController::show_for_camp_with_mealdetail
+   methods: GET
+
 api_users_index:
    path: /api/users
    controller: App\Controller\Api\UserApiController::index
