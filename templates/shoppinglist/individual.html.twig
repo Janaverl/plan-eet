@@ -10,6 +10,7 @@
             <div class="w3-card step">
                 <p> {{camp.name}} - {{camp.nrOfParticipants}} deelnemers </p>
                 <p> van: {{camp.startTime|date("d/m/Y - H:i")}}  - tot: {{camp.endTime|date("d/m/Y - H:i")}} </p>
+                <div id="supplies"></div>
             </div>
         </div>
     </div>
@@ -17,5 +18,11 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        {% if camp is defined %}
+            window.currentCamp = '{{ camp.id|e('js') }}';
+        {% endif %}
+    </script>
+    {{ encore_entry_script_tags('supplies') }}
     <script src="{{ asset('js/sorttable.js') }}"></script>
 {% endblock %} 

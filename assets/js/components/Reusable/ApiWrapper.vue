@@ -28,6 +28,10 @@
         created() {
             const vm = this;
 
+            ApiEventBus.$on('startLoading', () => {
+                vm.loading = true;
+            })
+
             ApiEventBus.$on('showError', () => {
                 vm.errored = true;
             })
