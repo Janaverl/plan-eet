@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Camp;
 use App\Entity\Campday;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * @method Campday|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +19,37 @@ class CampdayRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Campday::class);
+    }
+
+    public function findDatesByCamp(Camp $camp) : array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $rsm = new ResultSetMapping();
+
+        $rsm
+            ->addScalarResult('campdaycount', 'campdaycount')
+            ->addScalarResult('meal_date', 'date');
+
+        $sql =
+            "SELECT
+                campday.campdaycount AS campdaycount,
+                DATE_FORMAT(DATE_ADD(camp.start_time, INTERVAL (campday.campdaycount) DAY), '%d/%m/%Y') AS meal_date 
+
+            FROM campday
+
+            INNER JOIN camp ON camp.id = campday.camp_id
+
+            WHERE camp.id = :id
+            
+            ORDER BY campday.campdaycount ASC";
+
+        $query = $entityManager->createNativeQuery($sql, $rsm);
+
+        $query
+            ->setParameter('id', $camp);
+
+        return $query->getResult();
     }
 
     // public function findOneByCampAndCampdaycount(object $entityManager, object $camp, string $campdaycount): array

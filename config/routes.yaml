@@ -82,6 +82,11 @@ singlevalue_create:
    path: /value/create/{entityname}
    controller: App\Controller\SingleValueController::create
 
+api_days_camp_get:
+   path: /api/camp/campdays/{camp}
+   controller: App\Controller\Api\CampdayApiController::show_for_camp
+   methods: GET
+
 api_camps_store:
    path: /api/camps
    controller: App\Controller\Api\CampApiController::store
@@ -132,6 +137,7 @@ api_singlevalue_store:
    controller: App\Controller\Api\SingleValueApiController::store
    methods: POST
 
+api_supplies_camp_index:
 api_users_index:
    path: /api/users
    controller: App\Controller\Api\UserApiController::index
