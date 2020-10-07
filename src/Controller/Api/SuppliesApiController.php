@@ -17,15 +17,20 @@ class SuppliesApiController extends ApiController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        if (empty($request->query->get('rayons')) || empty($request->query->get('daycount'))) {
-            $allIngredients = $entityManager->getRepository(Ingredient::class)
-                ->findArrayByCamp($camp);
+        if (empty($request->query->get('rayons'))) {
+            $rayons = null;
         } else {
-            $rayon = $request->query->get('rayons');
-            $daycount = $request->query->get('daycount');
-            $allIngredients = $entityManager->getRepository(Ingredient::class)
-                ->findArrayByCampFilterByRayonsAndCampdays($camp, $rayon, $daycount);
+            $rayons = $request->query->get('rayons');
         }
+
+        if (empty($request->query->get('daycount'))) {
+            $daycount = null;
+        } else {
+            $daycount = $request->query->get('daycount');
+        }
+
+        $allIngredients = $entityManager->getRepository(Ingredient::class)
+            ->findArrayByCamp($camp, $rayons, $daycount);
 
         return new JsonResponse($allIngredients);
     }

@@ -133,7 +133,7 @@ class IngredientRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findArrayByCamp(Camp $camp)
+    public function findArrayByCamp(Camp $camp, ?array $rayons, ?array $campdays)
     {
         $entityManager = $this->getEntityManager();
 
@@ -145,136 +145,7 @@ class IngredientRepository extends ServiceEntityRepository
             ->addScalarResult('unit_name', 'unit')
             ->addScalarResult('rayon_name', 'rayon');
 
-        $sql =
-            'SELECT
-                DISTINCT ingredient.name AS ingredient,
-                SUM(ROUND((recipe_ingredients.quantity*(SELECT nr_of_participants FROM camp WHERE camp.id = :id)), 3)) AS quant,
-                unit.name AS unit_name,
-                rayon.name as rayon_name
-
-            FROM campmeal
-
-            INNER JOIN mealcourse ON campmeal.id = mealcourse.campmeal_id
-            INNER JOIN recipes ON mealcourse.recipe_id = recipes.id
-            INNER JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
-            INNER JOIN ingredient ON recipe_ingredients.ingredient_id = ingredient.id
-            INNER JOIN unit ON ingredient.unit_id = unit.id
-            INNER JOIN rayon ON ingredient.rayon_id = rayon.id
-
-            WHERE campmeal.id IN
-                (SELECT campmeal.id FROM campmeal WHERE camp_mealmoment_id IN
-                    (SELECT camp_mealmoments.id FROM camp_mealmoments
-                        WHERE camp_mealmoments.camp_id = :id
-                    )
-                )
-
-            GROUP BY ingredient
-            ORDER BY rayon.name ASC';
-
-        $query = $entityManager->createNativeQuery($sql, $rsm);
-
-        $query
-            ->setParameter('id', $camp);
-
-        return $query->getResult();
-    }
-
-    public function findArrayByCampFilterByRayon(Camp $camp, array $rayons)
-    {
-        $entityManager = $this->getEntityManager();
-
-        $rsm = new ResultSetMapping();
-
-        $rsm
-            ->addScalarResult('ingredient', 'name')
-            ->addScalarResult('quant', 'quantity')
-            ->addScalarResult('unit_name', 'unit')
-            ->addScalarResult('rayon_name', 'rayon');
-
-        $sql =
-            'SELECT
-                DISTINCT ingredient.name AS ingredient,
-                SUM(ROUND((recipe_ingredients.quantity*(SELECT nr_of_participants FROM camp WHERE camp.id = :id)), 3)) AS quant,
-                unit.name AS unit_name,
-                rayon.name as rayon_name
-
-            FROM campmeal
-
-            INNER JOIN mealcourse ON campmeal.id = mealcourse.campmeal_id
-            INNER JOIN recipes ON mealcourse.recipe_id = recipes.id
-            INNER JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
-            INNER JOIN ingredient ON recipe_ingredients.ingredient_id = ingredient.id
-            INNER JOIN unit ON ingredient.unit_id = unit.id
-            INNER JOIN rayon ON ingredient.rayon_id = rayon.id
-
-            WHERE campmeal.id IN
-                (SELECT campmeal.id FROM campmeal WHERE camp_mealmoment_id IN
-                    (SELECT camp_mealmoments.id FROM camp_mealmoments
-                        WHERE camp_mealmoments.camp_id = :id
-                    )
-                )
-            
-            AND (rayon.name IN (:rayons))
-
-            GROUP BY ingredient
-            ORDER BY rayon.name ASC';
-
-        $query = $entityManager->createNativeQuery($sql, $rsm);
-
-        $query
-            ->setParameter('id', $camp)
-            ->setParameter('rayons', $rayons);
-
-        return $query->getResult();
-    }
-
-    
-    public function findArrayByCampFilterByRayonsAndCampdays(Camp $camp, array $rayons, array $campdays)
-    {
-        $entityManager = $this->getEntityManager();
-
-        $rsm = new ResultSetMapping();
-
-        $rsm
-            ->addScalarResult('ingredient', 'name')
-            ->addScalarResult('quant', 'quantity')
-            ->addScalarResult('unit_name', 'unit')
-            ->addScalarResult('rayon_name', 'rayon');
-
-        $sql =
-            'SELECT
-                DISTINCT ingredient.name AS ingredient,
-                SUM(ROUND((recipe_ingredients.quantity*(SELECT nr_of_participants FROM camp WHERE camp.id = :id)), 3)) AS quant,
-                unit.name AS unit_name,
-                rayon.name as rayon_name
-
-            FROM campmeal
-
-            INNER JOIN mealcourse ON campmeal.id = mealcourse.campmeal_id
-            INNER JOIN recipes ON mealcourse.recipe_id = recipes.id
-            INNER JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
-            INNER JOIN ingredient ON recipe_ingredients.ingredient_id = ingredient.id
-            INNER JOIN unit ON ingredient.unit_id = unit.id
-            INNER JOIN rayon ON ingredient.rayon_id = rayon.id
-
-            WHERE campmeal.id IN
-                (SELECT campmeal.id FROM campmeal WHERE camp_mealmoment_id IN
-                    (SELECT camp_mealmoments.id FROM camp_mealmoments
-                        WHERE camp_mealmoments.camp_id = :id
-                    )
-                )
-            
-            AND (rayon.name IN (:rayons))
-
-            AND campmeal.campday_id IN
-                (SELECT campmeal.campday_id FROM campmeal WHERE campday_id IN
-                    (SELECT campday.id FROM campday
-                        WHERE campday.campdaycount IN (:campdays) 
-                    )
-                )
-
-            GROUP BY ingredient
-            ORDER BY rayon.name ASC';
+        $sql = $this->writeQueryToFindByCamp($rayons, $campdays);
 
         $query = $entityManager->createNativeQuery($sql, $rsm);
 
@@ -284,5 +155,76 @@ class IngredientRepository extends ServiceEntityRepository
             ->setParameter('campdays', $campdays);
 
         return $query->getResult();
+    }
+
+    private function writeQueryToFindByCamp($rayons, $daycounts) {
+        $queryLangSelet
+            ='
+            SELECT
+                DISTINCT ingredient.name AS ingredient,
+                SUM(ROUND((recipe_ingredients.quantity*(SELECT nr_of_participants FROM camp WHERE camp.id = :id)), 3)) AS quant,
+                unit.name AS unit_name,
+                rayon.name as rayon_name
+            ';
+
+        $queryLangFrom
+            ='
+            FROM campmeal
+            ';
+
+        $queryLangJoins
+            ='
+            INNER JOIN mealcourse ON campmeal.id = mealcourse.campmeal_id
+            INNER JOIN recipes ON mealcourse.recipe_id = recipes.id
+            INNER JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
+            INNER JOIN ingredient ON recipe_ingredients.ingredient_id = ingredient.id
+            INNER JOIN unit ON ingredient.unit_id = unit.id
+            INNER JOIN rayon ON ingredient.rayon_id = rayon.id
+            ';
+        
+        $queryLangWhere 
+            ='
+            WHERE campmeal.id IN
+                (SELECT campmeal.id FROM campmeal WHERE camp_mealmoment_id IN
+                    (SELECT camp_mealmoments.id FROM camp_mealmoments
+                        WHERE camp_mealmoments.camp_id = :id
+                    )
+                )
+            ';
+        
+        $queryLangFilterRayons
+            ='
+            AND (rayon.name IN (:rayons))
+            ';
+
+        $queryLangFilterCampdays
+            ='
+            AND campmeal.campday_id IN
+                (SELECT campmeal.campday_id FROM campmeal WHERE campday_id IN
+                    (SELECT campday.id FROM campday
+                        WHERE campday.campdaycount IN (:campdays) 
+                    )
+                )
+            ';
+
+        $queryLangFilterGroupBy
+            ='
+            GROUP BY ingredient
+            ORDER BY rayon.name ASC
+            ';
+
+        $query = $queryLangSelet;
+        $query .= $queryLangFrom;
+        $query .= $queryLangJoins;
+        $query .= $queryLangWhere;
+        if(!empty($rayons)) {
+            $query .= $queryLangFilterRayons;
+        };
+        if(!empty($daycounts)) {
+            $query .= $queryLangFilterCampdays;
+        };
+        $query .= $queryLangFilterGroupBy;
+
+        return $query;
     }
 }
