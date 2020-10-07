@@ -5,13 +5,13 @@ namespace App\Controller\Api;
 use App\Entity\Ingredient;
 use App\Entity\Rayon;
 use App\Entity\Unit;
-use App\Service\Addvalue;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class IngredientApiController extends ApiController
 {
+
     /**
      * @param array $data
      * @param object $ingredient
