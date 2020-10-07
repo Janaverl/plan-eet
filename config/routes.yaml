@@ -74,9 +74,9 @@ recipes_edit:
    path: /recipes/edit/{recipename}
    controller: App\Controller\RecipeController::edit
 
-shoppinglists_show:
-   path: /shoppinglists/show/{camp}
-   controller: App\Controller\ShoppinglistController::show
+supplies_show:
+   path: /supplies/show/{camp}
+   controller: App\Controller\SuppliesController::show
 
 singlevalue_create:
    path: /value/create/{entityname}

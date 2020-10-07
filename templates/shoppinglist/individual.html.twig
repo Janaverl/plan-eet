@@ -5,29 +5,11 @@
 {% block body %}
     <div class="contentwrapper">
         <h1>ingredientenlijst voor een kamp</h1>
-        
+            
         <div class="cardwrapper">
             <div class="w3-card step">
-                    <h5> {{camp.name}} </h5>
-                    <h5> van: {{camp.startTime|date("d/m/Y - H:i")}} </h5>
-                    <h5> tot: {{camp.endTime|date("d/m/Y - H:i")}} </h5>
-                    <h5> {{camp.nrOfParticipants}} deelnemers </h5>
-
-                    <p>{{message}}</p>
-                {% set rayon = "" %}
-                <ul>
-                {% for ingredient in ingredients %}
-                    {% if rayon != ingredient.r_name %}
-                        </ul>
-                        <p>{{ingredient.r_name}}</p>
-                        <ul>
-                        {% set rayon = ingredient.r_name %}
-                    {% endif %}
-                    <li>{{ ingredient.quantity*1 }} {{ingredient.u_name}} {{ingredient.name}}</li>
-                {% endfor %}
-                </ul>
-                </tbody>
-                </table>
+                <p> {{camp.name}} - {{camp.nrOfParticipants}} deelnemers </p>
+                <p> van: {{camp.startTime|date("d/m/Y - H:i")}}  - tot: {{camp.endTime|date("d/m/Y - H:i")}} </p>
             </div>
         </div>
     </div>
