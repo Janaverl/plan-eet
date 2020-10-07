@@ -32,6 +32,10 @@ Execute the sql-file in order to get started with some data.
 
 ### register and log in
 In order to use the CMS: register as a new user and change your role to ["ROLE_ADMIN"] .
+
+### set up front end
+This project uses webpack-encore.
+Runn ```npm install``` and ```yarn```
   
 ## projects of the alfa-version
 I split up the project into 6 smaller ones, in order to keep track of the progress.
