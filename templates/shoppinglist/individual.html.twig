@@ -16,6 +16,11 @@
     </div>
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('supplies') }}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script>

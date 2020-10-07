@@ -5,16 +5,17 @@
         </div>
         <div
             class="w3-bar-block"
-            v-for="day in days"
-            :key="day.date"
         >
-            <a
-                class="w3-bar-item w3-margin-bottom w3-button w3-border"
-                v-on:click="day.isActive = !day.isActive, passData()"
+            <button
+                v-for="day in days"
+                :key="day.date"
+                class="w3-bar-item w3-button w3-border"
+                v-on:click="day.isActive = !day.isActive, processClick()"
                 v-bind:class="{ 'w3-blue': day.isActive  }"
+                :disabled="day.isActive && isLastOne"
             >
                 {{day.date}}
-            </a>
+            </button>
         </div>
     </div>
 </template>
@@ -22,12 +23,14 @@
 <script>
     import axios from 'axios';
     import {SuppliesEventBus} from '../../supplies';
+    import filter from '../../modules/filter';
 
     export default {
         name: "dates",
         data: function() {
             return{
                 days: null,
+                isLastOne: false
             }
         },
         mounted () {
@@ -48,6 +51,10 @@
                 })
         },
         methods: {
+            processClick() {
+                this.passData();
+                this.isLastOne = filter.isLastActiveInArray(this.days);
+            },
             passData() {
                 SuppliesEventBus.$emit('passDays', this.days);
             }
@@ -56,4 +63,7 @@
 </script>
 
 <style scoped>
+    .w3-bar-item.w3-button.w3-border {
+        margin: 0px;
+    }
 </style>

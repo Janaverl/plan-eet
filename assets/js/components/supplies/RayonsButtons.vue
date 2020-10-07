@@ -3,27 +3,34 @@
         <div class="w3-container">
             <h5>rayons</h5>
         </div>
-        <a
-            v-for="rayon in rayons"
-            :key="rayon.name"
-            class="w3-margin w3-button w3-border"
-            v-on:click="rayon.isActive = !rayon.isActive, passData()"
-            v-bind:class="{ 'w3-blue': rayon.isActive  }"
+        <div
+            class="w3-bar"
         >
-            {{rayon.name}}
-        </a>
+            <button
+                v-for="rayon in rayons"
+                :key="rayon.name"
+                class="w3-bar-item w3-button w3-border"
+                v-on:click="rayon.isActive = !rayon.isActive, processClick()"
+                v-bind:class="{ 'w3-blue': rayon.isActive  }"
+                :disabled="rayon.isActive && isLastOne"
+            >
+                {{rayon.name}}
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
     import {SuppliesEventBus} from '../../supplies';
+    import filter from '../../modules/filter';
 
     export default {
         name: "rayons",
         data: function() {
             return{
-                rayons: null
+                rayons: null,
+                isLastOne: false
             }
         },
         mounted () {
@@ -44,6 +51,10 @@
                 })
         },
         methods: {
+            processClick() {
+                this.passData();
+                this.isLastOne = filter.isLastActiveInArray(this.rayons);
+            },
             passData() {
                 SuppliesEventBus.$emit('passRayons', this.rayons);
             }
@@ -52,4 +63,7 @@
 </script>
 
 <style scoped>
+    .w3-bar-item.w3-button.w3-border {
+        margin: 0px;
+    }
 </style>
