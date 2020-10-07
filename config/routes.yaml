@@ -117,6 +117,11 @@ api_ingredients_update:
    controller: App\Controller\Api\IngredientApiController::update
    methods: PUT
 
+api_rayons_camp_get:
+   path: /api/camp/rayons/{camp}
+   controller: App\Controller\Api\RayonApiController::show_for_camp
+   methods: GET
+
 api_recipes_store:
    path: /api/recipes
    controller: App\Controller\Api\RecipeApiController::store
